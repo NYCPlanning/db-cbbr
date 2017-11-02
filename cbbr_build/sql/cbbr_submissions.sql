@@ -4,9 +4,67 @@ DROP TABLE IF EXISTS cbbr_submissions;
 
 CREATE TABLE cbbr_submissions AS (
 WITH unioned AS (
-SELECT * FROM cbbr_requests_main
+SELECT
+	regid,
+	regdate,
+	progress,
+	parentregid,
+	parentfieldid,
+	need,
+	request,
+	description,
+	supporters1,
+	supporters2,
+	agency,
+	budgetcategory,
+	priority,
+	conornew,
+	trackingnum,
+	firstyrsubmitted,
+	site1,
+	sitename,
+	addressnum,
+	streetname,
+	blocknum,
+	lotnum,
+	streetsegment,
+	streetcross1,
+	streetcross2,
+	refname,
+	kill,
+	datelastupdate
+FROM cbbr_requests_main
 UNION ALL 
-SELECT * FROM cbbr_requests_other)
+SELECT 
+	regid,
+	regdate,
+	progress,
+	parentregid,
+	parentfieldid,
+	need,
+	request,
+	description,
+	supporters1,
+	supporters2,
+	agency,
+	budgetcategory,
+	priority,
+	conornew,
+	trackingnum,
+	firstyrsubmitted,
+	site1,
+	sitename,
+	addressnum,
+	streetname,
+	blocknum,
+	lotnum,
+	streetsegment,
+	streetcross1,
+	streetcross2,
+	refname,
+	kill,
+	datelastupdate
+FROM cbbr_requests_other)
 
 SELECT b.name, b.borough, b.commdist, a.*
 FROM unioned a
@@ -16,10 +74,10 @@ ON b.regid = a.parentregid
 );
 
 ALTER TABLE cbbr_submissions
-ADD geomsource text;
+ADD geomsource;
 ALTER TABLE cbbr_submissions
-ADD dataname text;
+ADD dataname;
 ALTER TABLE cbbr_submissions
-ADD datasource text;
+ADD datasource;
 
 SELECT AddGeometryColumn ('public','cbbr_submissions','geom',4326,'Geometry',2);

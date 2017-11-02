@@ -8,7 +8,7 @@ SELECT * FROM cbbr_requests_main
 UNION ALL 
 SELECT * FROM cbbr_requests_other)
 
-SELECT b.name, b.borough, b.commdist, a.*, geom::geometry
+SELECT b.name, b.borough, b.commdist, a.*
 FROM unioned a
 LEFT JOIN 
 cbbr_commboard_regid b

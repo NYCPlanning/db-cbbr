@@ -13,8 +13,8 @@ echo "Starting Attributes Table work at: $start"
 
 ## These manual geometries may overwrite old sprints. That's good.
 # more manual geometries 
-echo 'Updating manual geometries -- update_geometries script'
-./cbbr_build/update_geometries.sh
+#echo 'Updating manual geometries -- update_geometries script'
+#./cbbr_build/update_geometries.sh
 
 
 # String matching should never overwrite a geometry from above

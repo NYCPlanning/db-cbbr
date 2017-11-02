@@ -23,11 +23,11 @@ engine = sql.create_engine('postgresql://{}@localhost:5432/{}'.format(DBUSER, DB
 app_id = os.environ['GEOCLIENT_APP_ID']
 app_key = os.environ['GEOCLIENT_APP_KEY']
 
-# read in lcgms table
-lcgms = pd.read_sql_query('SELECT * FROM doe_facilities_lcgms WHERE primaryaddress IS NOT NULL;', engine)
+# read in cbbr table
+cbbr = pd.read_sql_query('SELECT * FROM cbbr_submissions WHERE addressnum IS NOT NULL;', engine)
 
 # replace single quotes with doubled single quotes for psql compatibility 
-lcgms['primaryaddress'] = [i.replace("'", "''") for i in lcgms['primaryaddress']]
+cbbr['addressnum'] = [i.replace("'", "''") for i in cbbr['addressnum']]
 
 # get the geo data
 g = Geoclient(app_id, app_key)
@@ -73,21 +73,21 @@ def get_loc(num, street, zipc):
     return(loc)
 
 locs = pd.DataFrame()
-for i in range(len(lcgms)):
-    new = get_loc(lcgms['primaryaddress'][i].split(' ',1)[0],
-                  lcgms['primaryaddress'][i].split(' ',1)[1],
-                  lcgms['zip'][i]
+for i in range(len(cbbr)):
+    new = get_loc(cbbr['primaryaddress'][i].split(' ',1)[0],
+                  cbbr['primaryaddress'][i].split(' ',1)[1],
+                  cbbr['zip'][i]
     )
     locs = pd.concat((locs, new))
 locs.reset_index(inplace = True)
 
-# update lcgms geom based on bin
-for i in range(len(lcgms)):
+# update cbbr geom based on bin
+for i in range(len(cbbr)):
     if locs['bin'][i] != 'none': 
-        upd = "UPDATE doe_facilities_lcgms a SET geom = ST_Centroid(b.geom) FROM doitt_buildingfootprints b WHERE a.primaryaddress = '"+ lcgms['primaryaddress'][i] + "' AND b.bin = '"+ locs['bin'][i] + "';"
+        upd = "UPDATE cbbr_submissions a SET geom = ST_Centroid(b.geom) FROM doitt_buildingfootprints b WHERE a.primaryaddress = '"+ cbbr['primaryaddress'][i] + "' AND b.bin = '"+ locs['bin'][i] + "';"
         engine.execute(upd)
     elif (locs['lat'][i] != 'none') & (locs['lon'][i] != 'none'):
-        upd = "UPDATE doe_facilities_lcgms a SET geom = ST_SetSRID(ST_MakePoint(" + str(locs['lon'][i]) + ", " + str(locs['lat'][i]) + "), 4326) WHERE primaryaddress = '" + lcgms['primaryaddress'][i] + "';"
+        upd = "UPDATE cbbr_submissions a SET geom = ST_SetSRID(ST_MakePoint(" + str(locs['lon'][i]) + ", " + str(locs['lat'][i]) + "), 4326) WHERE primaryaddress = '" + cbbr['primaryaddress'][i] + "';"
         engine.execute(upd)
 
 

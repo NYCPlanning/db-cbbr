@@ -10,5 +10,5 @@ DBUSER=$(cat $REPOLOC/cbbr_build/cbbr.config.json | jq -r '.DBUSER')
 
 # create cbbr table from community board budget request submissions
 echo 'Creating cbbr table...'
-psql -U $DBUSER -d $DBNAME -f $REPOLOC/sql/cbbr_submissions.sql
+psql -U $DBUSER -d $DBNAME -f $REPOLOC/cbbr_build/sql/cbbr_submissions.sql
 

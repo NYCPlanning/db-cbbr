@@ -14,6 +14,6 @@ echo 'Loading geometries from geojson files'
 GEOMS=./cbbr_build/geometries/*
 for G in $GEOMS
 do
-    MAPROJID=${G:46:-5}
-    ./cbbr_build/python/json2sql.py $MAPROJID $G > /dev/null
+    REGID=${G:46:-5}
+    ./cbbr_build/python/json2sql.py $REGID $G > /dev/null
 done

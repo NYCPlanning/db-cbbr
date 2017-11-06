@@ -34,8 +34,8 @@ cbbr['streetname'] = [i.replace("'", "''") for i in cbbr['streetname']]
 # get the geo data
 g = Geoclient(app_id, app_key)
 
-# address_zip from the github page. not sure why it wasn't in module
-def address_zip(self, houseNumber, street, borough):
+# address_borough from the github page. not sure why it wasn't in module
+def address_borough(self, houseNumber, street, borough):
     """
     Like the above address function, except it uses "zip code" instead of borough
 
@@ -56,7 +56,7 @@ def address_zip(self, houseNumber, street, borough):
 Geoclient.address_borough = address_borough
 
 def get_loc(num, street, borough):
-    geo = g.address_zip(num, street, borough)
+    geo = g.address_borough(num, street, borough)
     try:
         b_in = geo['buildingIdentificationNumber']
     except:

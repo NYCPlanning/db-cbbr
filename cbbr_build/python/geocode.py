@@ -24,7 +24,7 @@ app_id = os.environ['GEOCLIENT_APP_ID']
 app_key = os.environ['GEOCLIENT_APP_KEY']
 
 # read in cbbr table
-cbbr = pd.read_sql_query('SELECT * FROM cbbr_submissions WHERE addressnum IS NOT NULL;', engine)
+cbbr = pd.read_sql_query('SELECT * FROM cbbr_submissions WHERE addressnum IS NOT NULL AND streetname IS NOT NULL;', engine)
 
 # replace single quotes with doubled single quotes for psql compatibility 
 cbbr['addressnum'] = [i.replace("'", "''") for i in cbbr['addressnum']]

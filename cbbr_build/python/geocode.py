@@ -20,8 +20,8 @@ DBUSER = config['DBUSER']
 engine = sql.create_engine('postgresql://{}@localhost:5432/{}'.format(DBUSER, DBNAME))
 
 # load necessary environment variables
-app_id = os.environ['ead3ec7a']
-app_key = os.environ['e4b1299a68e86030c59a01f8979f5d11']
+app_id = os.environ['GEOCLIENT_APP_ID']
+app_key = os.environ['GEOCLIENT_APP_KEY']
 
 # read in cbbr table
 cbbr = pd.read_sql_query('SELECT * FROM cbbr_submissions WHERE addressnum IS NOT NULL;', engine)

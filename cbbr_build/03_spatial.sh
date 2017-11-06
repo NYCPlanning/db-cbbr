@@ -11,6 +11,8 @@ DBUSER=$(cat $REPOLOC/cbbr_build/cbbr.config.json | jq -r '.DBUSER')
 start=$(date +'%T')
 echo "Starting Attributes Table work at: $start"
 
+import py2
+
 # Geocode
 echo 'Geocoding geoms...'
 source activate py2

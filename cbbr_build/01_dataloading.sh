@@ -13,3 +13,4 @@ cd '/prod/data-loading-scripts'
 
 echo 'Loading core datasets'
 node loader.js install cbbr_submissions
+node loader.js install cbbr_geoms

@@ -86,10 +86,10 @@ locs.reset_index(inplace = True)
 # update cbbr geom based on bin or lat and long
 for i in range(len(cbbr)):
     if locs['bin'][i] != 'none': 
-        upd = "UPDATE cbbr_submissions a SET geom = ST_Centroid(b.geom) FROM doitt_buildingfootprints b WHERE a.primaryaddress = '"+ cbbr['primaryaddress'][i] + "' AND b.bin = '"+ locs['bin'][i] + "';"
+        upd = "UPDATE cbbr_submissions a SET geom = ST_Centroid(b.geom) FROM doitt_buildingfootprints b WHERE a.addressnum = '"+ cbbr['addressnum'][i] + "' AND b.bin = '"+ locs['bin'][i] + "';"
         engine.execute(upd)
     elif (locs['lat'][i] != 'none') & (locs['lon'][i] != 'none'):
-        upd = "UPDATE cbbr_submissions a SET geom = ST_SetSRID(ST_MakePoint(" + str(locs['lon'][i]) + ", " + str(locs['lat'][i]) + "), 4326) WHERE primaryaddress = '" + cbbr['primaryaddress'][i] + "';"
+        upd = "UPDATE cbbr_submissions a SET geom = ST_SetSRID(ST_MakePoint(" + str(locs['lon'][i]) + ", " + str(locs['lat'][i]) + "), 4326) WHERE addressnum = '" + cbbr['addressnum'][i] + "';"
         engine.execute(upd)
 
 

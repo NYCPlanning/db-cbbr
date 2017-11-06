@@ -14,6 +14,6 @@ echo 'Loading geometries from geojson files'
 GEOMS=./cbbr_build/geometries/*
 for G in $GEOMS
 do
-    REGID=${G:46:-5}
+    REGID=${G:24:-5}
     ./cbbr_build/python/json2sql.py $REGID $G > /dev/null
 done

@@ -35,3 +35,5 @@ psql -U $DBUSER -d $DBNAME -f $REPOLOC/cbbr_build/sql/spatial_dpr_string_name.sq
 # FacDB -- fuzzy string on facility name
 echo 'Adding FacDB geometries based on string matching for facility name...'
 psql -U $DBUSER -d $DBNAME -f $REPOLOC/cbbr_build/sql/spatial_facilities.sql
+
+cd $REPOLOC

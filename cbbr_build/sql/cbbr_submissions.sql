@@ -31,8 +31,7 @@ SELECT
 	streetcross1,
 	streetcross2,
 	refname,
-	kill,
-	datelastupdate
+	kill
 FROM cbbr_requests_main
 UNION ALL 
 SELECT 
@@ -62,8 +61,7 @@ SELECT
 	streetcross1,
 	streetcross2,
 	refname,
-	kill,
-	datelastupdate
+	kill
 FROM cbbr_requests_other)
 
 SELECT b.name, b.borough, b.commdist, a.*

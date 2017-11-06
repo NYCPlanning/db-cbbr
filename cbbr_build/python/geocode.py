@@ -10,7 +10,7 @@ wd = subprocess.check_output('git rev-parse --show-toplevel', shell = True)
 os.chdir(wd[:-1]) #-1 removes \n
 
 # load config file
-with open('cpdb.config.json') as conf:
+with open('cbbr.config.json') as conf:
     config = json.load(conf)
 
 DBNAME = config['DBNAME']
@@ -28,12 +28,14 @@ cbbr = pd.read_sql_query('SELECT * FROM cbbr_submissions WHERE addressnum IS NOT
 
 # replace single quotes with doubled single quotes for psql compatibility 
 cbbr['addressnum'] = [i.replace("'", "''") for i in cbbr['addressnum']]
+cbbr['streetname'] = [i.replace("'", "''") for i in cbbr['streetname']]
+
 
 # get the geo data
 g = Geoclient(app_id, app_key)
 
 # address_zip from the github page. not sure why it wasn't in module
-def address_zip(self, houseNumber, street, zip):
+def address_zip(self, houseNumber, street, borough):
     """
     Like the above address function, except it uses "zip code" instead of borough
 
@@ -48,13 +50,13 @@ def address_zip(self, houseNumber, street, zip):
             information.
 
     """
-    return self._request(u'address', houseNumber=houseNumber, street=street, zip=zip)
+    return self._request(u'address', houseNumber=houseNumber, street=street, borough=borough)
 
 # bound it to the class
-Geoclient.address_zip = address_zip
+Geoclient.address_borough = address_borough
 
-def get_loc(num, street, zipc):
-    geo = g.address_zip(num, street, zipc)
+def get_loc(num, street, borough):
+    geo = g.address_zip(num, street, borough)
     try:
         b_in = geo['buildingIdentificationNumber']
     except:
@@ -74,14 +76,14 @@ def get_loc(num, street, zipc):
 
 locs = pd.DataFrame()
 for i in range(len(cbbr)):
-    new = get_loc(cbbr['primaryaddress'][i].split(' ',1)[0],
-                  cbbr['primaryaddress'][i].split(' ',1)[1],
-                  cbbr['zip'][i]
+    new = get_loc(cbbr['addressnum'][i],
+                  cbbr['streetname'][i],
+                  cbbr['borough'][i]
     )
     locs = pd.concat((locs, new))
 locs.reset_index(inplace = True)
 
-# update cbbr geom based on bin
+# update cbbr geom based on bin or lat and long
 for i in range(len(cbbr)):
     if locs['bin'][i] != 'none': 
         upd = "UPDATE cbbr_submissions a SET geom = ST_Centroid(b.geom) FROM doitt_buildingfootprints b WHERE a.primaryaddress = '"+ cbbr['primaryaddress'][i] + "' AND b.bin = '"+ locs['bin'][i] + "';"

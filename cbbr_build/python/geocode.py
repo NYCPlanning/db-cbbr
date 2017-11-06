@@ -13,8 +13,8 @@ os.chdir(wd[:-1]) #-1 removes \n
 with open('cbbr_build/cbbr.config.json') as conf:
     config = json.load(conf)
 
-DBNAME = config['capdb']
-DBUSER = config['dbadmin']
+DBNAME = config['DBNAME']
+DBUSER = config['DBUSER']
 
 # connect to postgres db
 engine = sql.create_engine('postgresql://{}@localhost:5432/{}'.format(DBUSER, DBNAME))

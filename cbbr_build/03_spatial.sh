@@ -23,8 +23,8 @@ psql -U $DBUSER -d $DBNAME -f $REPOLOC/cbbr_build/sql/spatial_manualshp.sql
 
 ## These manual geometries may overwrite old sprints. That's good.
 # more manual geometries 
-#echo 'Updating manual geometries -- update_geometries script'
-#./cbbr_build/update_geometries.sh
+echo 'Updating manual geometries -- update_geometries script'
+./cbbr_build/update_geometries.sh
 
 # String matching
 # String matching should never overwrite a geometry from above

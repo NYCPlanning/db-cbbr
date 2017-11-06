@@ -23,7 +23,7 @@ with open(input_file) as data_file:
     data = json.load(data_file)
 
 sql_cmd =re.escape("UPDATE cbbr_submissions " +\
-                   "SET geomsource = 'DCP_geojson', " +\
+                   "SET geomsource = 'dcp_geojson', " +\
                    '''geom = ST_SetSRID(ST_GeomFromGeoJSON('{"type":"''' + str(data['type']) + '''","coordinates":''' + str(data['coordinates']) + '''}'),4326) ''' +\
                    "WHERE regid = '" + regid + "';")
 

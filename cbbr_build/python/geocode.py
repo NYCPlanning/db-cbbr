@@ -13,15 +13,15 @@ os.chdir(wd[:-1]) #-1 removes \n
 with open('cbbr_build/cbbr.config.json') as conf:
     config = json.load(conf)
 
-DBNAME = config['DBNAME']
-DBUSER = config['DBUSER']
+DBNAME = config['capdb']
+DBUSER = config['dbadmin']
 
 # connect to postgres db
 engine = sql.create_engine('postgresql://{}@localhost:5432/{}'.format(DBUSER, DBNAME))
 
 # load necessary environment variables
-app_id = os.environ['GEOCLIENT_APP_ID']
-app_key = os.environ['GEOCLIENT_APP_KEY']
+app_id = os.environ['ead3ec7a']
+app_key = os.environ['e4b1299a68e86030c59a01f8979f5d11']
 
 # read in cbbr table
 cbbr = pd.read_sql_query('SELECT * FROM cbbr_submissions WHERE addressnum IS NOT NULL;', engine)

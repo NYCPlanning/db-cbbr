@@ -1,12 +1,12 @@
 WITH proj AS(
 SELECT  ST_Multi(ST_Union(geom)) as geom,
-       regid
+       newtrackin
 FROM cbbr_geomsfy18
-GROUP BY regid
+GROUP BY trackingnum
 )
 UPDATE cbbr_submissions SET geom = proj.geom,
        dataname = 'cbbr_geomsfy18',
        datasource = 'dcp',
        geomsource = 'dcp'
 FROM proj
-WHERE cbbr_submissions.regid = proj.regid;
+WHERE cbbr_submissions.trackingnum = proj.newtrackin;

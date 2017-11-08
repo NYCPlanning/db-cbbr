@@ -21,7 +21,7 @@ UPDATE cbbr_submissions SET geom = proj.geom,
 FROM proj
 WHERE cbbr_submissions.trackingnum = proj.newtrackin
 AND (cbbr_submissions.sitename = proj.sitename 
-	OR (cbbr_submissions.addressnum = proj.addressnum 
+	OR (cbbr_submissions.addressnum::text = proj.addressnum::text 
 		AND cbbr_submissions.streetname = proj.streetname)
 	OR (cbbr_submissions.streetsegment = proj.sitestreet 
 		AND cbbr_submissions.streetcross1 = proj.sitecrosss)

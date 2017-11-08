@@ -81,7 +81,7 @@ locs.reset_index(inplace = True)
 
 # update cbbr geom based on bin or lat and long
 for i in range(len(cbbr)):
-    (locs['lat'][i] != 'none') & (locs['lon'][i] != 'none'):
+    if (locs['lat'][i] != 'none') & (locs['lon'][i] != 'none'):
         upd = "UPDATE cbbr_submissions a SET geom = ST_SetSRID(ST_MakePoint(" + str(locs['lon'][i]) + ", " + str(locs['lat'][i]) + "), 4326), geomsource = 'geoclient', dataname='lat long', datasource='doitt' WHERE addressnum = '" + cbbr['addressnum'][i] + "' AND a.streetsegment = '"+ cbbr['streetsegment'][i] + "';"
         engine.execute(upd)
 

@@ -55,7 +55,7 @@ def intersection(self, crossStreetOne, crossStreetTwo, borough, boroughCrossStre
 # bound it to the class
 Geoclient.intersection = intersection
 
-def get_loc(num, street, borough):
+def get_loc(crossStreetOne, crossStreetTwo, borough):
     geo = g.intersection(crossStreetOne, crossStreetTwo, borough)
     try:
         lat = geo['latitude']

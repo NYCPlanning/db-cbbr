@@ -13,8 +13,8 @@ echo "Starting Attributes Table work at: $start"
 
 # Geocode
 echo 'Geocoding geoms...'
-source activate python2.7
-python $REPOLOC/cbbr_build/python/geocode.py
+source activate py2
+python $REPOLOC/cbbr_build/python/geocode_address.py
 source deactivate
 
 # Manual geoms

@@ -65,8 +65,7 @@ def get_loc(crossStreetOne, crossStreetTwo, borough):
         lon = geo['longitude']
     except:
         lon = 'none'
-    loc = pd.DataFrame({'bin' : [b_in],
-                        'lat' : [lat],
+    loc = pd.DataFrame({'lat' : [lat],
                         'lon' : [lon]})
     return(loc)
 
@@ -79,7 +78,7 @@ for i in range(len(cbbr)):
     locs = pd.concat((locs, new))
 locs.reset_index(inplace = True)
 
-# update cbbr geom based on bin or lat and long
+# update cbbr geom based on lat and long
 for i in range(len(cbbr)):
     if (locs['lat'][i] != 'none') & (locs['lon'][i] != 'none'):
         upd = "UPDATE cbbr_submissions a SET geom = ST_SetSRID(ST_MakePoint(" + str(locs['lon'][i]) + ", " + str(locs['lat'][i]) + "), 4326), geomsource = 'geoclient', dataname='lat long', datasource='doitt' WHERE addressnum = '" + cbbr['addressnum'][i] + "' AND a.streetsegment = '"+ cbbr['streetsegment'][i] + "';"

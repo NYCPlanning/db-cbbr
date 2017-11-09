@@ -5,8 +5,8 @@ REPOLOC="$(git rev-parse --show-toplevel)"
 cd $REPOLOC
 
 # load config
-DBNAME=$(cat $REPOLOC/cbbr_build/cbbr.config.json | jq -r '.DBNAME')
-DBUSER=$(cat $REPOLOC/cbbr_build/cbbr.config.json | jq -r '.DBUSER')
+DBNAME=$(cat $REPOLOC/cbbr.config.json | jq -r '.DBNAME')
+DBUSER=$(cat $REPOLOC/cbbr.config.json | jq -r '.DBUSER')
 
 start=$(date +'%T')
 echo "Starting Attributes Table work at: $start"
@@ -35,5 +35,9 @@ psql -U $DBUSER -d $DBNAME -f $REPOLOC/cbbr_build/sql/spatial_dpr_string_name.sq
 # FacDB -- fuzzy string on facility name
 echo 'Adding FacDB geometries based on string matching for facility name...'
 psql -U $DBUSER -d $DBNAME -f $REPOLOC/cbbr_build/sql/spatial_facilities.sql
+
+#cleaning geometries
+psql -U $DBUSER -d $DBNAME -f $REPOLOC/cbbr_build/sql/spatial_geomclean.sql
+
 
 cd $REPOLOC

@@ -9,7 +9,7 @@ import sys
 import os
 
 # load config file
-with open('cbbr_build/cbbr.config.json') as conf:
+with open('cbbr.config.json') as conf:
     config = json.load(conf)
 
 DBNAME = config['DBNAME']

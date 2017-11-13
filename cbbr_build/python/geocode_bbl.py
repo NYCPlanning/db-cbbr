@@ -24,18 +24,18 @@ app_id = os.environ['GEOCLIENT_APP_ID']
 app_key = os.environ['GEOCLIENT_APP_KEY']
 
 # read in cbbr table
-cbbr = pd.read_sql_query('SELECT * FROM cbbr_submissions WHERE addressnum IS NOT NULL AND streetname IS NOT NULL AND borough IS NOT NULL AND geom IS NULL;', engine)
+cbbr = pd.read_sql_query('SELECT * FROM cbbr_submissions WHERE blocknum IS NOT NULL AND lotnum IS NOT NULL AND borough IS NOT NULL AND geom IS NULL;', engine)
 
 # replace single quotes with doubled single quotes for psql compatibility 
-cbbr['addressnum'] = [i.replace("'", "''") for i in cbbr['addressnum']]
-cbbr['streetname'] = [i.replace("'", "''") for i in cbbr['streetname']]
+cbbr['blocknum'] = [i.replace("'", "''") for i in cbbr['blocknum']]
+cbbr['lotnum'] = [i.replace("'", "''") for i in cbbr['lotnum']]
 
 
 # get the geo data
 g = Geoclient(app_id, app_key)
 
-# address_borough from the github page. not sure why it wasn't in module
-def address_borough(self, houseNumber, street, borough):
+# bbl from the github page. not sure why it wasn't in module
+def bbl(borough, block, lot):
     """
     Like the above address function, except it uses "zip code" instead of borough
 
@@ -50,13 +50,13 @@ def address_borough(self, houseNumber, street, borough):
             information.
 
     """
-    return self._request(u'address', houseNumber=houseNumber, street=street, borough=borough)
+    return self._request(u'bbl', borough=borough, block=block, lot=lot)
 
 # bound it to the class
-Geoclient.address_borough = address_borough
+Geoclient.bbl = bbl
 
-def get_loc(num, street, borough):
-    geo = g.address_borough(num, street, borough)
+def get_loc(borough, block, lot):
+    geo = g.bbl(orough, block, lot)
     try:
         b_in = geo['buildingIdentificationNumber']
     except:
@@ -76,9 +76,9 @@ def get_loc(num, street, borough):
 
 locs = pd.DataFrame()
 for i in range(len(cbbr)):
-    new = get_loc(cbbr['addressnum'][i],
-                  cbbr['streetname'][i],
-                  cbbr['borough'][i]
+    new = get_loc(cbbr['borough'][i],
+                  cbbr['blocknum'][i],
+                  cbbr['lotnum'][i]
     )
     locs = pd.concat((locs, new))
 locs.reset_index(inplace = True)

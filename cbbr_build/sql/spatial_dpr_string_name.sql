@@ -17,7 +17,7 @@ WHERE a.geom IS NULL AND
       upper(a.sitename) LIKE upper('%' || b.signname || '%')    
 ) 
 UPDATE cbbr_submissions
-SET geomsource = 'Algorithm',
+SET geomsource = 'algorithm',
     dataname='dpr_parksproperties',
     datasource='DPR',
     geom=master.geom
@@ -39,7 +39,7 @@ WHERE a.geom IS NULL AND
       upper(a.sitename) LIKE upper('%' ||b.signname || '%')
 )
 UPDATE cbbr_submissions
-SET geomsource = 'Algorithm',
+SET geomsource = 'algorithm',
     dataname='dpr_parksproperties',
     datasource='DPR',
     geom=master.geom
@@ -62,7 +62,7 @@ WHERE a.geom IS NULL AND
       levenshtein(upper(a.sitename), upper('%' ||b.signname || '%')) <=3
 )
 UPDATE cbbr_submissions
-SET geomsource = 'Algorithm',
+SET geomsource = 'algorithm',
     dataname='dpr_parksproperties',
     datasource='DPR',
     geom=master.geom

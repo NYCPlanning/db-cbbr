@@ -21,7 +21,7 @@ WHERE a.geom IS NULL AND
 )
 
 UPDATE cbbr_submissions
-SET geomsource = 'Algorithm',
+SET geomsource = 'algorithm',
     dataname='facdb_facilities',
     datasource='DCP',
     geom=master.geom
@@ -40,7 +40,7 @@ AND upper(a.sitename) NOT LIKE '%AND%'
 AND '%'||upper(a.sitename)||'%' LIKE '%'||upper(b.facname)||'%')
 
 UPDATE cbbr_submissions
-SET geomsource = 'Algorithm',
+SET geomsource = 'algorithm',
     dataname='facdb_facilities',
     datasource='DCP',
     geom=master.geom
@@ -61,7 +61,7 @@ AND regexp_replace(a.sitename,'\D', '', 'g') IS NOT NULL
 )
 
 UPDATE cbbr_submissions
-SET geomsource = 'Algorithm',
+SET geomsource = 'algorithm',
     dataname='facdb_facilities',
     datasource='DCP',
     geom=master.geom
@@ -82,7 +82,7 @@ AND a.borough = b.boro
 )
 
 UPDATE cbbr_submissions
-SET geomsource = 'Algorithm',
+SET geomsource = 'algorithm',
     dataname='facdb_facilities',
     datasource='DCP',
     geom=master.geom

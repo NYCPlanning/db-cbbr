@@ -56,7 +56,7 @@ def bbl(borough, block, lot):
 Geoclient.bbl = bbl
 
 def get_loc(borough, block, lot):
-    geo = g.bbl(orough, block, lot)
+    geo = g.bbl(borough, block, lot)
     try:
         b_in = geo['buildingIdentificationNumber']
     except:

@@ -86,10 +86,10 @@ locs.reset_index(inplace = True)
 # update cbbr geom based on bin or lat and long
 for i in range(len(cbbr)):
     if locs['bin'][i] != 'none': 
-        upd = "UPDATE cbbr_submissions a SET geom = ST_Centroid(b.geom), geomsource = 'geoclient', dataname='doitt_buildingfootprints', datasource='doitt' FROM doitt_buildingfootprints b WHERE a.addressnum = '"+ cbbr['addressnum'][i] + "' AND a.streetname = '"+ cbbr['streetname'][i] + "' AND b.bin = '"+ locs['bin'][i] + "';"
+        upd = "UPDATE cbbr_submissions a SET geom = ST_Centroid(b.geom), geomsource = 'geoclient', dataname='doitt_buildingfootprints', datasource='doitt' FROM doitt_buildingfootprints b WHERE a.blocknum = '"+ cbbr['blocknum'][i] + "' AND a.lotnum = '"+ cbbr['lotnum'][i] + "' AND b.bin = '"+ locs['bin'][i] + "';"
         engine.execute(upd)
     elif (locs['lat'][i] != 'none') & (locs['lon'][i] != 'none'):
-        upd = "UPDATE cbbr_submissions a SET geom = ST_SetSRID(ST_MakePoint(" + str(locs['lon'][i]) + ", " + str(locs['lat'][i]) + "), 4326), geomsource = 'geoclient', dataname='lat long', datasource='doitt' WHERE addressnum = '" + cbbr['addressnum'][i] + "' AND a.streetname = '"+ cbbr['streetname'][i] + "';"
+        upd = "UPDATE cbbr_submissions a SET geom = ST_SetSRID(ST_MakePoint(" + str(locs['lon'][i]) + ", " + str(locs['lat'][i]) + "), 4326), geomsource = 'geoclient', dataname='lat long', datasource='doitt' WHERE blocknum = '" + cbbr['blocknum'][i] + "' AND a.lotnum = '"+ cbbr['lotnum'][i] + "';"
         engine.execute(upd)
 
 

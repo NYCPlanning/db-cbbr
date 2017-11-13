@@ -35,7 +35,7 @@ cbbr['lotnum'] = [i.replace("'", "''") for i in cbbr['lotnum']]
 g = Geoclient(app_id, app_key)
 
 # bbl from the github page. not sure why it wasn't in module
-def bbl(borough, block, lot):
+def bbl(self, borough, block, lot):
     """
     Like the above address function, except it uses "zip code" instead of borough
 

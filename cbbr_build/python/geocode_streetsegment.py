@@ -91,8 +91,8 @@ locs.reset_index(inplace = True)
 
 # update cbbr geom based on lat and long
 for i in range(len(cbbr)):
-    if (locs['lat'][i] != 'none') & (locs['lon'][i] != 'none'):
-        upd = "UPDATE cbbr_submissions a SET geom = ST_SetSRID(ST_MakeLine(ST_MakePoint(" + str(locs['fromX'][i]) + ", " + str(locs['fromY'][i]) + "),ST_MakePoint(" + str(locs['toX'][i]) + ", " + str(locs['toY'][i]) + ")), 3104), geomsource = 'geoclient', dataname='lat long', datasource='doitt' WHERE streetsegment = '" + cbbr['streetsegment'][i] + "' AND a.streetcross1 = '"+ cbbr['streetcross1'][i] + "';"
+    if (locs['fromX'][i] != 'none') & (locs['fromY'][i] != 'none') & (locs['toX'][i] != 'none') & (locs['toY'][i] != 'none'):
+        upd = "UPDATE cbbr_submissions a SET geom = ST_SetSRID(ST_MakeLine(ST_MakePoint(" + str(locs['fromX'][i]) + ", " + str(locs['fromY'][i]) + "),ST_MakePoint(" + str(locs['toX'][i]) + ", " + str(locs['toY'][i]) + ")), 3104), geomsource = 'geoclient', dataname='lat long', datasource='lion' WHERE streetsegment = '" + cbbr['streetsegment'][i] + "' AND a.streetcross1 = '"+ cbbr['streetcross1'][i] + "';"
         engine.execute(upd)
 
 

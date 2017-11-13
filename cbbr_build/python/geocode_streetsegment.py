@@ -24,18 +24,18 @@ app_id = os.environ['GEOCLIENT_APP_ID']
 app_key = os.environ['GEOCLIENT_APP_KEY']
 
 # read in cbbr table
-cbbr = pd.read_sql_query('SELECT * FROM cbbr_submissions WHERE addressnum IS NOT NULL AND streetname IS NOT NULL AND borough IS NOT NULL AND borough IS NOT NULL AND geom IS NULL;', engine)
+cbbr = pd.read_sql_query('SELECT * FROM cbbr_submissions WHERE streetsegment IS NOT NULL AND streetcross1 IS NOT NULL AND streetcross2 IS NOT NULL AND borough IS NOT NULL AND geom IS NULL;', engine)
 
 # replace single quotes with doubled single quotes for psql compatibility 
-cbbr['addressnum'] = [i.replace("'", "''") for i in cbbr['addressnum']]
-cbbr['streetname'] = [i.replace("'", "''") for i in cbbr['streetname']]
-
+cbbr['streetsegment'] = [i.replace("'", "''") for i in cbbr['streetsegment']]
+cbbr['streetcross1'] = [i.replace("'", "''") for i in cbbr['streetcross1']]
+cbbr['streetcross2'] = [i.replace("'", "''") for i in cbbr['streetcross2']]
 
 # get the geo data
 g = Geoclient(app_id, app_key)
 
 # address_borough from the github page. not sure why it wasn't in module
-def address_borough(self, houseNumber, street, borough):
+def blockface(onStreet, crossStreetOne, crossStreetTwo, borough, boroughCrossStreetOne=None, boroughCrossStreetTwo=None, compassDirection=None):
     """
     Like the above address function, except it uses "zip code" instead of borough
 
@@ -50,17 +50,13 @@ def address_borough(self, houseNumber, street, borough):
             information.
 
     """
-    return self._request(u'address', houseNumber=houseNumber, street=street, borough=borough)
+    return self._request(u'blockface', onStreet=onStreet, crossStreetOne=crossStreetOne, crossStreetTwo=crossStreetTwo, borough=borough)
 
 # bound it to the class
-Geoclient.address_borough = address_borough
+Geoclient.blockface = blockface
 
-def get_loc(num, street, borough):
-    geo = g.address_borough(num, street, borough)
-    try:
-        b_in = geo['buildingIdentificationNumber']
-    except:
-        b_in = 'none'
+def get_loc(crossStreetOne, crossStreetTwo, borough):
+    geo = g.blockface(onStreet, crossStreetOne, crossStreetTwo, borough)
     try:
         lat = geo['latitude']
     except:
@@ -69,27 +65,24 @@ def get_loc(num, street, borough):
         lon = geo['longitude']
     except:
         lon = 'none'
-    loc = pd.DataFrame({'bin' : [b_in],
-                        'lat' : [lat],
+    loc = pd.DataFrame({'lat' : [lat],
                         'lon' : [lon]})
     return(loc)
 
 locs = pd.DataFrame()
 for i in range(len(cbbr)):
-    new = get_loc(cbbr['addressnum'][i],
-                  cbbr['streetname'][i],
+    new = get_loc(cbbr['streetsegment'][i],
+                  cbbr['streetcross1'][i],
+                  cbbr['streetcross2'][i],
                   cbbr['borough'][i]
     )
     locs = pd.concat((locs, new))
 locs.reset_index(inplace = True)
 
-# update cbbr geom based on bin or lat and long
+# update cbbr geom based on lat and long
 for i in range(len(cbbr)):
-    if locs['bin'][i] != 'none': 
-        upd = "UPDATE cbbr_submissions a SET geom = ST_Centroid(b.geom), geomsource = 'geoclient', dataname='doitt_buildingfootprints', datasource='doitt' FROM doitt_buildingfootprints b WHERE a.addressnum = '"+ cbbr['addressnum'][i] + "' AND a.streetname = '"+ cbbr['streetname'][i] + "' AND b.bin = '"+ locs['bin'][i] + "';"
-        engine.execute(upd)
-    elif (locs['lat'][i] != 'none') & (locs['lon'][i] != 'none'):
-        upd = "UPDATE cbbr_submissions a SET geom = ST_SetSRID(ST_MakePoint(" + str(locs['lon'][i]) + ", " + str(locs['lat'][i]) + "), 4326), geomsource = 'geoclient', dataname='lat long', datasource='doitt' WHERE addressnum = '" + cbbr['addressnum'][i] + "' AND a.streetname = '"+ cbbr['streetname'][i] + "';"
+    if (locs['lat'][i] != 'none') & (locs['lon'][i] != 'none'):
+        upd = "UPDATE cbbr_submissions a SET geom = ST_SetSRID(ST_MakePoint(" + str(locs['lon'][i]) + ", " + str(locs['lat'][i]) + "), 4326), geomsource = 'geoclient', dataname='lat long', datasource='doitt' WHERE streetsegment = '" + cbbr['streetsegment'][i] + "' AND a.streetcross1 = '"+ cbbr['streetcross1'][i] + "';"
         engine.execute(upd)
 
 

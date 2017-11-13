@@ -24,7 +24,7 @@ app_id = os.environ['GEOCLIENT_APP_ID']
 app_key = os.environ['GEOCLIENT_APP_KEY']
 
 # read in cbbr table
-cbbr = pd.read_sql_query('SELECT * FROM cbbr_submissions WHERE streetsegment IS NOT NULL AND streetcross1 IS NOT NULL AND streetcross2 IS NULL AND geom IS NULL;', engine)
+cbbr = pd.read_sql_query('SELECT * FROM cbbr_submissions WHERE streetsegment IS NOT NULL AND streetcross1 IS NOT NULL AND streetcross2 IS NULL AND borough IS NOT NULL AND geom IS NULL;', engine)
 
 # replace single quotes with doubled single quotes for psql compatibility 
 cbbr['streetsegment'] = [i.replace("'", "''") for i in cbbr['streetsegment']]

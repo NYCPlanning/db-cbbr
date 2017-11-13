@@ -17,6 +17,7 @@ source activate py2
 python $REPOLOC/cbbr_build/python/geocode_address.py
 python $REPOLOC/cbbr_build/python/geocode_intersection.py
 python $REPOLOC/cbbr_build/python/geocode_intersection_pt2.py
+python $REPOLOC/cbbr_build/python/geocode_streetsegment.py
 source deactivate
 
 # Manual geoms

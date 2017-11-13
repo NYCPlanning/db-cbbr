@@ -5,8 +5,8 @@ REPOLOC="$(git rev-parse --show-toplevel)"
 cd $REPOLOC
 
 # load config
-DBNAME=$(cat $REPOLOC/cbbr_build/cbbr.config.json | jq -r '.DBNAME')
-DBUSER=$(cat $REPOLOC/cbbr_build/cbbr.config.json | jq -r '.DBUSER')
+DBNAME=$(cat $REPOLOC/cbbr.config.json | jq -r '.DBNAME')
+DBUSER=$(cat $REPOLOC/cbbr.config.json | jq -r '.DBUSER')
 
 # custom geometries solution
 # loop through all files in the geometries directory and update em

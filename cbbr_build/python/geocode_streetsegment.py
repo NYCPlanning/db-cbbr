@@ -55,7 +55,7 @@ def blockface(self, onStreet, crossStreetOne, crossStreetTwo, borough, boroughCr
 # bound it to the class
 Geoclient.blockface = blockface
 
-def get_loc(crossStreetOne, crossStreetTwo, borough):
+def get_loc(onStreet, crossStreetOne, crossStreetTwo, borough):
     geo = g.blockface(onStreet, crossStreetOne, crossStreetTwo, borough)
     try:
         fromX = geo['fromXCoordinate']

@@ -15,7 +15,12 @@ echo "Starting Attributes Table work at: $start"
 echo 'Geocoding geoms...'
 source activate py2
 python $REPOLOC/cbbr_build/python/geocode_address.py
+python $REPOLOC/cbbr_build/python/geocode_intersection.py
 source deactivate
+
+
+python python/geocode_intersection.py
+
 
 # Manual geoms
 echo 'Adding existing geoms from previous sprints...'

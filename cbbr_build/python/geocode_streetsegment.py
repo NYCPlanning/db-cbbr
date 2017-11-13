@@ -35,7 +35,7 @@ cbbr['streetcross2'] = [i.replace("'", "''") for i in cbbr['streetcross2']]
 g = Geoclient(app_id, app_key)
 
 # address_borough from the github page. not sure why it wasn't in module
-def blockface(onStreet, crossStreetOne, crossStreetTwo, borough, boroughCrossStreetOne=None, boroughCrossStreetTwo=None, compassDirection=None):
+def blockface(self, onStreet, crossStreetOne, crossStreetTwo, borough, boroughCrossStreetOne=None, boroughCrossStreetTwo=None, compassDirection=None):
     """
     Like the above address function, except it uses "zip code" instead of borough
 
@@ -58,15 +58,25 @@ Geoclient.blockface = blockface
 def get_loc(crossStreetOne, crossStreetTwo, borough):
     geo = g.blockface(onStreet, crossStreetOne, crossStreetTwo, borough)
     try:
-        lat = geo['latitude']
+        fromX = geo['fromXCoordinate']
     except:
-        lat = 'none'
+        fromX = 'none'
     try:
-        lon = geo['longitude']
+        fromY = geo['fromYCoordinate']
     except:
-        lon = 'none'
-    loc = pd.DataFrame({'lat' : [lat],
-                        'lon' : [lon]})
+        fromY = 'none'
+    try:
+        toX = geo['toXCoordinate']
+    except:
+        toX = 'none'
+    try:
+        toY = geo['toYCoordinate']
+    except:
+        toY = 'none'
+    loc = pd.DataFrame({'fromX' : [fromX],
+                        'fromY' : [fromY],
+                        'toX' : [toX],
+                        'toY' : [toY]})
     return(loc)
 
 locs = pd.DataFrame()
@@ -82,7 +92,7 @@ locs.reset_index(inplace = True)
 # update cbbr geom based on lat and long
 for i in range(len(cbbr)):
     if (locs['lat'][i] != 'none') & (locs['lon'][i] != 'none'):
-        upd = "UPDATE cbbr_submissions a SET geom = ST_SetSRID(ST_MakePoint(" + str(locs['lon'][i]) + ", " + str(locs['lat'][i]) + "), 4326), geomsource = 'geoclient', dataname='lat long', datasource='doitt' WHERE streetsegment = '" + cbbr['streetsegment'][i] + "' AND a.streetcross1 = '"+ cbbr['streetcross1'][i] + "';"
+        upd = "UPDATE cbbr_submissions a SET geom = ST_SetSRID(ST_MakeLine(ST_MakePoint(" + str(locs['fromX'][i]) + ", " + str(locs['fromY'][i]) + "),ST_MakePoint(" + str(locs['toX'][i]) + ", " + str(locs['toY'][i]) + ")), 3104), geomsource = 'geoclient', dataname='lat long', datasource='doitt' WHERE streetsegment = '" + cbbr['streetsegment'][i] + "' AND a.streetcross1 = '"+ cbbr['streetcross1'][i] + "';"
         engine.execute(upd)
 
 

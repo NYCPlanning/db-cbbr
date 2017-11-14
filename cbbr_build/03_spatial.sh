@@ -41,6 +41,7 @@ echo 'Adding FacDB geometries based on string matching for facility name...'
 psql -U $DBUSER -d $DBNAME -f $REPOLOC/cbbr_build/sql/spatial_facilities.sql
 
 #cleaning geometries
+echo 'Cleaning geometries...'
 psql -U $DBUSER -d $DBNAME -f $REPOLOC/cbbr_build/sql/spatial_geomclean.sql
 
 

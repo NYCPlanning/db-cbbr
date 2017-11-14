@@ -44,5 +44,4 @@ psql -U $DBUSER -d $DBNAME -f $REPOLOC/cbbr_build/sql/spatial_facilities.sql
 echo 'Cleaning geometries...'
 psql -U $DBUSER -d $DBNAME -f $REPOLOC/cbbr_build/sql/spatial_geomclean.sql
 
-
 cd $REPOLOC

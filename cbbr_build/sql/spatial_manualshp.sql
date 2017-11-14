@@ -24,5 +24,5 @@ AND (cbbr_submissions.sitename = proj.sitename
 	OR (cbbr_submissions.addressnum::text = proj.addressnum::text 
 		AND cbbr_submissions.streetname = proj.streetname)
 	OR (cbbr_submissions.streetsegment = proj.sitestreet 
-		AND cbbr_submissions.streetcross1 = proj.sitecrosss)
-);
+		AND cbbr_submissions.streetcross1 = proj.sitecrosss))
+AND cbbr_submissions.geom IS NULL AND proj.geom IS NOT NULL;

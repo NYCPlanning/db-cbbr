@@ -17,7 +17,7 @@ WHERE agency = 'Department for the Aging';
 
 UPDATE cbbr_submissions 
 SET agencyacro = 'DOB'
-WHERE agency = 'Department for Buildings';
+WHERE agency = 'Department of Buildings';
 
 UPDATE cbbr_submissions 
 SET agencyacro = 'DCP'
@@ -149,4 +149,4 @@ WHERE agency = 'School Construction Authority';
 
 UPDATE cbbr_submissions
 SET agencyacro = 'TLC'
-WHERE agency = 'Taxi & Limousine Commission';
+WHERE agency = 'Taxi and Limousine Commission';

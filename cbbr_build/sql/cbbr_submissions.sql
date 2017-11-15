@@ -31,7 +31,7 @@ SELECT
 	streetcross1,
 	streetcross2,
 	refname,
-	kill
+	kill,
 	respdesc,
 	agyresponse,
 	agyresponsecat

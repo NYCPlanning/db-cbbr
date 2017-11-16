@@ -78,6 +78,7 @@ ON b.regid = a.parentregid
 );
 
 ALTER TABLE cbbr_submissions ADD agencyacro text;
+ALTER TABLE cbbr_submissions ADD denominator text;
 ALTER TABLE cbbr_submissions ADD geomsource text;
 ALTER TABLE cbbr_submissions ADD dataname text;
 ALTER TABLE cbbr_submissions ADD datasource text;

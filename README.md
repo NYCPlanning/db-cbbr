@@ -71,7 +71,7 @@ Your config file should look something like this:
 Clone and properly configure the data-loading-scripts repo: https://github.com/NYCPlanning/data-loading-scripts 
 Make sure the database data-loading-scripts uses is the same one you listed in your cbbr.config.json file.
 
-#### ommunity Board Budget Requests Database Build Process
+#### Community Board Budget Requests Database Build Process
 
 Run the scripts in cbbr_build in order:
 

@@ -17,7 +17,7 @@ SELECT
 	supporters2,
 	agency,
 	budgetcategory,
-	priority,
+	priority::integer,
 	conornew,
 	trackingnum,
 	firstyrsubmitted,
@@ -50,7 +50,7 @@ SELECT
 	supporters2,
 	agency,
 	budgetcategory,
-	priority,
+	priority::integer,
 	conornew,
 	trackingnum,
 	firstyrsubmitted,
@@ -78,7 +78,7 @@ ON b.regid = a.parentregid
 );
 
 ALTER TABLE cbbr_submissions ADD agencyacro text;
-ALTER TABLE cbbr_submissions ADD denominator double precision;
+ALTER TABLE cbbr_submissions ADD denominator integer;
 ALTER TABLE cbbr_submissions ADD geomsource text;
 ALTER TABLE cbbr_submissions ADD dataname text;
 ALTER TABLE cbbr_submissions ADD datasource text;

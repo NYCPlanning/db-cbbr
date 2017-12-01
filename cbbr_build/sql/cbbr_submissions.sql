@@ -82,10 +82,10 @@ ALTER TABLE cbbr_submissions ADD denominator integer;
 ALTER TABLE cbbr_submissions ADD geomsource text;
 ALTER TABLE cbbr_submissions ADD dataname text;
 ALTER TABLE cbbr_submissions ADD datasource text;
-ALTER TABLE cbbr_submissions ADD first text;
-ALTER TABLE cbbr_submissions ADD last text;
-ALTER TABLE cbbr_submissions ADD title text;
-ALTER TABLE cbbr_submissions ADD email text;
-ALTER TABLE cbbr_submissions ADD phone text;
+ALTER TABLE cbbr_submissions ADD cifirst text;
+ALTER TABLE cbbr_submissions ADD cilast text;
+ALTER TABLE cbbr_submissions ADD cititle text;
+ALTER TABLE cbbr_submissions ADD ciemail text;
+ALTER TABLE cbbr_submissions ADD ciphone text;
 
 SELECT AddGeometryColumn ('public','cbbr_submissions','geom',4326,'Geometry',2);

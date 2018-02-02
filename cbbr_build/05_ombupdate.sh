@@ -6,10 +6,11 @@ cd $REPOLOC
 
 cd '/prod/data-loading-scripts'
 
+# load lookup table
 echo 'Loading core datasets'
-node loader.js install cbbr_submissions
-node loader.js install cbbr_geoms
-node loader.js install dpr_parksproperties
+node loader.js install cbbr_omblookuptable
+# load omb table
+node loader.js install cbbr_ombresponse
 
 cd '/prod/db-cbbr'
 
@@ -17,10 +18,14 @@ cd '/prod/db-cbbr'
 DBNAME=$(cat $REPOLOC/cbbr.config.json | jq -r '.DBNAME')
 DBUSER=$(cat $REPOLOC/cbbr.config.json | jq -r '.DBUSER')
 
-# load lookup table
+# update cbbr_submissions table with new OMB data
+echo 'Updating data...'
+psql -U $DBUSER -d $DBNAME -f $REPOLOC/cbbr_build/sql/update_omb.sql
 
-
-# load omb table
-
-# remove lookup table and omb table
-
+# re normalize data
+echo 'Normalizing data...'
+psql -U $DBUSER -d $DBNAME -f $REPOLOC/cbbr_build/sql/normalize_agency.sql
+psql -U $DBUSER -d $DBNAME -f $REPOLOC/cbbr_build/sql/normalize_agencyacro.sql
+psql -U $DBUSER -d $DBNAME -f $REPOLOC/cbbr_build/sql/normalize_commdist.sql
+psql -U $DBUSER -d $DBNAME -f $REPOLOC/cbbr_build/sql/normalize_denominator.sql
+psql -U $DBUSER -d $DBNAME -f $REPOLOC/cbbr_build/sql/normalize_sitetype.sql

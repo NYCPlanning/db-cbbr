@@ -90,3 +90,7 @@ Steps:
 
 #### 04_export.sh
 Export geojson and csv files for Carto
+
+#### 05_ombupdate.sh
+OMB reviews the CBBR submissions and submits feedback / changes to DCP each January.  When the OMB feedback is received post the returned tables onto the FTP site, then run **05_ombupdate.sh** and rerun **03_spatial.sh** and **04_export.sh**
+

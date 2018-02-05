@@ -38,6 +38,18 @@ FROM (
 	) b
 WHERE upper(a.regid)=upper(b.regid);
 
+DELETE FROM cbbr_submissions
+WHERE regid IN (
+	SELECT a.regid FROM cbbr_submissions a
+	LEFT JOIN (
+		SELECT a.*, regid as regidb
+		FROM cbbr_ombresponse a
+		LEFT JOIN cbbr_omblookuptable b
+		ON a.newtrackingno=b.newtrackingno
+	) b
+	ON upper(a.regid)=b.regidb
+WHERE b.regidb IS NULL);
+
 -- dropping tables
 DROP TABLE IF EXISTS cbbr_ombresponse;
 DROP TABLE IF EXISTS cbbr_omblookuptable;

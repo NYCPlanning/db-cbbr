@@ -1,5 +1,5 @@
 -- get a list of records that go not fall w/ in the expected community board
-
+COPY (
 SELECT a.regid, 
 	a.sitename, 
 	a.description, 
@@ -14,3 +14,4 @@ WHERE a.commdist::text<>b.borocd::text
 	AND ST_IsValid(b.geom)
 	AND a.commdist IS NOT NULL
 	AND b.borocd IS NOT NULL
+) TO '/prod/db-cbbr/analysis/output/cbbr_projects_outsideexpectedcd.csv' DELIMITER ',' CSV HEADER;

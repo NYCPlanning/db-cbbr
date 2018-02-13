@@ -53,7 +53,7 @@ WHERE lower(agency) LIKE '%environmental%';
 
 UPDATE cbbr_submissions
 SET agency = 'Department of Health and Mental Hygiene'
-WHERE lower(agency) LIKE '%mental%';
+WHERE lower(agency) LIKE '% mental%';
 
 UPDATE cbbr_submissions
 SET agency = 'Department of Homeless Services'

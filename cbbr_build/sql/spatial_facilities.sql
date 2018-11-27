@@ -11,7 +11,7 @@ SELECT facname
 FROM filtered
 WHERE namecount = 1
 )
-SELECT a.regid, a.sitename, b.facname, b.wkb_geometry as geom
+SELECT a.regid, a.sitename, b.facname, b.geom
 FROM cbbr_submissions a, facdb_facilities b
 WHERE a.geom IS NULL AND
 	  a.sitename IS NOT NULL AND
@@ -32,7 +32,7 @@ WHERE cbbr_submissions.regid=master.regid AND
 
 -- update lib geoms using facdb
 WITH master AS(
-SELECT a.regid, a.sitename, b.facname, b.wkb_geometry as geom
+SELECT a.regid, a.sitename, b.facname, b.geom
 FROM cbbr_submissions a,
      (SELECT * FROM facdb_facilities WHERE facgroup = 'Libraries') b
 WHERE upper(a.sitename) LIKE '%LIBRARY%'
@@ -51,7 +51,7 @@ WHERE cbbr_submissions.regid=master.regid AND
 
 -- update precinct geoms using facdb
 WITH master AS(
-SELECT a.regid, a.sitename, b.facname, b.wkb_geometry as geom
+SELECT a.regid, a.sitename, b.facname, b.geom
 FROM cbbr_submissions a,
      (SELECT * FROM facdb_facilities WHERE facsubgrp = 'Police Services') b
 WHERE upper(a.sitename) LIKE '%PRECINCT%'
@@ -71,7 +71,7 @@ WHERE cbbr_submissions.regid=master.regid AND
 
 -- update school geoms using facdb
 WITH master AS(
-SELECT a.regid, a.sitename, b.facname, b.wkb_geometry as geom
+SELECT a.regid, a.sitename, b.facname, b.geom
 FROM cbbr_submissions a,
      (SELECT * FROM facdb_facilities WHERE facsubgrp = 'Public K-12 Schools') b
 WHERE (upper(a.sitename) LIKE '%SCHOOL%' OR upper(a.sitename) LIKE '%P.S.%')

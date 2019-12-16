@@ -1,28 +1,46 @@
 #!/bin/bash
+# Create a postgres database container
+source config.sh
 
-################################################################################################
-### OBTAINING DATA
-################################################################################################
-### NOTE: This script requires that you setup the DATABASE_URL environment variable.
-### Directions are in the README.md.
+[ ! "$(docker ps -a | grep $DB_CONTAINER_NAME)" ]\
+     && docker run -itd --name=$DB_CONTAINER_NAME\
+            -v `pwd`:/home/cbbr_build\
+            -w /home/cbbr_build\
+            --env-file .env\
+            --shm-size=4g\
+            -p $CONTAINER_PORT:5432\
+            mdillon/postgis
 
-## Load all datasets from sources using civic data loader
-## https://github.com/NYCPlanning/data-loading-scripts
+## Wait for database to get ready, this might take 5 seconds of trys
+docker start $DB_CONTAINER_NAME
+until docker exec $DB_CONTAINER_NAME psql -h localhost -U postgres; do
+    echo "Waiting for postgres container..."
+    sleep 0.5
+done
 
-cd '/prod/data-loading-scripts'
+docker inspect -f '{{.State.Running}}' $DB_CONTAINER_NAME
+docker exec $DB_CONTAINER_NAME psql -U postgres -h localhost -c "SELECT 'DATABSE IS UP';"
 
-echo 'Loading core datasets'
-node loader.js install cbbr_submissions
-node loader.js install cbbr_geoms
-node loader.js install dpr_parksproperties
+echo "load data into the container"
+docker run --rm\
+            --network=host\
+            -v `pwd`/python:/home/python\
+            -w /home/python\
+            --env-file .env\
+            sptkl/cook:latest python3 dataloading.py
 
-cd '/prod/db-cbbr'
+docker run --rm\
+            --network=host\
+            -v `pwd`/python:/home/python\
+            -w /home/python\
+            --env-file .env\
+            sptkl/cook:latest bash -c "pip3 install -r requirements.txt; python3 facdb_dataloading.py"
 
-DBNAME=$(cat $REPOLOC/cbbr.config.json | jq -r '.DBNAME')
-DBUSER=$(cat $REPOLOC/cbbr.config.json | jq -r '.DBUSER')
+docker run --rm\
+            --network=host\
+            -v `pwd`:/home/cbbr_build\
+            -w /home/cbbr_build\
+            --env-file .env\
+            sptkl/cook:latest bash -c "pip3 install -r python/requirements.txt; python3 python/aggregate_geoms.py"
 
-# facilties from carto
-wget -O './capitalprojects_build/downloads/facdb_facilities.json' 'https://cartoprod.capitalplanning.nyc/user/cpp/api/v2/sql?format=GeoJSON&q=select * from facdb_facilities'
-
-ogr2ogr -f 'PostgreSQL' PG:'dbname=$DBNAME user=$DBUSER' $REPOLOC/'capitalprojects_build/downloads/facdb_facilities.json' -nln facdb_facilities -overwrite
-rm './capitalprojects_build/downloads/facdb_facilities.json'
+docker exec $DB_CONTAINER_NAME psql -U postgres -h localhost -f sql/preprocessing.sql

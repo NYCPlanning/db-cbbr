@@ -34,6 +34,6 @@ docker run --rm\
             -v `pwd`:/home/cbbr_build\
             -w /home/cbbr_build\
             --env-file .env\
-            sptkl/cook:latest bash -c "pip3 install -r python/requirements.txt; python3 python/facdb_dataloading.py; python3 python/aggregate_geoms.py"
+            sptkl/cook:latest bash -c "pip3 install -r python/requirements.txt; python3 python/aggregate_geoms.py"
 
 docker exec $DB_CONTAINER_NAME psql -U postgres -h localhost -f sql/preprocessing.sql

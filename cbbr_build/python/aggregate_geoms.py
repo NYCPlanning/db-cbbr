@@ -21,19 +21,17 @@ if __name__ == '__main__':
             info = info.replace("]]]",']]')
         if (type == 'LineString')&(count > 3)&('[[[' in info):
             info = info.replace("LineString",'Polygon')
-            type = 'Polygon'
         if (type == 'LineString')&(count > 3)&('[[[' not in info):
             info = info.replace("LineString",'Polygon')
-            type = 'Polygon'
             info = info.replace("[[",'[[[')
             info = info.replace("]]",']]]')
         name = str(f)[str(f).find('geometries/')+len('geometries/'):-5]
         result = dict(
             regid = name,
-            type = type,
             geom = info
         )
         data.append(result)
 
     df = pd.DataFrame.from_dict(data)
+    df.to_csv(sourcePath/'0_cbbr_geoms.csv')
     df.to_sql('cbbr_geoms', engine, if_exists='replace', chunksize=10000)

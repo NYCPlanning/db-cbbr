@@ -24,16 +24,9 @@ docker exec $DB_CONTAINER_NAME psql -U postgres -h localhost -c "SELECT 'DATABSE
 echo "load data into the container"
 docker run --rm\
             --network=host\
-            -v `pwd`/python:/home/python\
-            -w /home/python\
-            --env-file .env\
-            sptkl/cook:latest python3 dataloading.py
-
-docker run --rm\
-            --network=host\
             -v `pwd`:/home/cbbr_build\
             -w /home/cbbr_build\
             --env-file .env\
-            sptkl/cook:latest bash -c "pip3 install -r python/requirements.txt; python3 python/aggregate_geoms.py"
+            sptkl/cook:latest bash -c "pip3 install -r python/requirements.txt; python3 python/dataloading.py ;python3 python/aggregate_geoms.py"
 
 docker exec $DB_CONTAINER_NAME psql -U postgres -h localhost -f sql/preprocessing.sql

@@ -16,5 +16,6 @@ CBBR is primarly built for planning coordination and information purposes only
 
 ## Building Instructions:
 1. `./01_dataloading.sh` to load all source data into the postgresDB container
+3. `./03_spatial.sh` to geocode the dataset
 5. `./05_archive.sh` to archive the cbbr to EDM postgresDB
 6. `./06_cleanup.sh` note: the clean up step will remove postgresDB container

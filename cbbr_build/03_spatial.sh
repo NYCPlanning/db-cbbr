@@ -12,5 +12,6 @@ docker exec $DB_CONTAINER_NAME psql -U postgres -h localhost -f sql/assign_geoms
 docker exec $DB_CONTAINER_NAME psql -U postgres -h localhost -f sql/spatial_manualshp.sql
 docker exec $DB_CONTAINER_NAME psql -U postgres -h localhost -f sql/spatial_dpr_string_name.sql
 docker exec $DB_CONTAINER_NAME psql -U postgres -h localhost -f sql/spatial_facilities.sql
+docker exec $DB_CONTAINER_NAME psql -U postgres -h localhost -f sql/spatial_geomclean.sql
 
 docker exec $DB_CONTAINER_NAME psql -U postgres -h localhost -f sql/geo_rejects.sql

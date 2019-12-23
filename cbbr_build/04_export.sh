@@ -2,7 +2,7 @@
 source config.sh
 
 echo "Exporting output tables"
-docker exec $DB_CONTAINER_NAME psql -U postgres -h localhost -c "\COPY (SELECT * FROM cbbr_submissions WHERE borough IS NOT NULL) TO 'output/cbbr_submissions.csv' DELIMITER ',' CSV HEADER;"
+psql $BUILD_ENGINE -c "\COPY (SELECT * FROM cbbr_submissions WHERE borough IS NOT NULL) TO 'output/cbbr_submissions.csv' DELIMITER ',' CSV HEADER;"
 
 # # points
 # ogr2ogr -f "GeoJSON" cbbr_build/output/cbbr_submissions_pts.geojson PG:"host=localhost dbname=$DBNAME user=$DBUSER" \

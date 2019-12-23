@@ -1,152 +1,41 @@
+-- create the agency field
+ALTER TABLE cbbr_submissions
+ADD COLUMN agency text;
+
 -- setting the agency name
 UPDATE cbbr_submissions 
-SET agency = 'Administration for Childrens Services'
-WHERE lower(agency) LIKE '%children%';
-
-UPDATE cbbr_submissions 
-SET agency = 'Brooklyn Public Library'
-WHERE lower(agency) LIKE 'if%bpl%' AND borough = 'Brooklyn';
-
-UPDATE cbbr_submissions 
-SET agency = 'City University of New York'
-WHERE lower(agency) LIKE '%city%university%';
-
-UPDATE cbbr_submissions 
-SET agency = 'Department for the Aging'
-WHERE lower(agency) LIKE '%aging%';
-
-UPDATE cbbr_submissions
-SET agency = 'Department of Buildings'
-WHERE lower(agency) LIKE '%buildings%';
-
-UPDATE cbbr_submissions 
-SET agency = 'Department of City Planning'
-WHERE lower(agency) LIKE '%planning%';
-
-UPDATE cbbr_submissions 
-SET agency = 'Department of Citywide Administrative Services'
-WHERE lower(agency) LIKE '%administrative%';
-
-UPDATE cbbr_submissions
-SET agency = 'Department of Consumer Affairs'
-WHERE lower(agency) LIKE '%consumer%';
-
-UPDATE cbbr_submissions
-SET agency = 'Department of Correction'
-WHERE lower(agency) LIKE '%correction%';
-
-UPDATE cbbr_submissions
-SET agency = 'Department of Cultural Affairs'
-WHERE lower(agency) LIKE '%cultural%';
-
-UPDATE cbbr_submissions
-SET agency = 'Department of Design and Construction'
-WHERE lower(agency) LIKE '%design%';
-
-UPDATE cbbr_submissions
-SET agency = 'Department of Education'
-WHERE lower(agency) LIKE '%education%';
-
-UPDATE cbbr_submissions
-SET agency = 'Department of Environmental Protection'
-WHERE lower(agency) LIKE '%environmental%';
-
-UPDATE cbbr_submissions
-SET agency = 'Department of Health and Mental Hygiene'
-WHERE lower(agency) LIKE '% mental%';
-
-UPDATE cbbr_submissions
-SET agency = 'Department of Homeless Services'
-WHERE lower(agency) LIKE '%homeless%';
-
-UPDATE cbbr_submissions
-SET agency = 'Department of Housing Preservation and Development'
-WHERE lower(agency) LIKE '%preservation%';
-
-UPDATE cbbr_submissions
-SET agency = 'Department of Information Technology and Telecommunications'
-WHERE lower(agency) LIKE '%technology%';
-
-UPDATE cbbr_submissions
-SET agency = 'Department of Parks and Recreation'
-WHERE lower(agency) LIKE '%parks%';
-
-UPDATE cbbr_submissions
-SET agency = 'Department of Probation'
-WHERE lower(agency) LIKE '%probation%';
-
-UPDATE cbbr_submissions
-SET agency = 'Department of Sanitation'
-WHERE lower(agency) LIKE '%sanitation%';
-
-UPDATE cbbr_submissions
-SET agency = 'Department of Small Business Services'
-WHERE lower(agency) LIKE '%small%';
-
-UPDATE cbbr_submissions
-SET agency = 'Department of Transportation'
-WHERE lower(agency) LIKE '%transportation%';
-
-UPDATE cbbr_submissions
-SET agency = 'Department of Youth and Community Development'
-WHERE lower(agency) LIKE '%youth%';
-
-UPDATE cbbr_submissions
-SET agency = 'Economic Development Corporation'
-WHERE lower(agency) LIKE '%economic%';
-
-UPDATE cbbr_submissions
-SET agency = 'Fire Department'
-WHERE lower(agency) LIKE '%fire%';
-
-UPDATE cbbr_submissions
-SET agency = 'Health and Hospitals Corporation'
-WHERE lower(agency) LIKE '%hospitals%';
-
-UPDATE cbbr_submissions
-SET agency = 'Human Resources Administration'
-WHERE lower(agency) LIKE '%social services%' OR lower(agency) LIKE '%human resources%';
-
-UPDATE cbbr_submissions
-SET agency = 'Landmarks Preservation Commission'
-WHERE lower(agency) LIKE '%landmarks%';
-
-UPDATE cbbr_submissions
-SET agency = 'New York City Housing Authority'
-WHERE lower(agency) LIKE '%nycha%';
-
-UPDATE cbbr_submissions
-SET agency = 'New York City Transit Authority'
-WHERE lower(agency) LIKE '%transit%';
-
-UPDATE cbbr_submissions
-SET agency = 'New York Public Library'
-WHERE lower(agency) LIKE 'if%nypl%' OR lower(agency) LIKE '%(nypl)%' AND borough <> 'Queens' AND borough <> 'Brooklyn';
-
-UPDATE cbbr_submissions
-SET agency = 'New York Research Libraries'
-WHERE lower(agency) LIKE '%research libraries%';
-
-UPDATE cbbr_submissions
-SET agency = 'Office of Management and Budget'
-WHERE lower(agency) LIKE '%budget%';
-
-UPDATE cbbr_submissions
-SET agency = 'Other'
-WHERE lower(agency) LIKE '%other%';
-
-UPDATE cbbr_submissions
-SET agency = 'Police Department'
-WHERE lower(agency) LIKE '%police%';
-
-UPDATE cbbr_submissions
-SET agency = 'Queens Public Library'
-WHERE lower(agency) LIKE 'if%qpl%' AND borough = 'Queens';
-
-UPDATE cbbr_submissions
-SET agency = 'School Construction Authority'
-WHERE lower(agency) LIKE '%school construction authority%';
-
-UPDATE cbbr_submissions
-SET agency = 'Taxi and Limousine Commission'
-WHERE lower(agency) LIKE '%taxi%';
+SET agency = (CASE 
+		WHEN agency_acronym = 'ACS' THEN upper('Administration for Childrens Services')
+		WHEN agency_acronym = 'BPL' THEN upper('Brooklyn Public Library')
+		WHEN agency_acronym = 'DCAS' THEN upper('Department of Citywide Administrative Services')
+		WHEN agency_acronym = 'DCLA' THEN upper('Department of Cultural Affairs')
+		WHEN agency_acronym = 'DCP' THEN upper('Department of City Planning')
+		WHEN agency_acronym = 'DEP' THEN upper('Department of Environmental Protection')
+		WHEN agency_acronym = 'DFTA' THEN upper('Department for the Aging')
+		WHEN agency_acronym = 'DHS' THEN upper('Department of Homeless Services')
+		WHEN agency_acronym = 'DHS, HRA' THEN upper('Department of Homeless Services / Human Resources Administration')
+		WHEN agency_acronym = 'DOB' THEN upper('Department of Buildings')
+		WHEN agency_acronym = 'DOE' THEN upper('Department of Education')
+		WHEN agency_acronym = 'DOHMH' THEN upper('Department of Health and Mental Hygiene')
+		WHEN agency_acronym = 'DOITT' THEN upper('Department of Information Technology and Telecommunications')
+		WHEN agency_acronym = 'DOT' THEN upper('Department of Transportation')
+		WHEN agency_acronym = 'DPR' THEN upper('Department of Parks and Recreation')
+		WHEN agency_acronym = 'DSNY' THEN upper('Department of Sanitation')
+		WHEN agency_acronym = 'DYCD' THEN upper('Department of Youth and Community Development')
+		WHEN agency_acronym = 'EDC' THEN upper('Economic Development Corporation')
+		WHEN agency_acronym = 'FDNY' THEN upper('NYC FIRE DEPARTMENT')
+		WHEN agency_acronym = 'HHC' THEN upper('Health and Hospitals Corporation')
+		WHEN agency_acronym = 'HPD' THEN upper('DEPARTMENT OF HOUSING PRESERVATION AND DEVELOPMENT')
+		WHEN agency_acronym = 'HRA' THEN upper('HUMAN RESOURCES ADMINISTRATION')
+		WHEN agency_acronym = 'LPC' THEN upper('Landmarks Preservation Commission')
+		WHEN agency_acronym = 'NYCHA' THEN upper('New York City Housing Authority')
+		WHEN agency_acronym = 'NYCTA' THEN upper('NYC TRANSIT AUTHORITY')
+		WHEN agency_acronym = 'NYPD' THEN upper('NYC POLICE DEPARTMENT')
+		WHEN agency_acronym = 'NYPL' THEN upper('New York Public Library')
+		WHEN agency_acronym = 'OMB' THEN upper('Office of Management and Budget')
+		WHEN agency_acronym = 'QL' THEN upper('Queens Public Library')
+		WHEN agency_acronym = 'SBS' THEN upper('Department of Small Business Services')
+		WHEN agency_acronym = 'SCA' THEN upper('School Construction Authority')
+		WHEN agency_acronym = 'TLC' THEN upper('Taxi and Limousine Commission')
+		ELSE NULL
+	END);

@@ -7,7 +7,8 @@ docker run -it --rm\
             --env-file .env\
             sptkl/docker-geosupport:19d bash -c "python3 python/geocoding.py"
 
-psql $BUILD_ENGINE -f sql/assign_geoms.sql
-psql $BUILD_ENGINE -f sql/spatial_manualshp.sql
-psql $BUILD_ENGINE -f sql/spatial_dpr_string_name.sql
-psql $BUILD_ENGINE -f sql/spatial_facilities.sql
+docker exec $DB_CONTAINER_NAME psql -U postgres -h localhost -f sql/assign_geoms.sql
+docker exec $DB_CONTAINER_NAME psql -U postgres -h localhost -f sql/spatial_manualshp.sql
+docker exec $DB_CONTAINER_NAME psql -U postgres -h localhost -f sql/spatial_dpr_string_name.sql
+docker exec $DB_CONTAINER_NAME psql -U postgres -h localhost -f sql/spatial_facilities.sql
+docker exec $DB_CONTAINER_NAME psql -U postgres -h localhost -f sql/spatial_geomclean.sql

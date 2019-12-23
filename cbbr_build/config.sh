@@ -1,2 +1,4 @@
-DB_CONTAINER_NAME=cbbr-$USER
-CONTAINER_PORT=3436
+if [ -f .env ]
+then
+  export $(cat .env | sed 's/#.*//g' | xargs)
+fi

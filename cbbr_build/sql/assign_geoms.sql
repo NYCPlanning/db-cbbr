@@ -1,5 +1,7 @@
 -- Assign geoms based on geocoding returned values
 ALTER TABLE cbbr_submissions
+DROP COLUMN IF EXISTS geo_from_geom,
+DROP COLUMN IF EXISTS geo_to_geom,
 DROP COLUMN IF EXISTS geom;
 ALTER TABLE cbbr_submissions
 ADD geo_from_geom GEOMETRY,

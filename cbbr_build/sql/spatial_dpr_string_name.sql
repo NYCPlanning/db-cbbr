@@ -15,6 +15,14 @@ WHERE a.geom IS NULL AND
       upper(b.signname) <> 'SITTING AREA' AND
       upper(b.signname) <> 'BRIDGE PARK' AND
       upper(a.facility_or_park_name) LIKE upper('%' || b.signname || '%')
+      AND a.borough = (CASE 
+        WHEN b.borough = 'M' THEN 'Manhattan'
+        WHEN b.borough = 'X' THEN 'Bronx'
+        WHEN b.borough = 'B' THEN 'Brooklyn'
+        WHEN b.borough = 'Q' THEN 'Queens'
+        WHEN b.borough = 'R' THEN 'Staten Island'
+        ELSE NULL
+        END)
 ) 
 UPDATE cbbr_submissions
 SET geo_function='dpr_parksproperties',
@@ -35,6 +43,14 @@ WHERE a.geom IS NULL AND
       upper(b.signname) <> 'TRIANGLE' AND
       upper(b.signname) <> 'SITTING AREA' AND
       upper(a.facility_or_park_name) LIKE upper('%' ||b.signname || '%')
+      AND a.borough = (CASE 
+        WHEN b.borough = 'M' THEN 'Manhattan'
+        WHEN b.borough = 'X' THEN 'Bronx'
+        WHEN b.borough = 'B' THEN 'Brooklyn'
+        WHEN b.borough = 'Q' THEN 'Queens'
+        WHEN b.borough = 'R' THEN 'Staten Island'
+        ELSE NULL
+        END)
 )
 UPDATE cbbr_submissions
 SET geo_function='dpr_parksproperties',
@@ -55,7 +71,15 @@ WHERE a.geom IS NULL AND
       upper(b.signname) <> 'TRIANGLE' AND
       upper(b.signname) <> 'SITTING AREA' AND
       upper(b.signname) <> 'BRIDGE PARK' AND
-      levenshtein(upper(a.facility_or_park_name), upper('%' ||b.signname || '%')) <=3
+      levenshtein(upper('%' ||a.facility_or_park_name || '%'), upper('%' ||b.signname || '%')) <=3
+      AND a.borough = (CASE 
+        WHEN b.borough = 'M' THEN 'Manhattan'
+        WHEN b.borough = 'X' THEN 'Bronx'
+        WHEN b.borough = 'B' THEN 'Brooklyn'
+        WHEN b.borough = 'Q' THEN 'Queens'
+        WHEN b.borough = 'R' THEN 'Staten Island'
+        ELSE NULL
+        END)
 )
 UPDATE cbbr_submissions
 SET geo_function='dpr_parksproperties',
@@ -63,4 +87,3 @@ SET geo_function='dpr_parksproperties',
 FROM master
 WHERE cbbr_submissions.unique_id=master.unique_id AND
       cbbr_submissions.geom IS NULL;
-

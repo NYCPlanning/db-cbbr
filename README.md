@@ -11,8 +11,7 @@ CBBR is primarly built for planning coordination and information purposes only
 
 ## Building Preparation:
 1. `cd cbbr_build` navigate to the building directory
-2. set CONTAINER_PORT in `config.sh` to a port number is not used
-3. Set RECIPE_ENGINE, BUILD_ENGINE and EDM_DATA in `.env`
+2. Set RECIPE_ENGINE, BUILD_ENGINE and EDM_DATA in `.env`
 
 ## Building Instructions:
 1. `./01_dataloading.sh` to load all source data into the postgresDB container

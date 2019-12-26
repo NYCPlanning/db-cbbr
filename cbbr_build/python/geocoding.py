@@ -179,4 +179,4 @@ if __name__ == '__main__':
     
     print('geocoding finished, dumping to postgres ...')
     df = pd.DataFrame(it)
-    df.to_sql('cbbr_submissions', engine, if_exists='replace', chunksize=500)
+    df.to_sql('cbbr_submissions', engine, if_exists='replace', chunksize=500, index=False)

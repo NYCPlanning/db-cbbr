@@ -10,12 +10,12 @@ ADD geom GEOMETRY;
 
 --clean up empty values
 UPDATE cbbr_submissions
-SET geo_bbl = (CASE WHEN geo_bbl = '' THEN NULL ELSE geo_bbl END),
-    geo_bin = (CASE WHEN geo_bin = '' THEN NULL ELSE geo_bin END),
-    geo_longitude = (CASE WHEN geo_longitude = '' THEN NULL ELSE geo_longitude END),
-	geo_latitude = (CASE WHEN geo_latitude = '' THEN NULL ELSE geo_latitude END),
-	geo_x_coord = (CASE WHEN geo_x_coord = '' THEN NULL ELSE geo_x_coord END),
-	geo_y_coord = (CASE WHEN geo_y_coord = '' THEN NULL ELSE geo_y_coord END)
+SET geo_bbl = nullif(geo_bbl,''),
+    geo_bin = nullif(geo_bin,''),
+    geo_longitude = nullif(geo_longitude,''),
+	geo_latitude = nullif(geo_latitude,''),
+	geo_x_coord = nullif(geo_x_coord,''),
+	geo_y_coord = nullif(geo_y_coord,'')
 ;
 
 -- Assign geoms based on the centroid of the bin

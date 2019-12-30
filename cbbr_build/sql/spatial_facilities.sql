@@ -94,21 +94,54 @@ SET geo_function='facilities',
 FROM master
 WHERE cbbr_submissions.unique_id=master.unique_id AND
       cbbr_submissions.geom IS NULL;
+-- update school geoms using facdb
+-- round 2 after removing leading 0s
+WITH master AS(
+SELECT a.unique_id, a.facility_or_park_name, b.facname, b.geom
+FROM cbbr_submissions a,
+     (SELECT * FROM facilities WHERE upper(facsubgrp) = 'PUBLIC K-12 SCHOOLS') b
+WHERE (upper(a.facility_or_park_name) LIKE '%SCHOOL%' 
+  OR upper(a.facility_or_park_name) LIKE '%P.S.%' 
+  OR upper(a.facility_or_park_name) LIKE '%I.S.%' 
+  OR upper(a.facility_or_park_name) LIKE '%M.S.%' 
+  OR upper(a.facility_or_park_name) LIKE '%H.S.%'
+  OR upper(a.facility_or_park_name) LIKE 'PS%'
+  OR upper(a.facility_or_park_name) LIKE 'P.S%')
+AND upper(a.facility_or_park_name) NOT LIKE '%AND%'
+AND regexp_replace(a.facility_or_park_name,'\D', '', 'g') = regexp_replace(replace(replace(b.facname,' 0', ' '),' 0', ' '),'\D', '', 'g')
+AND regexp_replace(a.facility_or_park_name,'\D', '', 'g') <> ''
+AND a.borough = b.boro
+AND a.geom IS NULL
+)
+
+UPDATE cbbr_submissions
+SET geo_function='facilities',
+    geom=master.geom
+FROM master
+WHERE cbbr_submissions.unique_id=master.unique_id AND
+      cbbr_submissions.geom IS NULL;
 
 -- update park geoms using facdb
 WITH master AS(
-SELECT a.unique_id, a.facility_or_park_name, b.facname, b.geom
+SELECT a.unique_id, a.facility_or_park_name, b.facname, a.agency_acronym, a.borough, b.geom
 FROM cbbr_submissions a,
      (SELECT * FROM facilities WHERE upper(facgroup) = 'PARKS AND PLAZAS') b
 WHERE  (upper(a.facility_or_park_name) LIKE '%PARK%' OR upper(a.facility_or_park_name) LIKE '%PLAYGROUND%' OR agency_acronym = 'DPR')
 AND upper(a.facility_or_park_name) NOT LIKE '%AND%'
-AND ('%'||replace(upper(a.facility_or_park_name),' PARK','')||'%' LIKE '%'||replace(upper(b.facname),' PARK','')||'%')
+AND (('%'||replace(upper(a.facility_or_park_name),' PARK','')||'%' LIKE '%'||replace(upper(b.facname),' PARK','')||'%')
+  OR ('%'||replace(upper(a.facility_or_park_name),' PARK','')||'%' LIKE '%'||replace(upper(b.facname),' PLAYGROUND','')||'%')
+  OR ('%'||replace(upper(a.facility_or_park_name),' PLAYGROUND','')||'%' LIKE '%'||replace(upper(b.facname),' PLAYGROUND','')||'%')
+  OR ('%'||replace(upper(a.facility_or_park_name),' PLAYGROUND','')||'%' LIKE '%'||replace(upper(b.facname),' PARK','')||'%')
+  )
 AND upper(b.facname) <> 'PARK' AND
       upper(b.facname) <> 'LOT' AND
       upper(b.facname) <> 'GARDEN' AND 
       upper(b.facname) <> 'TRIANGLE' AND
       upper(b.facname) <> 'SITTING AREA' AND
-      upper(b.facname) <> 'BRIDGE PARK'
+      upper(b.facname) <> 'BRIDGE PARK' AND
+      upper(b.facname) NOT LIKE '%GARDEN%' AND 
+      upper(a.facility_or_park_name) NOT LIKE '%GARDEN%' AND
+      upper(a.facility_or_park_name) NOT LIKE '%WOOD%'
 AND a.borough = b.boro
 AND a.geom IS NULL)
 

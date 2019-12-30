@@ -1,5 +1,7 @@
 -- create the agency field
 ALTER TABLE cbbr_submissions
+DROP COLUMN IF EXISTS agency;
+ALTER TABLE cbbr_submissions
 ADD COLUMN agency text;
 
 -- setting the agency name

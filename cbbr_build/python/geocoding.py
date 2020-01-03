@@ -160,7 +160,6 @@ if __name__ == '__main__':
     engine = create_engine(os.environ['BUILD_ENGINE'])
 
     df = pd.read_sql('SELECT * FROM cbbr_submissions', engine)
-    df.rename(columns={"boro": "borough"}, inplace=True)
     df['addressnum'] = df.address.apply(get_hnum)
     df['streetname'] = df.address.apply(get_sname)
     df['streetname_1'] = df['address'].apply(lambda x: clean_streetname(x, 0))

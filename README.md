@@ -15,5 +15,7 @@ CBBR is primarly built for planning coordination and information purposes only
 
 ## Building Instructions:
 1. `./01_dataloading.sh` to load all source data into the postgresDB container
+2. `./02_cbbr.sh` to normalize the agency and community district fields
 3. `./03_spatial.sh` to geocode the dataset
+3. `./04_export.sh` to export the dataset as csv
 5. `./05_archive.sh` to archive the cbbr to EDM postgresDB

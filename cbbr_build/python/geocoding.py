@@ -107,7 +107,7 @@ def geocode(inputs):
                             geo_from_y_coord = g['2'](node=geo_from_node).get('SPATIAL COORDINATES', {}).get('Y Coordinate', '')
                             geo_to_x_coord = g['2'](node=geo_to_node).get('SPATIAL COORDINATES', {}).get('X Coordinate', '')
                             geo_to_y_coord = g['2'](node=geo_to_node).get('SPATIAL COORDINATES', {}).get('Y Coordinate', '')
-                            geo.update(dict(geo_from_x_coord=geo_from_x_coord, geo_from_y_coord=geo_from_x_coord, geo_to_x_coord=geo_from_x_coord, geo_to_y_coord=geo_from_x_coord,geo_function='Segment'))
+                            geo.update(dict(geo_from_x_coord=geo_from_x_coord, geo_from_y_coord=geo_from_y_coord, geo_to_x_coord=geo_to_x_coord, geo_to_y_coord=geo_to_y_coord, geo_function='Segment'))
                         else:
                             geo = g['1B'](street_name=sname, house_number=hnum, borough=borough)
                             geo = geo_parser(geo)

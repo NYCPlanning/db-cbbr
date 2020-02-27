@@ -11,6 +11,10 @@ psql $BUILD_ENGINE -f sql/assign_geoms.sql
 psql $BUILD_ENGINE -f sql/spatial_manualshp.sql
 psql $BUILD_ENGINE -f sql/spatial_dpr_string_name.sql
 psql $BUILD_ENGINE -f sql/spatial_facilities.sql
-psql $BUILD_ENGINE -f sql/spatial_geomclean.sql
 
+echo "Overwriting geometries with manual mapping..."
+psql $BUILD_ENGINE -f sql/spatial_manual_map.sql
+echo "Done."
+
+psql $BUILD_ENGINE -f sql/spatial_geomclean.sql
 psql $BUILD_ENGINE -f sql/geo_rejects.sql

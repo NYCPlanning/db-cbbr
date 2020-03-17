@@ -1,28 +1,19 @@
-WITH proj AS(
-SELECT  ST_Multi(ST_Union(geom)) as geom,
-       newtrackin,
-       sitename,
-       addressnum,
-       streetname,
-       sitestreet,
-       sitecrosss
-FROM cbbr_geomsfy18
-GROUP BY newtrackin,
-       sitename,
-       addressnum,
-       streetname,
-       sitestreet,
-       sitecrosss
+-- backfill ungeocoded records with manually researched geoms
+WITH geoms AS(
+	WITH regid_lookup AS(
+		SELECT a.regid, a.trackingnum
+		FROM old_cbbr_submissions a
+		RIGHT JOIN cbbr_submissions b
+		ON a.trackingnum = b.parent_tracking_code
+		WHERE a.regid IS NOT NULL AND a.trackingnum IS NOT NULL
+	)
+	SELECT a.trackingnum, b.geom FROM regid_lookup a
+	INNER JOIN cbbr_geoms b
+	ON a.regid = b.regid
 )
-UPDATE cbbr_submissions SET geom = proj.geom,
-       dataname = 'cbbr_geomsfy18',
-       datasource = 'dcp',
-       geomsource = 'dcp'
-FROM proj
-WHERE cbbr_submissions.trackingnum = proj.newtrackin
-AND (cbbr_submissions.sitename = proj.sitename 
-	OR (cbbr_submissions.addressnum::text = proj.addressnum::text 
-		AND cbbr_submissions.streetname = proj.streetname)
-	OR (cbbr_submissions.streetsegment = proj.sitestreet 
-		AND cbbr_submissions.streetcross1 = proj.sitecrosss))
-AND cbbr_submissions.geom IS NULL AND proj.geom IS NOT NULL;
+UPDATE cbbr_submissions a
+SET geom = b.geom,
+	geo_function = 'Manual_Research'
+FROM geoms b
+WHERE a.parent_tracking_code = b.trackingnum
+AND a.geom IS NULL;

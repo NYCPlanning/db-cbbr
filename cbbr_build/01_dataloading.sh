@@ -1,28 +1,12 @@
 #!/bin/bash
+# Create a postgres database container
+source config.sh
 
-################################################################################################
-### OBTAINING DATA
-################################################################################################
-### NOTE: This script requires that you setup the DATABASE_URL environment variable.
-### Directions are in the README.md.
+echo "load data into the container"
+docker run --rm\
+            -v `pwd`:/home/cbbr_build\
+            -w /home/cbbr_build\
+            --env-file .env\
+            sptkl/cook:latest bash -c "python3 python/dataloading.py; python3 python/aggregate_geoms.py; pip3 install -r python/requirements.txt; python3 python/manual_geoms.py"
 
-## Load all datasets from sources using civic data loader
-## https://github.com/NYCPlanning/data-loading-scripts
-
-cd '/prod/data-loading-scripts'
-
-echo 'Loading core datasets'
-node loader.js install cbbr_submissions
-node loader.js install cbbr_geoms
-node loader.js install dpr_parksproperties
-
-cd '/prod/db-cbbr'
-
-DBNAME=$(cat $REPOLOC/cbbr.config.json | jq -r '.DBNAME')
-DBUSER=$(cat $REPOLOC/cbbr.config.json | jq -r '.DBUSER')
-
-# facilties from carto
-wget -O './capitalprojects_build/downloads/facdb_facilities.json' 'https://cartoprod.capitalplanning.nyc/user/cpp/api/v2/sql?format=GeoJSON&q=select * from facdb_facilities'
-
-ogr2ogr -f 'PostgreSQL' PG:'dbname=$DBNAME user=$DBUSER' $REPOLOC/'capitalprojects_build/downloads/facdb_facilities.json' -nln facdb_facilities -overwrite
-rm './capitalprojects_build/downloads/facdb_facilities.json'
+psql $BUILD_ENGINE -f sql/preprocessing.sql

@@ -1,8 +1,11 @@
 #!/bin/bash
 source config.sh
 
+echo "Transforming to final schema"
+psql $BUILD_ENGINE -f sql/export.sql
+
 echo "Exporting output tables"
-psql $BUILD_ENGINE -c "\COPY (SELECT * FROM cbbr_submissions WHERE borough IS NOT NULL) TO 'output/cbbr_submissions.csv' DELIMITER ',' CSV HEADER;"
+psql $BUILD_ENGINE -c "\COPY (SELECT * FROM cbbr_export WHERE borough IS NOT NULL) TO 'output/cbbr_submissions.csv' DELIMITER ',' CSV HEADER;"
 
 # # points
 # ogr2ogr -f "GeoJSON" cbbr_build/output/cbbr_submissions_pts.geojson PG:"host=localhost dbname=$DBNAME user=$DBUSER" \

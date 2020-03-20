@@ -10,6 +10,7 @@ EDM_DATA = os.environ.get('EDM_DATA', '')
 def ETL():
     importer = Importer(RECIPE_ENGINE, BUILD_ENGINE)
     importer.import_table(schema_name='cbbr_submissions')
+    importer.import_table(schema_name='cbbr_agency_updates')
     importer.import_table(schema_name='dpr_parksproperties')
     importer.import_table(schema_name='doitt_buildingfootprints')
 

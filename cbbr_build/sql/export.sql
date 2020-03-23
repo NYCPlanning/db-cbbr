@@ -22,7 +22,8 @@ CREATE TABLE cbbr_export (
     parent_tracking_code text,
     agyresponsecat text,
     agyresponse text,
-    unique_id text);
+    unique_id text,
+    geom geometry(Geometry,4326));
 
 INSERT INTO cbbr_export(
     trackingnum,
@@ -46,7 +47,8 @@ INSERT INTO cbbr_export(
     parent_tracking_code,
     agyresponsecat,
     agyresponse,
-    unique_id
+    unique_id,
+    geom
 )
 
 SELECT  
@@ -71,5 +73,6 @@ SELECT
     parent_tracking_code,
     agency_category_response,
     agency_response,
-    unique_id
+    unique_id,
+    geom
 FROM cbbr_submissions;

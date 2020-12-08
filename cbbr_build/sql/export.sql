@@ -73,7 +73,7 @@ SELECT
 	  ELSE supporters_1 END) as supporters1,
     (CASE WHEN supporters_2 IS NULL
 			OR supporters_2 IN ('', ' ', 'n/a') THEN NULL
-	  ELSE supporters_2 END) as supporters2
+	  ELSE supporters_2 END) as supporters2,
     parent_tracking_code,
     agency_category_response,
     agency_response,

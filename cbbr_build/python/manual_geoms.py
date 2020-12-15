@@ -14,7 +14,7 @@ db_cursor = db_connection.cursor()
 str_buffer = io.StringIO() 
 
 # Load manual mapping data
-geojson_filename = "final_mapped_CBBR_FY21.geojson"
+geojson_filename = "cbbr_fy22_manualgeoms.geojson"
 geojson_path = Path(__file__).resolve().parent.parent/'geometries'/geojson_filename
 gdf = pd.DataFrame(gpd.read_file(geojson_path))[['unique_id','geometry']]
 gdf = gdf.rename(columns={'geometry':'geom'})
@@ -23,8 +23,8 @@ print("Loading manually mapped geometries: \n", gdf.head())
 
 # Create table
 create = f'''
-DROP TABLE IF EXISTS manual_geoms.\"FY21\";
-CREATE TABLE manual_geoms.\"FY21\" (
+DROP TABLE IF EXISTS manual_geoms.\"FY22\";
+CREATE TABLE manual_geoms.\"FY22\" (
     unique_id text,
     geom geometry 
 );
@@ -36,7 +36,7 @@ con.dispose()
 # Export modified table to CSV, and copy to postgres
 gdf.to_csv(str_buffer, sep='/', header=False, index=False)
 str_buffer.seek(0)
-db_cursor.copy_from(str_buffer, 'manual_geoms.\"FY21\"', sep='/', null='')
+db_cursor.copy_from(str_buffer, 'manual_geoms.\"FY22\"', sep='/', null='')
 db_cursor.connection.commit()
 
 # Close connections

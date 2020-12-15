@@ -2,7 +2,7 @@
 
 -- Translate fy22 ids back to fy21 ids to use fy21 manual geoms
 WITH fy21_fy22_translate AS (
-	SELECT b.fy22_unique_id as unique_id
+	SELECT b.fy22_unique_id as unique_id,
 			a.geom
 	FROM manual_geoms."FY21" a
 	JOIN fy21_fy22_lookup b

@@ -14,7 +14,7 @@ SET geom = b.geom,
 FROM fy21_fy22_translate b
 WHERE a.unique_id = b.unique_id;
 
--- Overwrite with fy21 manual geoms
+-- Overwrite with fy22 manual geoms
 UPDATE cbbr_submissions a
 SET geom = b.geom,
 	geo_function = 'Manual_Research'

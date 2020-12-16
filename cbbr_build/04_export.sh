@@ -39,7 +39,12 @@ psql $BUILD_ENGINE -c "\COPY (SELECT trackingnum,
         DROP TABLE IF EXISTS cbbr_export_pts;
         SELECT * INTO cbbr_export_pts FROM cbbr_export
         WHERE ST_GeometryType(geom)='ST_MultiPoint';
+
+        DROP TABLE IF EXISTS cbbr_submissions_needgeoms;
+        SELECT * INTO cbbr_submissions_needgeoms FROM cbbr_submissions 
+        WHERE geom IS NULL AND type = 'site';
     "
+    CSV_export $BUILD_ENGINE cbbr_submissions_needgeoms cbbr_submissions_needgeoms
     CSV_export $BUILD_ENGINE cbbr_export_poly cbbr_submissions_poly
     CSV_export $BUILD_ENGINE cbbr_export_pts cbbr_submissions_pts
     SHP_export $BUILD_ENGINE cbbr_export_poly MULTIPOLYGON cbbr_submissions_poly

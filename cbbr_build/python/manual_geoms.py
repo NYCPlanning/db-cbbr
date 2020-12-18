@@ -14,7 +14,7 @@ db_cursor = db_connection.cursor()
 str_buffer = io.StringIO() 
 
 # Load manual mapping data
-geojson_filename = "cbbr_fy22_manualgeoms.geojson"
+geojson_filename = "cbbr_manualgeoms_12172020.geojson"
 geojson_path = Path(__file__).resolve().parent.parent/'geometries'/geojson_filename
 gdf = pd.DataFrame(gpd.read_file(geojson_path))[['unique_id','geometry']]
 gdf = gdf.rename(columns={'geometry':'geom'})

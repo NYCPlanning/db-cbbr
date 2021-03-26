@@ -5,8 +5,12 @@ SET geom = ST_SetSRID(ST_GeomFromGeoJSON(geom),4326);
 ALTER TABLE cbbr_geoms
 ALTER COLUMN geom TYPE GEOMETRY;
 
+-- ALTER TABLE cbbr_submissions
+-- RENAME COLUMN boro TO borough;
 ALTER TABLE cbbr_submissions
-RENAME COLUMN boro TO borough;
+RENAME COLUMN trackingnum TO tracking_code;
+ALTER TABLE cbbr_submissions
+RENAME COLUMN agencyacro TO agency_acronym;
 ALTER TABLE doitt_buildingfootprints
 RENAME COLUMN wkb_geometry TO geom;
 ALTER TABLE dpr_parksproperties

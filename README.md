@@ -22,7 +22,7 @@ CBBR is primarly built for planning coordination and information purposes only
 ## Building Preparation
 
 1. `cd cbbr_build` navigate to the building directory
-2. Set RECIPE_ENGINE, BUILD_ENGINE and EDM_DATA in `.env`
+2. Set `RECIPE_ENGINE`, `BUILD_ENGINE`, and `EDM_DATA` in `.env`
 
 ## Building Instructions
 

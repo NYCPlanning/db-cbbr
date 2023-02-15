@@ -1,3 +1,10 @@
+#!/bin/bash
+# A script used by build scripts to import utility functions, set environment variables,
+# and configure connections
+
+# Exit when any command fails
+set -e
+
 if [ -f .env ]
 then
   export $(cat .env | sed 's/#.*//g' | xargs)

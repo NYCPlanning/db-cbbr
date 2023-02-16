@@ -21,7 +21,7 @@ echo "Load data into the container ..."
 import_public cbbr_submissions
 # import_public cbbr_agency_updates # not in edm-recipes yet
 import_public dpr_parksproperties
-import_public doitt_buildingfootprints 20221030 # last version with a valid sql archive in in edm-recipes
+import_public doitt_buildingfootprints 20230122 # last version with a valid sql archive in in edm-recipes
 
 # docker run --rm \
 #     --name $CONTAINER_NAME \

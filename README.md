@@ -23,11 +23,13 @@ CBBR is primarly built for planning coordination and information purposes only
 
 1. `cd cbbr_build` navigate to the building directory
 2. Set `RECIPE_ENGINE`, `BUILD_ENGINE`, and `EDM_DATA` in `.env`
+3. Create and/or activate a python virtual environment
+4. `./dev_python_packages.sh` to install python packages
 
 ## Building Instructions
 
-1. `./01_dataloading.sh` to load all source data into the postgresDB container
-2. `./02_cbbr.sh` to normalize the agency and community district fields
-3. `./03_spatial.sh` to geocode the dataset
-4. `./04_export.sh` to export the dataset as csv
-5. `./05_archive.sh` to archive the cbbr to EDM postgresDB
+2. `./01_dataloading.sh` to load all source data into the postgresDB container
+3. `./02_cbbr.sh` to normalize the agency and community district fields
+4. `./03_spatial.sh` to geocode the dataset
+5. `./04_export.sh` to export the dataset as csv
+6. `./05_archive.sh` to archive the cbbr to EDM postgresDB

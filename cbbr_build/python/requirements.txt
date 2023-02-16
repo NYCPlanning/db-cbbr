@@ -3,3 +3,5 @@ pandas
 geopandas
 usaddress
 python-dotenv
+sqlalchemy
+# python-geosupport

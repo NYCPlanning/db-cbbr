@@ -15,14 +15,23 @@ CONTAINER_WORKDIR="/cook_container_home/$NAME"
 VERSION=$DATE
 
 source $WORKDIR/config.sh
+# pip3 install -r $WORKDIR/python/requirements.txt
 
 echo "Load data into the container ..."
 
-import_public cbbr_submissions
-# import_public cbbr_agency_updates # not in edm-recipes yet
-import_public dpr_parksproperties
-import_public doitt_buildingfootprints 20230122 # last version with a valid sql archive in in edm-recipes
+# ## REPLACES python3 python/dataloading.py
+# import_public cbbr_submissions
+# import_public dpr_parksproperties
+# import_public doitt_buildingfootprints 20230122 # last version with a valid sql archive in in edm-recipes
+# # import_public cbbr_agency_updates # DEPRICATED THIS INPUT DATA
 
+## REPLACES python3 python/aggregate_geoms.py
+python3 python/aggregate_geoms.py
+
+## REPLACES python3 python/manual_geoms.py
+## TODO
+
+## DEPRICATED AND REPLACED USE OF COOK DOCKER IMAGE
 # docker run --rm \
 #     --name $CONTAINER_NAME \
 #     --volume $WORKDIR:$CONTAINER_WORKDIR \
@@ -38,14 +47,14 @@ import_public doitt_buildingfootprints 20230122 # last version with a valid sql 
 # "
 # psql $BUILD_ENGINE -f sql/preprocessing.sql
 
-# cat data/cbbr_fy22_to_fy21_uniqueids.csv |
-#     psql $BUILD_ENGINE -c "
-#     DROP TABLE IF EXISTS fy21_fy22_lookup;
-#     CREATE TABLE fy21_fy22_lookup (
-#         fy22_unique_id text,
-#         fy21_unique_id text
-#     );
-#     COPY fy21_fy22_lookup FROM STDIN DELIMITER ',' CSV HEADER;
-# # "
+cat data/cbbr_fy22_to_fy21_uniqueids.csv |
+    psql $BUILD_ENGINE -c "
+    DROP TABLE IF EXISTS fy21_fy22_lookup;
+    CREATE TABLE fy21_fy22_lookup (
+        fy22_unique_id text,
+        fy21_unique_id text
+    );
+    COPY fy21_fy22_lookup FROM STDIN DELIMITER ',' CSV HEADER;
+# "
 
 echo "Done!"

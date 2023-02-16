@@ -1,5 +1,5 @@
 from multiprocessing import Pool, cpu_count
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 from geosupport import Geosupport, GeosupportError
 from pathlib import Path
 import pandas as pd
@@ -158,18 +158,22 @@ def geo_parser(geo):
 if __name__ == '__main__':
     # connect to postgres db
     engine = create_engine(os.environ['BUILD_ENGINE'])
-
-    df = pd.read_sql('SELECT * FROM cbbr_submissions', engine)
+    select_query = text("SELECT * FROM _cbbr_submissions")
+    with engine.begin() as conn:
+        df = pd.read_sql(select_query, conn)
     df['addressnum'] = df.address.apply(get_hnum)
     df['streetname'] = df.address.apply(get_sname)
     df['streetname_1'] = df['address'].apply(lambda x: clean_streetname(x, 0))
     df['streetname_2'] = df['address'].apply(lambda x: clean_streetname(x, -1))
     df['streetname_1'] = np.where(df.streetname_1 == '',df.street_name.apply(lambda x: clean_streetname(x, 0)),df.streetname_1)
     df['streetname_2'] = np.where(df.streetname_2 == '',df.street_name.apply(lambda x: clean_streetname(x, 0)),df.streetname_2)
-    df['between_cross_street_1'] = df.between_cross_street_1.apply(get_sname)
-    df['and_cross_street_2'] = df.and_cross_street_2.apply(get_sname)
+    
+    print(sorted(df.columns))
 
-    records = df.to_dict('records')
+    # df['between_cross_street_1'] = df.between_cross_street_1.apply(get_sname)
+    # df['and_cross_street_2'] = df.and_cross_street_2.apply(get_sname)
+    df['between_cross_street_1'] = df['cross_street1'].apply(get_sname)
+    df['and_cross_street_2'] = df['cross_street2'].apply(get_sname)
     
     print('start geocoding ...')
     # Multiprocess
@@ -178,4 +182,4 @@ if __name__ == '__main__':
     
     print('geocoding finished, dumping to postgres ...')
     df = pd.DataFrame(it)
-    df.to_sql('cbbr_submissions', engine, if_exists='replace', chunksize=500, index=False)
+    df.to_sql('_cbbr_submissions', engine, if_exists='replace', chunksize=500, index=False)

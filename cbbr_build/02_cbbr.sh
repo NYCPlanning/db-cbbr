@@ -1,6 +1,7 @@
 #!/bin/bash
 source config.sh
 
+echo "CBBR Version FY2024 : 02 CBBR"
 echo "Create _cbbr_submissions table ..."
 run_sql sql/_cbbr_submissions.sql
 

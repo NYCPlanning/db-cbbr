@@ -19,17 +19,17 @@ source $WORKDIR/config.sh
 
 echo "Load data into the container ..."
 
-# ## REPLACES python3 python/dataloading.py
+# ## REPLACES python3 python/dataloading.py in cook image
 # import_public cbbr_submissions
 # import_public dpr_parksproperties
 # import_public doitt_buildingfootprints 20230122 # last version with a valid sql archive in in edm-recipes
 # # import_public cbbr_agency_updates # DEPRICATED THIS INPUT DATA
 
-## REPLACES python3 python/aggregate_geoms.py
+## REPLACES python3 python/aggregate_geoms.py in cook image
 python3 $WORKDIR/python/aggregate_geoms.py
 
-## REPLACES python3 python/manual_geoms.py
-## TODO
+## REPLACES python3 python/manual_geoms.py in cook image
+python3 $WORKDIR/python/manual_geoms.py
 
 ## DEPRICATED AND REPLACED USE OF COOK DOCKER IMAGE
 # docker run --rm \
@@ -55,6 +55,6 @@ cat data/cbbr_fy22_to_fy21_uniqueids.csv |
         fy21_unique_id text
     );
     COPY fy21_fy22_lookup FROM STDIN DELIMITER ',' CSV HEADER;
-# "
+"
 
 echo "Done!"

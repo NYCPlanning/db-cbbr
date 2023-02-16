@@ -12,7 +12,7 @@ FROM filtered
 WHERE namecount = 1
 )
 SELECT a.unique_id, a.facility_or_park_name, b.facname, b.geom
-FROM cbbr_submissions a, facilities b
+FROM _cbbr_submissions a, facilities b
 WHERE a.geom IS NULL AND
 	  a.facility_or_park_name IS NOT NULL AND
       b.facname LIKE '%'||' '||'%'||' '||'%' AND
@@ -20,17 +20,17 @@ WHERE a.geom IS NULL AND
       b.facname IN (SELECT facname FROM singlename)
       AND a.borough=b.boro
 )
-UPDATE cbbr_submissions
+UPDATE _cbbr_submissions
 SET geo_function='facilities',
     geom=master.geom
 FROM master
-WHERE cbbr_submissions.unique_id=master.unique_id AND
-      cbbr_submissions.geom IS NULL;
+WHERE _cbbr_submissions.unique_id=master.unique_id AND
+      _cbbr_submissions.geom IS NULL;
 
 -- update lib geoms using facdb
 WITH master AS(
 SELECT a.unique_id, a.facility_or_park_name, b.facname, b.geom
-FROM cbbr_submissions a,
+FROM _cbbr_submissions a,
      (SELECT * FROM facilities WHERE upper(facgroup) = 'LIBRARIES') b
 WHERE (upper(a.facility_or_park_name) LIKE '%LIBRARY%' OR upper(a.facility_or_park_name) LIKE '%BRANCH%')
 AND upper(a.facility_or_park_name) NOT LIKE '%AND%'
@@ -42,17 +42,17 @@ AND a.borough = b.boro
 AND a.geom IS NULL
 )
 
-UPDATE cbbr_submissions
+UPDATE _cbbr_submissions
 SET geo_function='facilities',
     geom=master.geom
 FROM master
-WHERE cbbr_submissions.unique_id=master.unique_id AND
-      cbbr_submissions.geom IS NULL;
+WHERE _cbbr_submissions.unique_id=master.unique_id AND
+      _cbbr_submissions.geom IS NULL;
 
 -- update precinct geoms using facdb
 WITH master AS(
 SELECT a.unique_id, a.facility_or_park_name, b.facname, b.geom
-FROM cbbr_submissions a,
+FROM _cbbr_submissions a,
      (SELECT * FROM facilities WHERE upper(facsubgrp) = 'POLICE SERVICES') b
 WHERE (upper(a.facility_or_park_name) LIKE '%PRECINCT%' OR upper(a.facility_or_park_name) LIKE '%PCT%')
 AND upper(a.facility_or_park_name) NOT LIKE '%AND%'
@@ -62,17 +62,17 @@ AND a.borough = b.boro
 AND a.geom IS NULL
 )
 
-UPDATE cbbr_submissions
+UPDATE _cbbr_submissions
 SET geo_function='facilities',
     geom=master.geom
 FROM master
-WHERE cbbr_submissions.unique_id=master.unique_id AND
-      cbbr_submissions.geom IS NULL;
+WHERE _cbbr_submissions.unique_id=master.unique_id AND
+      _cbbr_submissions.geom IS NULL;
 
 -- update school geoms using facdb
 WITH master AS(
 SELECT a.unique_id, a.facility_or_park_name, b.facname, b.geom
-FROM cbbr_submissions a,
+FROM _cbbr_submissions a,
      (SELECT * FROM facilities WHERE upper(facsubgrp) = 'PUBLIC K-12 SCHOOLS') b
 WHERE (upper(a.facility_or_park_name) LIKE '%SCHOOL%' 
   OR upper(a.facility_or_park_name) LIKE '%P.S.%' 
@@ -88,17 +88,17 @@ AND a.borough = b.boro
 AND a.geom IS NULL
 )
 
-UPDATE cbbr_submissions
+UPDATE _cbbr_submissions
 SET geo_function='facilities',
     geom=master.geom
 FROM master
-WHERE cbbr_submissions.unique_id=master.unique_id AND
-      cbbr_submissions.geom IS NULL;
+WHERE _cbbr_submissions.unique_id=master.unique_id AND
+      _cbbr_submissions.geom IS NULL;
 -- update school geoms using facdb
 -- round 2 after removing leading 0s
 WITH master AS(
 SELECT a.unique_id, a.facility_or_park_name, b.facname, b.geom
-FROM cbbr_submissions a,
+FROM _cbbr_submissions a,
      (SELECT * FROM facilities WHERE upper(facsubgrp) = 'PUBLIC K-12 SCHOOLS') b
 WHERE (upper(a.facility_or_park_name) LIKE '%SCHOOL%' 
   OR upper(a.facility_or_park_name) LIKE '%P.S.%' 
@@ -114,17 +114,17 @@ AND a.borough = b.boro
 AND a.geom IS NULL
 )
 
-UPDATE cbbr_submissions
+UPDATE _cbbr_submissions
 SET geo_function='facilities',
     geom=master.geom
 FROM master
-WHERE cbbr_submissions.unique_id=master.unique_id AND
-      cbbr_submissions.geom IS NULL;
+WHERE _cbbr_submissions.unique_id=master.unique_id AND
+      _cbbr_submissions.geom IS NULL;
 
 -- update park geoms using facdb
 WITH master AS(
 SELECT a.unique_id, a.facility_or_park_name, b.facname, a.agency_acronym, a.borough, b.geom
-FROM cbbr_submissions a,
+FROM _cbbr_submissions a,
      (SELECT * FROM facilities WHERE upper(facgroup) = 'PARKS AND PLAZAS') b
 WHERE  (upper(a.facility_or_park_name) LIKE '%PARK%' OR upper(a.facility_or_park_name) LIKE '%PLAYGROUND%' OR agency_acronym = 'DPR')
 AND upper(a.facility_or_park_name) NOT LIKE '%AND%'
@@ -145,9 +145,9 @@ AND upper(b.facname) <> 'PARK' AND
 AND a.borough = b.boro
 AND a.geom IS NULL)
 
-UPDATE cbbr_submissions
+UPDATE _cbbr_submissions
 SET geo_function='facilities',
     geom=master.geom
 FROM master
-WHERE cbbr_submissions.unique_id=master.unique_id AND
-      cbbr_submissions.geom IS NULL;
+WHERE _cbbr_submissions.unique_id=master.unique_id AND
+      _cbbr_submissions.geom IS NULL;

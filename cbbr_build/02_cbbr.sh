@@ -2,15 +2,15 @@
 source config.sh
 
 echo "CBBR Version FY2024 : 02 CBBR"
-echo "Create _cbbr_submissions table ..."
-run_sql sql/_cbbr_submissions.sql
+echo "Create tables to modify ..."
+run_sql sql/preprocessing.sql
 
 ## Skipping for dev of initial FY2024 build
 # psql $BUILD_ENGINE -f sql/apply_agency_updates.sql
 
-echo "Normalizing agency values ..."
+echo "Normalize agency values ..."
 run_sql sql/normalize_agency.sql
-echo "Normalizing commdist values ..."
+echo "Normalize commdist values ..."
 run_sql sql/normalize_commdist.sql
-echo "Normalizing denominator values ..."
+echo "Normalize denominator values ..."
 run_sql sql/normalize_denominator.sql

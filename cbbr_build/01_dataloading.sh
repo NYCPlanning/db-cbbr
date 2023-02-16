@@ -26,7 +26,7 @@ echo "Load data into the container ..."
 # # import_public cbbr_agency_updates # DEPRICATED THIS INPUT DATA
 
 ## REPLACES python3 python/aggregate_geoms.py
-python3 python/aggregate_geoms.py
+python3 $WORKDIR/python/aggregate_geoms.py
 
 ## REPLACES python3 python/manual_geoms.py
 ## TODO

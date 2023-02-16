@@ -33,5 +33,5 @@ if __name__ == '__main__':
         data.append(result)
 
     df = pd.DataFrame.from_dict(data)
-    # df.to_csv(sourcePath/'0_cbbr_geoms.csv', index=False)
+    df.to_csv(sourcePath/'0_cbbr_geoms.csv', index=False)
     df.to_sql('cbbr_geoms', engine, if_exists='replace', chunksize=100, index=False)

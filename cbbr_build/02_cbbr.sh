@@ -1,8 +1,9 @@
 #!/bin/bash
 source config.sh
 
-## Skipping for dev of initial FY2024 build
-# psql $BUILD_ENGINE -f sql/cbbr_submissions.sql
+echo "Create _cbbr_submissions table ..."
+run_sql sql/_cbbr_submissions.sql
+
 ## Skipping for dev of initial FY2024 build
 # psql $BUILD_ENGINE -f sql/apply_agency_updates.sql
 

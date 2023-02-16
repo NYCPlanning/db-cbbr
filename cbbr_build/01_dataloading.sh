@@ -28,8 +28,9 @@ echo "Load data into the container ..."
 ## REPLACES python3 python/aggregate_geoms.py in cook image
 python3 $WORKDIR/python/aggregate_geoms.py
 
-## REPLACES python3 python/manual_geoms.py in cook image
-python3 $WORKDIR/python/manual_geoms.py
+## Skipping manual_geoms for dev of initial 2023 build
+# ## REPLACES python3 python/manual_geoms.py in cook image
+# python3 $WORKDIR/python/manual_geoms.py
 
 ## DEPRICATED AND REPLACED USE OF COOK DOCKER IMAGE
 # docker run --rm \
@@ -47,7 +48,7 @@ python3 $WORKDIR/python/manual_geoms.py
 # "
 # psql $BUILD_ENGINE -f sql/preprocessing.sql
 
-cat data/cbbr_fy22_to_fy21_uniqueids.csv |
+cat $WORKDIR/data/cbbr_fy22_to_fy21_uniqueids.csv |
     psql $BUILD_ENGINE -c "
     DROP TABLE IF EXISTS fy21_fy22_lookup;
     CREATE TABLE fy21_fy22_lookup (

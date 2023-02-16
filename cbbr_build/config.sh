@@ -5,28 +5,26 @@
 # Exit when any command fails
 set -e
 
-if [ -f .env ]
-then
+if [ -f .env ]; then
   export $(cat .env | sed 's/#.*//g' | xargs)
 fi
 
 function urlparse {
-    proto="$(echo $1 | grep :// | sed -e's,^\(.*://\).*,\1,g')"
-    url=$(echo $1 | sed -e s,$proto,,g)
-    userpass="$(echo $url | grep @ | cut -d@ -f1)"
-    BUILD_PWD=`echo $userpass | grep : | cut -d: -f2`
-    BUILD_USER=`echo $userpass | grep : | cut -d: -f1`
-    hostport=$(echo $url | sed -e s,$userpass@,,g | cut -d/ -f1)
-    BUILD_HOST="$(echo $hostport | sed -e 's,:.*,,g')"
-    BUILD_PORT="$(echo $hostport | sed -e 's,^.*:,:,g' -e 's,.*:\([0-9]*\).*,\1,g' -e 's,[^0-9],,g')"
-    BUILD_DB="$(echo $url | grep / | cut -d/ -f2-)"
+  proto="$(echo $1 | grep :// | sed -e's,^\(.*://\).*,\1,g')"
+  url=$(echo $1 | sed -e s,$proto,,g)
+  userpass="$(echo $url | grep @ | cut -d@ -f1)"
+  BUILD_PWD=$(echo $userpass | grep : | cut -d: -f2)
+  BUILD_USER=$(echo $userpass | grep : | cut -d: -f1)
+  hostport=$(echo $url | sed -e s,$userpass@,,g | cut -d/ -f1)
+  BUILD_HOST="$(echo $hostport | sed -e 's,:.*,,g')"
+  BUILD_PORT="$(echo $hostport | sed -e 's,^.*:,:,g' -e 's,.*:\([0-9]*\).*,\1,g' -e 's,[^0-9],,g')"
+  BUILD_DB="$(echo $url | grep / | cut -d/ -f2-)"
 }
 
-
 function CSV_export {
-  psql $1  -c "\COPY (
+  psql $1 -c "\COPY (
     SELECT * FROM $2
-  ) TO STDOUT DELIMITER ',' CSV HEADER;" > $3.csv
+  ) TO STDOUT DELIMITER ',' CSV HEADER;" >$3.csv
 }
 
 function SHP_export {
@@ -35,12 +33,44 @@ function SHP_export {
     (
       cd $4
       ogr2ogr -progress -f "ESRI Shapefile" $4.shp \
-          PG:"host=$BUILD_HOST user=$BUILD_USER port=$BUILD_PORT dbname=$BUILD_DB password=$BUILD_PWD" \
-          -nlt $3 $2
-        rm -f $4.zip
-        zip -9 $4.zip *
-        ls | grep -v $4.zip | xargs rm
-      )
+        PG:"host=$BUILD_HOST user=$BUILD_USER port=$BUILD_PORT dbname=$BUILD_DB password=$BUILD_PWD" \
+        -nlt $3 $2
+      rm -f $4.zip
+      zip -9 $4.zip *
+      ls | grep -v $4.zip | xargs rm
+    )
   mv $4/$4.zip $4.zip
   rm -rf $4
+}
+
+function import_public {
+  local name=$1
+  local version=${2:-latest}
+  local url=https://nyc3.digitaloceanspaces.com/edm-recipes
+  local version=$(curl -ss $url/datasets/$name/$version/config.json | jq -r '.dataset.version')
+  echo "$name version: $version"
+
+  local target_dir=$(pwd)/.library/datasets/$name/$version
+
+  # Download sql dump for the datasets from data library
+  if [ -f $target_dir/$name.sql ]; then
+    echo "✅ $name.sql exists in cache"
+  else
+    echo "🛠 $name.sql doesn't exists in cache, downloading ..."
+    mkdir -p $target_dir && (
+      cd $target_dir
+      local download_url=$url/datasets/$name/$version/$name.sql
+      local download_url_zip=$download_url.zip
+      local statuscode=$(curl --silent --output $name.sql.zip --write-out "%{http_code}" $download_url_zip)
+      if [ $statuscode = 404 ]; then
+        curl -ss -O $download_url
+      else
+        unzip $name.sql.zip
+      fi
+      rm $name.sql.zip
+    )
+  fi
+
+  # Loading into Database
+  psql $BUILD_ENGINE -f $target_dir/$name.sql
 }

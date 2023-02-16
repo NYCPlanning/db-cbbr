@@ -7,13 +7,13 @@ ALTER TABLE cbbr_submissions
 WITH denominatorcount AS (
     SELECT
         commdist,
-        type_br,
+        "type",
         COUNT(*) AS count
     FROM
         cbbr_submissions
     GROUP BY
         commdist,
-        type_br)
+        "type")
 UPDATE
     cbbr_submissions a
 SET
@@ -22,5 +22,5 @@ FROM
     denominatorcount b
 WHERE
     a.commdist = b.commdist
-    AND a.type_br = b.type_br;
+    AND a.type = b.type;
 

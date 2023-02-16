@@ -1,12 +1,5 @@
 #!/bin/bash
 # Create a postgres database container
-# Exit when any command fails
-set -e
-# Keep track of the last executed command
-trap 'last_command=$current_command; current_command=$BASH_COMMAND' DEBUG
-# Echo an error message before exiting
-trap 'echo "\"${last_command}\" command filed with exit code $?."' EXIT
-
 BASEDIR=$(dirname $0)
 NAME=$(basename $BASEDIR)
 WORKDIR="$(pwd)/$NAME"
@@ -15,22 +8,8 @@ CONTAINER_WORKDIR="/cook_container_home/$NAME"
 VERSION=$DATE
 
 source $WORKDIR/config.sh
-# pip3 install -r $WORKDIR/python/requirements.txt
 
 echo "Load data into the container ..."
-
-# ## REPLACES python3 python/dataloading.py in cook image
-# import_public cbbr_submissions
-# import_public dpr_parksproperties
-# import_public doitt_buildingfootprints 20230122 # last version with a valid sql archive in in edm-recipes
-# # import_public cbbr_agency_updates # DEPRICATED THIS INPUT DATA
-
-## REPLACES python3 python/aggregate_geoms.py in cook image
-python3 $WORKDIR/python/aggregate_geoms.py
-
-## Skipping manual_geoms for dev of initial 2023 build
-# ## REPLACES python3 python/manual_geoms.py in cook image
-# python3 $WORKDIR/python/manual_geoms.py
 
 ## DEPRICATED AND REPLACED USE OF COOK DOCKER IMAGE
 # docker run --rm \
@@ -47,6 +26,21 @@ python3 $WORKDIR/python/aggregate_geoms.py
 # # python3 python/manual_geoms.py
 # "
 # psql $BUILD_ENGINE -f sql/preprocessing.sql
+
+## REPLACES python3 python/dataloading.py in cook image
+import_public cbbr_submissions
+import_public dpr_parksproperties
+import_public doitt_buildingfootprints 20230122 # last version with a valid sql archive in in edm-recipes
+import_public dcp_facilities
+# Skipping import of cbbr_submissions."2018/12/11" for dev of initial 2023 build
+# import_public cbbr_agency_updates # DEPRICATED THIS INPUT DATA
+
+## REPLACES python3 python/aggregate_geoms.py in cook image
+python3 $WORKDIR/python/aggregate_geoms.py
+
+## Skipping manual_geoms for dev of initial 2023 build
+# ## REPLACES python3 python/manual_geoms.py in cook image
+# python3 $WORKDIR/python/manual_geoms.py
 
 cat $WORKDIR/data/cbbr_fy22_to_fy21_uniqueids.csv |
     psql $BUILD_ENGINE -c "

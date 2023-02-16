@@ -47,7 +47,7 @@ import_public dcp_facilities
 
 echo "Load FY2021 to FY2022 lookup data ..."
 cat $WORKDIR/data/cbbr_fy22_to_fy21_uniqueids.csv |
-    psql $BUILD_ENGINE -c "
+    psql $BUILD_ENGINE --set ON_ERROR_STOP=1 --command "
     DROP TABLE IF EXISTS fy21_fy22_lookup;
     CREATE TABLE fy21_fy22_lookup (
         fy22_unique_id text,

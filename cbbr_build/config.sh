@@ -2,12 +2,14 @@
 # A script used by build scripts to import utility functions, set environment variables,
 # and configure connections
 
-# Exit when any command fails
-set -e
-# Keep track of the last executed command
-trap 'last_command=$current_command; current_command=$BASH_COMMAND' DEBUG
-# Echo an error message before exiting
-trap 'echo "\"${last_command}\" command filed with exit code $?."' EXIT
+function set_error_traps {
+  # Exit when any command fails
+  set -e
+  # Keep track of the last executed command
+  trap 'last_command=$current_command; current_command=$BASH_COMMAND' DEBUG
+  # Echo an error message before exiting
+  trap 'echo "\"${last_command}\" command filed with exit code $?."' EXIT
+}
 
 function set_env {
   for envfile in $@; do
@@ -17,8 +19,15 @@ function set_env {
   done
 }
 
+# Setting error traps
+set_error_traps
+
 # Setting Environmental Variables
 set_env .env version.env
+
+function run_sql {
+  psql $BUILD_ENGINE --set ON_ERROR_STOP=1 --file $1
+}
 
 function urlparse {
   proto="$(echo $1 | grep :// | sed -e's,^\(.*://\).*,\1,g')"

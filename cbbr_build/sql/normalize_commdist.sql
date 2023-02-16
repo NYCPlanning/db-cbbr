@@ -1,17 +1,17 @@
-ALTER TABLE cbbr_submissions
+ALTER TABLE _cbbr_submissions
     DROP COLUMN IF EXISTS commdist;
 
-ALTER TABLE cbbr_submissions
+ALTER TABLE _cbbr_submissions
     ADD COLUMN commdist text;
 
 -- OPTION A: Use provided FY2024 values
 -- UPDATE
---     cbbr_submissions
+--     _cbbr_submissions
 -- SET
 --     commdist = boro_and_board;
 -- OPTION B: Construct values to align with previous CBBR versions
 UPDATE
-    cbbr_submissions a
+    _cbbr_submissions a
 SET
     commdist = '1' || board
 WHERE
@@ -19,7 +19,7 @@ WHERE
     AND commdist IS NULL;
 
 UPDATE
-    cbbr_submissions a
+    _cbbr_submissions a
 SET
     commdist = '2' || board
 WHERE
@@ -27,7 +27,7 @@ WHERE
     AND commdist IS NULL;
 
 UPDATE
-    cbbr_submissions a
+    _cbbr_submissions a
 SET
     commdist = '3' || board
 WHERE
@@ -35,7 +35,7 @@ WHERE
     AND commdist IS NULL;
 
 UPDATE
-    cbbr_submissions a
+    _cbbr_submissions a
 SET
     commdist = '4' || board
 WHERE
@@ -43,7 +43,7 @@ WHERE
     AND commdist IS NULL;
 
 UPDATE
-    cbbr_submissions a
+    _cbbr_submissions a
 SET
     commdist = '5' || board
 WHERE

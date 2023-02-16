@@ -1,13 +1,13 @@
 -- create the agency field
-ALTER TABLE cbbr_submissions
+ALTER TABLE _cbbr_submissions
     DROP COLUMN IF EXISTS agency_normalized;
 
-ALTER TABLE cbbr_submissions
+ALTER TABLE _cbbr_submissions
     ADD COLUMN agency_normalized text;
 
 -- setting the agency name
 UPDATE
-    cbbr_submissions
+    _cbbr_submissions
 SET
     agency_normalized = (
         CASE WHEN agency_name = 'ACS' THEN

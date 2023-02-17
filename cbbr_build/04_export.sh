@@ -1,8 +1,9 @@
 #!/bin/bash
 source config.sh
 
+echo "CBBR Version $VERSION : 04 Export"
 echo "Transforming to final schema"
-psql $BUILD_ENGINE -f sql/export.sql
+run_sql sql/export.sql
 
 echo "Exporting output tables"
 psql $BUILD_ENGINE -c "\COPY (SELECT trackingnum,
@@ -27,10 +28,10 @@ psql $BUILD_ENGINE -c "\COPY (SELECT trackingnum,
     agyresponsecat,
     agyresponse,
     unique_id
- FROM cbbr_export WHERE borough IS NOT NULL) TO 'output/cbbr_submissions.csv' DELIMITER ',' CSV HEADER;"
+ FROM cbbr_export WHERE borough IS NOT NULL) TO 'output/$VERSION/cbbr_export.csv' DELIMITER ',' CSV HEADER;"
 
 (
-    cd output
+    cd output/$VERSION
     psql $BUILD_ENGINE -c "
         DROP TABLE IF EXISTS cbbr_export_poly;
         SELECT * INTO cbbr_export_poly FROM cbbr_export
@@ -48,5 +49,5 @@ psql $BUILD_ENGINE -c "\COPY (SELECT trackingnum,
     CSV_export $BUILD_ENGINE cbbr_export_poly cbbr_submissions_poly
     CSV_export $BUILD_ENGINE cbbr_export_pts cbbr_submissions_pts
     SHP_export $BUILD_ENGINE cbbr_export_poly MULTIPOLYGON cbbr_submissions_poly
-    SHP_export $BUILD_ENGINE cbbr_export_pts  MULTIPOINT cbbr_submissions_pts
+    SHP_export $BUILD_ENGINE cbbr_export_pts MULTIPOINT cbbr_submissions_pts
 )

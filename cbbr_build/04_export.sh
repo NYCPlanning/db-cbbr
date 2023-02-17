@@ -54,3 +54,5 @@ psql $BUILD_ENGINE -c "\COPY (SELECT
     SHP_export $BUILD_ENGINE cbbr_export_poly MULTIPOLYGON cbbr_submissions_poly
     SHP_export $BUILD_ENGINE cbbr_export_pts MULTIPOINT cbbr_submissions_pts
 )
+
+echo "Done!"

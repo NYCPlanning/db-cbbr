@@ -23,18 +23,19 @@ def get_hnum(address):
 
 def get_sname(address):
     result = [k for (k,v) in usaddress.parse(address) \
-            if re.search("Street", v)]  if address is not None else ''
+            if re.search("Street", v)] if address is not None else ''
     result = ' '.join(result)
     if result == '':
-        return address
+        return address.strip(",")
     else: 
-        return result
+        return result.strip(",")
 
 def clean_streetname(x, n):
     x = '' if x is None else x
     if (' at ' in x.lower())|(' and ' in x.lower())|('&' in x):
         x = re.split('&| AND | and | AT | at',x)[n]
-    else: x = ''
+    else:
+        x = ''
     return x
 
 def geocode(inputs):
@@ -168,14 +169,16 @@ if __name__ == '__main__':
     df['streetname_1'] = np.where(df.streetname_1 == '',df.street_name.apply(lambda x: clean_streetname(x, 0)),df.streetname_1)
     df['streetname_2'] = np.where(df.streetname_2 == '',df.street_name.apply(lambda x: clean_streetname(x, 0)),df.streetname_2)
     
-    print(sorted(df.columns))
-    records = df.to_dict('records')
+    df['geo_from_x_coord'] = np.nan
+    df['geo_from_y_coord'] = np.nan
+    df['geo_to_x_coord'] = np.nan
+    df['geo_to_y_coord'] = np.nan
 
-    # df['between_cross_street_1'] = df.between_cross_street_1.apply(get_sname)
-    # df['and_cross_street_2'] = df.and_cross_street_2.apply(get_sname)
     df['between_cross_street_1'] = df['cross_street1'].apply(get_sname)
     df['and_cross_street_2'] = df['cross_street2'].apply(get_sname)
-    
+
+    records = df.to_dict('records')
+
     print('start geocoding ...')
     # Multiprocess
     with Pool(processes=cpu_count()) as pool:

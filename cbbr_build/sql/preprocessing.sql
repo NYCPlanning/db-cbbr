@@ -20,7 +20,8 @@ CREATE TABLE _dpr_parksproperties AS TABLE dpr_parksproperties;
 --     ALTER COLUMN geom TYPE GEOMETRY;
 --
 -- rename columns
--- ALTER TABLE cbbr_submissions RENAME COLUMN boro TO borough;
+ALTER TABLE _cbbr_submissions RENAME COLUMN boro TO borough;
+
 ALTER TABLE _doitt_buildingfootprints RENAME COLUMN wkb_geometry TO geom;
 
 ALTER TABLE _dpr_parksproperties RENAME COLUMN wkb_geometry TO geom;

@@ -9,7 +9,7 @@ VERSION=$DATE
 
 source $WORKDIR/config.sh
 
-echo "CBBR Version FY2024 : 01 Data Loading"
+echo "CBBR Version $VERSION : 01 Data Loading"
 echo "Load data into the container ..."
 
 ## DEPRICATED AND REPLACED USE OF COOK DOCKER IMAGE

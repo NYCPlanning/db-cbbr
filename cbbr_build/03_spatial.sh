@@ -1,7 +1,7 @@
 #!/bin/bash
 source config.sh
 
-echo "CBBR Version FY2024 : 03 Spatial"
+echo "CBBR Version $VERSION : 03 Spatial"
 echo "Geocode with geosupport image  ..."
 docker run -it --rm \
     -v $(pwd):/home/db-cbbr \

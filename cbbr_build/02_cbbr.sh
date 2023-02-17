@@ -1,7 +1,7 @@
 #!/bin/bash
 source config.sh
 
-echo "CBBR Version FY2024 : 02 CBBR"
+echo "CBBR Version $VERSION : 02 CBBR"
 echo "Create tables to modify ..."
 run_sql sql/preprocessing.sql
 

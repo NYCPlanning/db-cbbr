@@ -169,6 +169,7 @@ if __name__ == '__main__':
     df['streetname_2'] = np.where(df.streetname_2 == '',df.street_name.apply(lambda x: clean_streetname(x, 0)),df.streetname_2)
     
     print(sorted(df.columns))
+    records = df.to_dict('records')
 
     # df['between_cross_street_1'] = df.between_cross_street_1.apply(get_sname)
     # df['and_cross_street_2'] = df.and_cross_street_2.apply(get_sname)

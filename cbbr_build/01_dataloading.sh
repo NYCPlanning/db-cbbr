@@ -45,15 +45,16 @@ import_public dcp_facilities
 # ## REPLACES python3 python/manual_geoms.py in cook image
 # python3 $WORKDIR/python/manual_geoms.py
 
-echo "Load FY2021 to FY2022 lookup data ..."
-cat $WORKDIR/data/cbbr_fy22_to_fy21_uniqueids.csv |
-    psql $BUILD_ENGINE --set ON_ERROR_STOP=1 --command "
-    DROP TABLE IF EXISTS fy21_fy22_lookup;
-    CREATE TABLE fy21_fy22_lookup (
-        fy22_unique_id text,
-        fy21_unique_id text
-    );
-    COPY fy21_fy22_lookup FROM STDIN DELIMITER ',' CSV HEADER;
-"
+## Skipping import of FY2021-FY2022 lookup table for dev of initial FY2024 build
+# echo "Load FY2021 to FY2022 lookup data ..."
+# cat $WORKDIR/data/cbbr_fy22_to_fy21_uniqueids.csv |
+#     psql $BUILD_ENGINE --set ON_ERROR_STOP=1 --command "
+#     DROP TABLE IF EXISTS fy21_fy22_lookup;
+#     CREATE TABLE fy21_fy22_lookup (
+#         fy22_unique_id text,
+#         fy21_unique_id text
+#     );
+#     COPY fy21_fy22_lookup FROM STDIN DELIMITER ',' CSV HEADER;
+# "
 
 echo "Done!"

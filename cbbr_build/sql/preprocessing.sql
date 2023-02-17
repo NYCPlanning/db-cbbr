@@ -48,13 +48,13 @@ ALTER TABLE _cbbr_submissions RENAME COLUMN board TO cd;
 
 ALTER TABLE _cbbr_submissions RENAME COLUMN agency_name TO agency_acronym;
 
-ALTER TABLE _cbbr_submissions RENAME COLUMN 'type' TO type_br;
+ALTER TABLE _cbbr_submissions RENAME COLUMN "type" TO type_br;
 
 ALTER TABLE _cbbr_submissions RENAME COLUMN reason TO explanation;
 
 ALTER TABLE _cbbr_submissions RENAME COLUMN supported_by_1 TO supporters1;
 
-ALTER TABLE _cbbr_submissions RENAME COLUMN supported_by_2 TO supporters1;
+ALTER TABLE _cbbr_submissions RENAME COLUMN supported_by_2 TO supporters2;
 
 ALTER TABLE _cbbr_submissions RENAME COLUMN agy_response_category TO agency_category_response;
 

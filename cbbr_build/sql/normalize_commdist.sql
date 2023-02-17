@@ -13,7 +13,7 @@ ALTER TABLE _cbbr_submissions
 UPDATE
     _cbbr_submissions a
 SET
-    commdist = '1' || board
+    commdist = '1' || lpad(cd, 2, '0')
 WHERE
     a.boro_name = 'Manhattan'
     AND commdist IS NULL;
@@ -21,7 +21,7 @@ WHERE
 UPDATE
     _cbbr_submissions a
 SET
-    commdist = '2' || board
+    commdist = '2' || lpad(cd, 2, '0')
 WHERE
     a.boro_name = 'Bronx'
     AND commdist IS NULL;
@@ -29,7 +29,7 @@ WHERE
 UPDATE
     _cbbr_submissions a
 SET
-    commdist = '3' || board
+    commdist = '3' || lpad(cd, 2, '0')
 WHERE
     a.boro_name = 'Brooklyn'
     AND commdist IS NULL;
@@ -37,7 +37,7 @@ WHERE
 UPDATE
     _cbbr_submissions a
 SET
-    commdist = '4' || board
+    commdist = '4' || lpad(cd, 2, '0')
 WHERE
     a.boro_name = 'Queens'
     AND commdist IS NULL;
@@ -45,7 +45,7 @@ WHERE
 UPDATE
     _cbbr_submissions a
 SET
-    commdist = '5' || board
+    commdist = '5' || lpad(cd, 2, '0')
 WHERE
     a.boro_name = 'SI'
     AND commdist IS NULL;

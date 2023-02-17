@@ -6,7 +6,8 @@ echo "Transforming to final schema"
 run_sql sql/export.sql
 
 echo "Exporting output tables"
-psql $BUILD_ENGINE -c "\COPY (SELECT trackingnum,
+psql $BUILD_ENGINE -c "\COPY (SELECT
+    trackingnum,
     borough,
     cd,
     commdist,

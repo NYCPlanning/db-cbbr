@@ -46,7 +46,7 @@ psql $BUILD_ENGINE -c "\COPY (SELECT
 
         DROP TABLE IF EXISTS cbbr_submissions_needgeoms;
         SELECT * INTO cbbr_submissions_needgeoms FROM _cbbr_submissions 
-        WHERE geom IS NULL AND type_br = 'site';
+        WHERE geom IS NULL;
     "
     CSV_export $BUILD_ENGINE cbbr_submissions_needgeoms cbbr_submissions_needgeoms
     CSV_export $BUILD_ENGINE cbbr_export_poly cbbr_submissions_poly

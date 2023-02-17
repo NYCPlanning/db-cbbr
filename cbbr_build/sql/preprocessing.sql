@@ -30,7 +30,7 @@ ALTER TABLE _cbbr_submissions
 UPDATE
     _cbbr_submissions
 SET
-    unique_id = trkno;
+    unique_id = ogc_fid;
 
 -- rename columns
 ALTER TABLE _cbbr_submissions RENAME COLUMN trkno TO tracking_code;

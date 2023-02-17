@@ -10,79 +10,79 @@ UPDATE
     _cbbr_submissions
 SET
     agency_normalized = (
-        CASE WHEN agency_name = 'ACS' THEN
+        CASE WHEN agency_acronym = 'ACS' THEN
             upper('Administration for Children''s Services')
-        WHEN agency_name = 'BPL' THEN
+        WHEN agency_acronym = 'BPL' THEN
             upper('Brooklyn Public Library')
-        WHEN agency_name = 'CEOM' THEN
+        WHEN agency_acronym = 'CEOM' THEN
             upper('Citywide Event Coordination and Management')
-        WHEN agency_name = 'DCA' THEN
+        WHEN agency_acronym = 'DCA' THEN
             upper('Department of Consumer Affairs')
-        WHEN agency_name = 'DCAS' THEN
+        WHEN agency_acronym = 'DCAS' THEN
             upper('Department of Citywide Administrative Services')
-        WHEN agency_name = 'DCLA' THEN
+        WHEN agency_acronym = 'DCLA' THEN
             upper('Department of Cultural Affairs')
-        WHEN agency_name = 'DCP' THEN
+        WHEN agency_acronym = 'DCP' THEN
             upper('Department of City Planning')
-        WHEN agency_name = 'DEP' THEN
+        WHEN agency_acronym = 'DEP' THEN
             upper('Department of Environmental Protection')
-        WHEN agency_name = 'DFTA' THEN
+        WHEN agency_acronym = 'DFTA' THEN
             upper('Department for the Aging')
-        WHEN agency_name = 'DHS' THEN
+        WHEN agency_acronym = 'DHS' THEN
             upper('Department of Homeless Services')
-        WHEN agency_name = 'DHS, HRA' THEN
+        WHEN agency_acronym = 'DHS, HRA' THEN
             upper('Department of Homeless Services / Human Resources Administration')
-        WHEN agency_name = 'DOB' THEN
+        WHEN agency_acronym = 'DOB' THEN
             upper('Department of Buildings')
-        WHEN agency_name = 'DOE' THEN
+        WHEN agency_acronym = 'DOE' THEN
             upper('Department of Education')
-        WHEN agency_name = 'DOHMH' THEN
+        WHEN agency_acronym = 'DOHMH' THEN
             upper('Department of Health and Mental Hygiene')
-        WHEN agency_name = 'DOITT' THEN
+        WHEN agency_acronym = 'DOITT' THEN
             upper('Dept of Information Technology & Telecommunications')
-        WHEN agency_name = 'DOT' THEN
+        WHEN agency_acronym = 'DOT' THEN
             upper('Department of Transportation')
-        WHEN agency_name = 'DPR' THEN
+        WHEN agency_acronym = 'DPR' THEN
             upper('Department of Parks and Recreation')
-        WHEN agency_name = 'DSNY' THEN
+        WHEN agency_acronym = 'DSNY' THEN
             upper('Department of Sanitation')
-        WHEN agency_name = 'DYCD' THEN
+        WHEN agency_acronym = 'DYCD' THEN
             upper('Department of Youth & Community Development')
-        WHEN agency_name = 'EDC' THEN
+        WHEN agency_acronym = 'EDC' THEN
             upper('Economic Development Corporation')
-        WHEN agency_name = 'FDNY' THEN
+        WHEN agency_acronym = 'FDNY' THEN
             upper('Fire Department')
-        WHEN agency_name = 'HHC' THEN
+        WHEN agency_acronym = 'HHC' THEN
             upper('Health and Hospitals Corporation')
-        WHEN agency_name = 'HPD' THEN
+        WHEN agency_acronym = 'HPD' THEN
             upper('Department of Housing Preservation & Development')
-        WHEN agency_name = 'HRA' THEN
+        WHEN agency_acronym = 'HRA' THEN
             upper('Human Resources Administration')
-        WHEN agency_name = 'LPC' THEN
+        WHEN agency_acronym = 'LPC' THEN
             upper('Landmarks Preservation Commission')
-        WHEN agency_name = 'MOCJ' THEN
+        WHEN agency_acronym = 'MOCJ' THEN
             upper('Mayor''s Office of Criminal Justice')
-        WHEN agency_name = 'MOME' THEN
+        WHEN agency_acronym = 'MOME' THEN
             upper('Mayor''s Office of Media and Entertainment')
-        WHEN agency_name = 'NYCHA' THEN
+        WHEN agency_acronym = 'NYCHA' THEN
             upper('Housing Authority')
-        WHEN agency_name = 'NYCTA' THEN
+        WHEN agency_acronym = 'NYCTA' THEN
             upper('Transit Authority')
-        WHEN agency_name = 'NYPD' THEN
+        WHEN agency_acronym = 'NYPD' THEN
             upper('Police Department')
-        WHEN agency_name = 'NYPL' THEN
+        WHEN agency_acronym = 'NYPL' THEN
             upper('New York Public Library')
-        WHEN agency_name = 'OEM' THEN
+        WHEN agency_acronym = 'OEM' THEN
             upper('Office of Emergency Management')
-        WHEN agency_name = 'OMB' THEN
+        WHEN agency_acronym = 'OMB' THEN
             upper('Mayor''s Office of Management and Budget')
-        WHEN agency_name = 'QPL' THEN
+        WHEN agency_acronym = 'QPL' THEN
             upper('Queens Borough Public Library')
-        WHEN agency_name = 'SBS' THEN
+        WHEN agency_acronym = 'SBS' THEN
             upper('Department of Small Business Services')
-        WHEN agency_name = 'SCA' THEN
+        WHEN agency_acronym = 'SCA' THEN
             upper('School Construction Authority')
-        WHEN agency_name = 'TLC' THEN
+        WHEN agency_acronym = 'TLC' THEN
             upper('Taxi and Limousine Commission')
         ELSE
             NULL

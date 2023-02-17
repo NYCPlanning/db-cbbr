@@ -47,6 +47,6 @@ UPDATE
 SET
     commdist = '5' || board
 WHERE
-    a.boro_name = 'Staten Island'
+    a.boro_name = 'SI'
     AND commdist IS NULL;
 

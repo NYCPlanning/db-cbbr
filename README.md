@@ -17,7 +17,7 @@ The Community Board Budget Requests Database is a way to quickly and easily expl
 
 The spatial data are not 100% reliable, accurate, or exhaustive
 
-CBBR is primarly built for planning coordination and information purposes only
+CBBR is primarily built for planning coordination and information purposes only
 
 ## Building Preparation
 

@@ -13,16 +13,23 @@ docker run -it --rm \
 echo "Assign geometries from geocoding ..."
 run_sql sql/assign_geoms.sql
 
+## Skipping for dev of initial FY2024 build
 # run_sql sql/spatial_manualshp.sql
-echo "Assign geometries from parks data ..."
-run_sql sql/spatial_dpr_string_name.sql
 
-echo "Assign geometries from facilities data ..."
-run_sql sql/spatial_facilities.sql
+## Skipping for dev of initial FY2024 build
+# echo "Assign geometries from parks data ..."
+# run_sql sql/spatial_dpr_string_name.sql
 
+## Skipping for dev of initial FY2024 build
+# echo "Assign geometries from facilities data ..."
+# run_sql sql/spatial_facilities.sql
+
+## Skipping for dev of initial FY2024 build
 # echo "Overwriting geometries with manual mapping..."
 # run_sql sql/spatial_manual_map.sql
-# echo "Done."
 
-# run_sql sql/spatial_geomclean.sql
-# run_sql sql/geo_rejects.sql
+echo "Running spatial_geomclean ..."
+run_sql sql/spatial_geomclean.sql
+
+echo "Running geo_rejects ..."
+run_sql sql/geo_rejects.sql

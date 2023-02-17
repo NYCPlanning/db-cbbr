@@ -26,7 +26,7 @@ UPDATE
 SET
     geom = (
         CASE WHEN a.geo_bbl || a.geo_bin IS NOT NULL THEN
-            ST_Centroid (b.wkb_geometry)
+            ST_Centroid (b.geom)
         ELSE
             a.geom
         END)

@@ -52,9 +52,9 @@ ALTER TABLE _cbbr_submissions RENAME COLUMN "type" TO type_br;
 
 ALTER TABLE _cbbr_submissions RENAME COLUMN reason TO explanation;
 
-ALTER TABLE _cbbr_submissions RENAME COLUMN supported_by_1 TO supporters1;
+ALTER TABLE _cbbr_submissions RENAME COLUMN supported_by_1 TO supporters_1;
 
-ALTER TABLE _cbbr_submissions RENAME COLUMN supported_by_2 TO supporters2;
+ALTER TABLE _cbbr_submissions RENAME COLUMN supported_by_2 TO supporters_2;
 
 ALTER TABLE _cbbr_submissions RENAME COLUMN agy_response_category TO agency_category_response;
 

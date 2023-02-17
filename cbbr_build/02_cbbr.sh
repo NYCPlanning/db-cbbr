@@ -14,3 +14,5 @@ echo "Normalize commdist values ..."
 run_sql sql/normalize_commdist.sql
 echo "Normalize denominator values ..."
 run_sql sql/normalize_denominator.sql
+
+echo "Done!"

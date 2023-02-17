@@ -33,3 +33,5 @@ run_sql sql/spatial_geomclean.sql
 
 echo "Running geo_rejects ..."
 run_sql sql/geo_rejects.sql
+
+echo "Done!"

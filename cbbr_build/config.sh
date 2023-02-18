@@ -7,8 +7,8 @@ function set_error_traps {
   set -e
   # Keep track of the last executed command
   trap 'last_command=$current_command; current_command=$BASH_COMMAND' DEBUG
-  # Echo an error message before exiting
-  trap 'echo "\"${last_command}\" command filed with exit code $?."' EXIT
+  # # Echo an error message before exiting
+  # trap 'echo "\"${last_command}\" command filed with exit code $?."' EXIT
 }
 
 function set_env {
@@ -42,7 +42,7 @@ function urlparse {
 }
 
 function CSV_export {
-  psql $1 -c "\COPY (
+  psql $1 --set ON_ERROR_STOP=1 -c "\COPY (
     SELECT * FROM $2
   ) TO STDOUT DELIMITER ',' CSV HEADER;" >$3.csv
 }

@@ -134,6 +134,7 @@ def geocode(inputs):
                         except GeosupportError as e:
                             geo = e.result
                             geo = geo_parser(geo)
+                            geo.update(dict(geo_function='GEOCODE FAILED'))
 
     geo.update(inputs)
     return geo

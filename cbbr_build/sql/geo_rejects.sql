@@ -2,7 +2,7 @@ DROP TABLE IF EXISTS geo_rejects;
 
 CREATE TABLE geo_rejects AS (
     SELECT
-        -- unique_id,
+        unique_id,
         address,
         street_name,
         between_cross_street_1,

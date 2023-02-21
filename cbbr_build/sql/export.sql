@@ -7,7 +7,8 @@ SELECT
 FROM
     _cbbr_submissions
 WHERE
-    geom IS NULL;
+    geom IS NULL
+    AND "type" = 'site';
 
 -- cbbr_export
 DROP TABLE IF EXISTS cbbr_export;
@@ -18,6 +19,7 @@ SELECT
     cd,
     commdist,
     type_br,
+    "type",
     priority,
     agency_acronym AS agencyacro,
     agency,

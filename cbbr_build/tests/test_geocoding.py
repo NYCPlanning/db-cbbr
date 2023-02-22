@@ -34,7 +34,7 @@ def example_cbbr_data():
             "location": [
                 np.nan,
                 "Site Name: Linden Park Comfort Station",
-                "Street Name: Atlantic Avenue    Cross Street 1: Crescent Street",
+                "Street Name: Atlantic Avenue;    Cross Street 1: Crescent Street;",
             ],
         }
     )
@@ -57,7 +57,7 @@ def example_cbbr_data_parsed():
             "location": [
                 np.nan,
                 "Site Name: Linden Park Comfort Station",
-                "Street Name: Atlantic Avenue    Cross Street 1: Crescent Street",
+                "Street Name: Atlantic Avenue;    Cross Street 1: Crescent Street;",
             ],
             "and_cross_street_2": [
                 np.nan,
@@ -121,6 +121,7 @@ def test_validate_example_data(example_cbbr_data, example_cbbr_data_parsed):
         ("a", np.nan),
         ("Site Name: A", "A"),
         ("Site Name: Park A ", "Park A"),
+        ("Site Name: Park A;", "Park A"),
         ("Site Name: Park A Cross Street 1: B Drive", "Park A Cross Street 1: B Drive"),
         ("Cross Street 1: B Drive", np.nan),
     ],

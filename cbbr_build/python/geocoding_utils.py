@@ -1,5 +1,7 @@
+import re
 import pandas as pd
 import numpy as np
+import usaddress
 from typing import Union
 
 # location components ordered by the observed pattern in data from right to left
@@ -21,6 +23,7 @@ def get_location_value_from_end(
 
     Examples
         'Site Name: A', 'Site Name:' -> 'A'
+        'Site Name: A;', 'Site Name:' -> 'A'
         'Site Name: A Cross Street: B', 'Cross Street:' -> 'B'
         'Site Name: A Cross Street: B', 'Site Name:' -> 'A Cross Street: B'
     """
@@ -32,12 +35,16 @@ def get_location_value_from_end(
     all_substrings = full_location_value.split(location_value_prefix)
 
     invalid_substrings = ["", " "]
+    invalid_characters = [";"]
     valid_substrings = [
         substring.strip()
         for substring in all_substrings
         if substring not in invalid_substrings
     ]
     location_value = valid_substrings[-1]
+
+    for invalid_character in invalid_characters:
+        location_value = location_value.replace(invalid_character, "")
 
     return location_value
 
@@ -93,3 +100,69 @@ def parse_location(data: pd.DataFrame) -> pd.DataFrame:
     data = data.where(pd.notnull(data), None)
 
     return data
+
+
+def get_hnum(address: str) -> str:
+    address = "" if address is None else address
+    # address = '' if (address is None or pd.isna(address)) else address
+    # print(f"get_hnum : {type(address)=} {address=}")
+    result = [k for (k, v) in usaddress.parse(address) if re.search("Address", v)]
+    result = " ".join(result)
+    fraction = re.findall("\d+[\/]\d+", address)
+    if not bool(re.search("\d+[\/]\d+", result)) and len(fraction) != 0:
+        result = f"{result} {fraction[0]}"
+
+    return result
+
+
+def get_sname(address: str) -> str:
+    address = "" if address is None else address
+    # print(f"get_sname: {type(address)=} {address=}")
+    result = (
+        [k for (k, v) in usaddress.parse(address) if re.search("Street", v)]
+        if address is not None
+        else ""
+    )
+    result = " ".join(result)
+    if result == "":
+        return address.strip(",")
+    else:
+        return result.strip(",")
+
+
+def clean_streetname(x: str, n: int) -> str:
+    x = "" if x is None else x
+    if (" at " in x.lower()) | (" and " in x.lower()) | ("&" in x):
+        x = re.split("&| AND | and | AT | at", x)[n]
+    else:
+        x = ""
+    return x
+
+
+def geo_parser(geo: dict) -> dict:
+    return dict(
+        geo_message=geo.get("Message", "msg err"),
+        geo_grc=geo.get("Geosupport Return Code (GRC)", ""),
+        geo_reason_code=geo.get("Reason Code", ""),
+        geo_housenum=geo.get("House Number - Display Format", ""),
+        geo_streetname=geo.get("First Street Name Normalized", ""),
+        geo_bbl=geo.get("BOROUGH BLOCK LOT (BBL)", {}).get(
+            "BOROUGH BLOCK LOT (BBL)",
+            "",
+        ),
+        geo_borough=geo.get("BOROUGH BLOCK LOT (BBL)", {}).get(
+            "Borough Code",
+            "",
+        ),
+        geo_bin=geo.get(
+            "Building Identification Number (BIN) of Input Address or NAP", ""
+        ),
+        geo_latitude=geo.get("Latitude", ""),
+        geo_longitude=geo.get("Longitude", ""),
+        geo_x_coord=geo.get("SPATIAL COORDINATES", {}).get("X Coordinate", ""),
+        geo_y_coord=geo.get("SPATIAL COORDINATES", {}).get("Y Coordinate", ""),
+        geo_from_node=geo.get("From Node", ""),
+        geo_to_node=geo.get("To Node", ""),
+        geo_grc2=geo.get("Geosupport Return Code 2 (GRC 2)", ""),
+        geo_message2=geo.get("Message 2", "msg2 err"),
+    )

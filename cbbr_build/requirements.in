@@ -1,7 +1,8 @@
-psycopg2-binary
-pandas
 geopandas
-usaddress
+pandas
+psycopg2-binary
+pytest
 python-dotenv
+python-geosupport
 sqlalchemy
-# python-geosupport
+usaddress

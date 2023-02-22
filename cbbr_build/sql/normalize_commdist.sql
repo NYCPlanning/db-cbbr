@@ -2,6 +2,9 @@ ALTER TABLE _cbbr_submissions
     DROP COLUMN IF EXISTS commdist;
 
 ALTER TABLE _cbbr_submissions
+    ADD COLUMN borough_code text;
+
+ALTER TABLE _cbbr_submissions
     ADD COLUMN commdist text;
 
 -- OPTION A: Use provided FY2024 values
@@ -13,40 +16,45 @@ ALTER TABLE _cbbr_submissions
 UPDATE
     _cbbr_submissions a
 SET
+    borough_code = '1',
     commdist = '1' || lpad(cd, 2, '0')
 WHERE
-    a.boro_name = 'Manhattan'
+    a.borough = 'Manhattan'
     AND commdist IS NULL;
 
 UPDATE
     _cbbr_submissions a
 SET
+    borough_code = '2',
     commdist = '2' || lpad(cd, 2, '0')
 WHERE
-    a.boro_name = 'Bronx'
+    a.borough = 'Bronx'
     AND commdist IS NULL;
 
 UPDATE
     _cbbr_submissions a
 SET
+    borough_code = '3',
     commdist = '3' || lpad(cd, 2, '0')
 WHERE
-    a.boro_name = 'Brooklyn'
+    a.borough = 'Brooklyn'
     AND commdist IS NULL;
 
 UPDATE
     _cbbr_submissions a
 SET
+    borough_code = '4',
     commdist = '4' || lpad(cd, 2, '0')
 WHERE
-    a.boro_name = 'Queens'
+    a.borough = 'Queens'
     AND commdist IS NULL;
 
 UPDATE
     _cbbr_submissions a
 SET
+    borough_code = '5',
     commdist = '5' || lpad(cd, 2, '0')
 WHERE
-    a.boro_name = 'SI'
+    a.borough = 'SI'
     AND commdist IS NULL;
 

@@ -16,6 +16,7 @@ DROP TABLE IF EXISTS cbbr_export;
 SELECT
     tracking_code AS trackingnum,
     borough,
+    boro_name,
     cd,
     commdist,
     type_br,

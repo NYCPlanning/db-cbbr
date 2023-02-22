@@ -83,20 +83,6 @@ def example_cbbr_data_parsed():
     )
 
 
-def test_always_passes():
-    assert True
-
-
-@pytest.mark.xfail(reason="expected to always fail")
-def test_expect_always_fails():
-    assert False
-
-
-@pytest.mark.skip(reason="skipping always fails")
-def test_skip_always_fails():
-    assert False
-
-
 def test_validate_example_data(example_cbbr_data, example_cbbr_data_parsed):
     assert isinstance(example_cbbr_data, pd.DataFrame)
     assert (

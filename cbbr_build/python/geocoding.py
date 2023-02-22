@@ -1,3 +1,4 @@
+# DEPRECATED
 from multiprocessing import Pool, cpu_count
 from sqlalchemy import create_engine, text
 from geosupport import Geosupport, GeosupportError

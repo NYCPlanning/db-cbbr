@@ -3,7 +3,7 @@ import pytest
 import pandas as pd
 import numpy as np
 
-from ..python.geocoding_utils import (
+from ..python.geocode_utils import (
     get_location_value_from_end,
     remove_location_value_from_end,
     parse_location,

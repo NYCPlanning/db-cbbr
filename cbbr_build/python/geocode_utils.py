@@ -104,8 +104,6 @@ def parse_location(data: pd.DataFrame) -> pd.DataFrame:
 
 def get_hnum(address: str) -> str:
     address = "" if address is None else address
-    # address = '' if (address is None or pd.isna(address)) else address
-    # print(f"get_hnum : {type(address)=} {address=}")
     result = [k for (k, v) in usaddress.parse(address) if re.search("Address", v)]
     result = " ".join(result)
     fraction = re.findall("\d+[\/]\d+", address)
@@ -117,7 +115,6 @@ def get_hnum(address: str) -> str:
 
 def get_sname(address: str) -> str:
     address = "" if address is None else address
-    # print(f"get_sname: {type(address)=} {address=}")
     result = (
         [k for (k, v) in usaddress.parse(address) if re.search("Street", v)]
         if address is not None

@@ -12,20 +12,17 @@ from geocoding_utils import (
     geo_parser,
 )
 
-g = Geosupport()
+geo_client = Geosupport()
 
 
 def geosupport_1B_address(input_record: dict) -> dict:
-    """1B function - geocode based on the house number and street name"""
-    # geo_function = geosupport_1B_address.__name__
-    # geo_result = dict(geo_function=geo_function)
-
+    """1B function - geocode based on the address number and street name"""
     borough = input_record.get("borough_code", "")
     house_number = input_record.get("addressnum", "")
     street_name = input_record.get("streetname", "")
 
     # use geosupport function
-    geo_function_result = g["1B"](
+    geo_function_result = geo_client["1B"](
         borough=borough,
         street_name=street_name,
         house_number=house_number,
@@ -37,12 +34,12 @@ def geosupport_1B_address(input_record: dict) -> dict:
 
 
 def geosupport_1B_place(input_record: dict) -> dict:
+    """1B function - geocode based on the place name"""
     borough = input_record.get("borough_code", "")
-    # house_number = input_record.get("addressnum", "")
     street_name = input_record.get("facility_or_park_name", "")
 
     # use geosupport function
-    geo_function_result = g["1A"](
+    geo_function_result = geo_client["1A"](
         borough=borough,
         street_name=street_name,
         house_number="",
@@ -58,7 +55,7 @@ def geosupport_1A_address(input_record: dict) -> dict:
     street_name = input_record.get("streetname", "")
 
     # use geosupport function
-    geo_function_result = g["1A"](
+    geo_function_result = geo_client["1A"](
         borough=borough,
         street_name=street_name,
         house_number=house_number,
@@ -72,14 +69,22 @@ GEOSUPPORT_FUNCTION_HIERARCHY = [
     geosupport_1B_address,
     geosupport_1B_place,
     # geosupport_1A_address,
+    # geosupport_2,
 ]
 
 
 def geocode(inputs: dict):
-    if not inputs.get("location"):
-        inputs.update(dict(geo_function="NO LOCATION DATA"))
     geo_error = None
     outputs = inputs
+
+    input_location = inputs.get("location")
+    if not input_location:
+        outputs.update(dict(geo_function="NO LOCATION DATA"))
+        return outputs
+
+    if "district wide" in input_location.lower():
+        outputs.update(dict(geo_function="LOCATION IS DISTRICT WIDE"))
+        return outputs
 
     for geo_function in GEOSUPPORT_FUNCTION_HIERARCHY:
         try:
@@ -89,8 +94,9 @@ def geocode(inputs: dict):
             outputs.update(geo_result)
 
             return outputs
+
         except GeosupportError as e:
-            # try next function but remember error
+            # try the next function but remember this error
             geo_error = e
             continue
 

@@ -21,7 +21,7 @@ CSV_export $BUILD_ENGINE cbbr_export_poly cbbr_submissions_poly
 CSV_export $BUILD_ENGINE cbbr_export_pts cbbr_submissions_pts
 
 echo "Exporting output tables to shapefile zip files ..."
-SHP_export $BUILD_ENGINE cbbr_export_poly MULTIPOLYGON cbbr_submissions_poly
-SHP_export $BUILD_ENGINE cbbr_export_pts MULTIPOINT cbbr_submissions_pts
+SHP_export $BUILD_ENGINE cbbr_export_poly MULTIPOLYGON cbbr_submissions_poly_shapefile
+SHP_export $BUILD_ENGINE cbbr_export_pts MULTIPOINT cbbr_submissions_pts_shapefile
 
 echo "Done!"

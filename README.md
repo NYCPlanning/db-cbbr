@@ -4,14 +4,14 @@ The Community Board Budget Requests Database, a data product produced by the New
 
 The Community Board Budget Requests Database is a way to quickly and easily explore and learn about projects requested by NYC's 59 Community Boards.  It’s main purpose is to be a starting point for exploring potential projects and to better understand communities' perceived needs across NYC.  The spatial data provides an integrated view enabling a broad understanding of where communities have requested investments, and reveals opportunities for strategic neighborhood planning.
 
-## Available Files
+## Output files (FY2024)
 
-- [cbbr_submissions.csv](https://raw.githubusercontent.com/NYCPlanning/db-cbbr/master/cbbr_build/output/cbbr_submissions.csv)
-- [cbbr_submissions_needgeoms.csv](https://raw.githubusercontent.com/NYCPlanning/db-cbbr/master/cbbr_build/output/cbbr_submissions_needgeoms.csv)
-- [cbbr_submissions_poly.csv](https://raw.githubusercontent.com/NYCPlanning/db-cbbr/master/cbbr_build/output/cbbr_submissions_poly.csv)
-- [cbbr_submissions_pts.csv](https://raw.githubusercontent.com/NYCPlanning/db-cbbr/master/cbbr_build/output/cbbr_submissions_pts.csv)
-- [cbbr_submissions_poly.zip](https://raw.githubusercontent.com/NYCPlanning/db-cbbr/master/cbbr_build/output/cbbr_submissions_poly.zip)
-- [cbbr_submissions_pts.zip](https://raw.githubusercontent.com/NYCPlanning/db-cbbr/master/cbbr_build/output/cbbr_submissions_pts.zip)
+- [cbbr_submissions.csv](https://raw.githubusercontent.com/NYCPlanning/db-cbbr/master/cbbr_build/output/FY2024/cbbr_submissions.csv)
+- [cbbr_submissions_needgeoms.csv](https://raw.githubusercontent.com/NYCPlanning/db-cbbr/master/cbbr_build/output/FY2024/cbbr_submissions_needgeoms.csv)
+- [cbbr_submissions_poly.csv](https://raw.githubusercontent.com/NYCPlanning/db-cbbr/master/cbbr_build/output/FY2024/cbbr_submissions_poly.csv)
+- [cbbr_submissions_pts.csv](https://raw.githubusercontent.com/NYCPlanning/db-cbbr/master/cbbr_build/output/FY2024/cbbr_submissions_pts.csv)
+- [cbbr_submissions_poly_shapefile.zip](https://raw.githubusercontent.com/NYCPlanning/db-cbbr/master/cbbr_build/output/FY2024/cbbr_submissions_poly_shapefile.zip)
+- [cbbr_submissions_pts_shapefile.zip](https://raw.githubusercontent.com/NYCPlanning/db-cbbr/master/cbbr_build/output/FY2024/cbbr_submissions_pts_shapefile.zip)
 
 ### Limitations
 

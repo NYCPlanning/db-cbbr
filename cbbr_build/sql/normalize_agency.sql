@@ -38,7 +38,7 @@ SET
             upper('Department of Education')
         WHEN agency_acronym = 'DOHMH' THEN
             upper('Department of Health and Mental Hygiene')
-        WHEN agency_acronym = 'DOITT' THEN
+        WHEN agency_acronym = 'DoiTT' THEN
             upper('Dept of Information Technology & Telecommunications')
         WHEN agency_acronym = 'DOT' THEN
             upper('Department of Transportation')

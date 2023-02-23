@@ -6,6 +6,7 @@ import copy
 from multiprocessing import Pool, cpu_count
 from geosupport import Geosupport, GeosupportError
 from library.helper.geocode_utils import (
+    GEOCODE_COLUMNS,
     parse_location,
     get_hnum,
     get_sname,
@@ -27,8 +28,6 @@ def geosupport_1B_address(input_record: dict) -> dict:
         street_name=street_name,
         house_number=house_number,
     )
-    geo_function_result = geo_parser(geo_function_result)
-    # geo_result.update(geo_function_result)
 
     return geo_function_result
 
@@ -45,7 +44,6 @@ def geosupport_1B_place(input_record: dict) -> dict:
         street_name=street_name,
         house_number="",
     )
-    geo_function_result = geo_parser(geo_function_result)
 
     return geo_function_result
 
@@ -61,7 +59,6 @@ def geosupport_1A_address(input_record: dict) -> dict:
         street_name=street_name,
         house_number=house_number,
     )
-    geo_function_result = geo_parser(geo_function_result)
 
     return geo_function_result
 
@@ -74,7 +71,7 @@ GEOSUPPORT_FUNCTION_HIERARCHY = [
 ]
 
 
-def geocode(inputs: dict):
+def geocode_record(inputs: dict) -> dict:
     geo_error = None
     outputs = copy.deepcopy(inputs)
 
@@ -88,9 +85,10 @@ def geocode(inputs: dict):
         return outputs
 
     for geo_function in GEOSUPPORT_FUNCTION_HIERARCHY:
+        last_attempted_geo_function = geo_function.__name__
         try:
-            last_attempted_geo_function = geo_function.__name__
-            geo_result = geo_function(inputs)
+            geo_result = geo_function(input_record=inputs)
+            geo_result = geo_parser(geo_result)
             outputs.update(dict(geo_function=last_attempted_geo_function))
             outputs.update(geo_result)
 
@@ -109,68 +107,41 @@ def geocode(inputs: dict):
     return outputs
 
 
-if __name__ == "__main__":
-    # TODO formally move this to test files
-    # print("creating fake data ...")
-    # cbbr_data = pd.DataFrame.from_dict(
-    #     {
-    #         "id": [
-    #             "fake_park",
-    #             "fake_address",
-    #             "real_address_works",
-    #             "real_address_fails",
-    #             "real_place_works",
-    #             "real_street_fails",
-    #         ],
-    #         "borough_code": [
-    #             "3",
-    #             "3",
-    #             "3",
-    #             "3",
-    #             "3",
-    #             "3",
-    #         ],
-    #         "location": [
-    #             "Site Name: Little Park",
-    #             "Site Name: Home; Street Name: 1991 August Ave",
-    #             "Site Name: Pena-Herrera Park;   Street Name: 4601 3 Avenue",
-    #             "Site Name: Kosciuszko Pool;   Street Name: 670 Marcy Avenue, Brooklyn, New York, NY",
-    #             # "Site Name: Kosciuszko Pool;   Street Name: 658 DEKALB AVENUE, Brooklyn, New York, NY",
-    #             "Site Name: Kosciuszko Pool;   Street Name: Brooklyn, New York, NY",
-    #             "Street Name: Winthrop Street    Cross Street 1: Flatbush Avenue  Cross Street 2: Flatbush Avenue",
-    #         ],
-    #     }
-    # )
+def geocode_records(cbbr_data: pd.DataFrame) -> pd.DataFrame:
+    cbbr_data[GEOCODE_COLUMNS] = None
+    cbbr_data["addressnum"] = cbbr_data["address"].apply(get_hnum)
+    cbbr_data["street_name"] = cbbr_data["address"].apply(get_sname)
 
+    # cbbr_data["geo_from_x_coord"] = None
+    # cbbr_data["geo_from_y_coord"] = None
+    # cbbr_data["geo_to_x_coord"] = None
+    # cbbr_data["geo_to_y_coord"] = None
+
+    data_records = cbbr_data.to_dict("records")
+    # Multiprocess
+    with Pool(processes=cpu_count()) as pool:
+        geocoded_records = pool.map(geocode_record, data_records, 10000)
+
+    return pd.DataFrame(geocoded_records)
+
+
+if __name__ == "__main__":
+    print("start selecting data from DB ...")
     # connect to postgres db
     engine = create_engine(os.environ["BUILD_ENGINE"])
     select_query = text("SELECT * FROM _cbbr_submissions")
     with engine.begin() as conn:
         cbbr_data = pd.read_sql(select_query, conn)
 
-    print("parsing data for geocoding ...")
-    # parse components of location column
+    print("parsing location data for geocoding ...")
     cbbr_data = parse_location(cbbr_data)
-    cbbr_data["addressnum"] = cbbr_data.address.apply(get_hnum)
-    cbbr_data["street_name"] = cbbr_data.address.apply(get_sname)
-
-    cbbr_data["geo_from_x_coord"] = np.nan
-    cbbr_data["geo_from_y_coord"] = np.nan
-    cbbr_data["geo_to_x_coord"] = np.nan
-    cbbr_data["geo_to_y_coord"] = np.nan
-    cbbr_data["geo_to_y_coord"] = np.nan
-    cbbr_data["geo_to_y_coord"] = np.nan
 
     print("start geocoding ...")
-    cbbr_data_records = cbbr_data.to_dict("records")
-    # Multiprocess
-    with Pool(processes=cpu_count()) as pool:
-        geocoded_records = pool.map(geocode, cbbr_data_records, 10000)
-
-    geocoded_cbbr_data = pd.DataFrame(geocoded_records)
-    print("done geocoding")
+    geocoded_cbbr_data = geocode_records(cbbr_data)
+    print("start exporting to DB ...")
     # TODO formally move this to test files
     # geocoded_cbbr_data.to_csv("geocoded_cbbr_data.csv")
     geocoded_cbbr_data.to_sql(
         "_cbbr_submissions", engine, if_exists="replace", chunksize=500, index=False
     )
+    print("done geocoding")

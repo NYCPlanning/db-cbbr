@@ -14,6 +14,30 @@ LOCATION_PREFIX_TO_COLUMN = [
     ("Site Name:", "facility_or_park_name"),
 ]
 
+GEOCODE_COLUMNS = [
+    "addressnum",
+    "street_name",
+    "geo_from_x_coord",
+    "geo_from_y_coord",
+    "geo_to_x_coord",
+    "geo_to_y_coord",
+    "geo_function",
+    "geo_message",
+    "geo_grc",
+    "geo_reason_code",
+    "geo_housenum",
+    "geo_streetname",
+    "geo_bbl",
+    "geo_borough",
+    "geo_bin",
+    "geo_latitude",
+    "geo_longitude",
+    "geo_x_coord",
+    "geo_y_coord",
+    "geo_from_node",
+    "geo_to_node",
+]
+
 
 def get_location_value_from_end(
     full_location_value: str, location_value_prefix: str
@@ -28,9 +52,9 @@ def get_location_value_from_end(
         'Site Name: A Cross Street: B', 'Site Name:' -> 'A Cross Street: B'
     """
     if pd.isna(full_location_value):
-        return np.nan
+        return None
     if location_value_prefix not in full_location_value:
-        return np.nan
+        return None
 
     all_substrings = full_location_value.split(location_value_prefix)
 
@@ -56,12 +80,12 @@ def remove_location_value_from_end(
     Will return all text to the right of the prefix.
 
     Examples
-        'Site Name: A', 'Site Name:' -> np.nan
+        'Site Name: A', 'Site Name:' -> None
         'Site Name: A Cross Street: B', 'Cross Street:' -> 'Site Name: A'
-        'Site Name: A Cross Street: B', 'Site Name:' -> np.nan
+        'Site Name: A Cross Street: B', 'Site Name:' -> None
     """
     if pd.isna(full_location_value):
-        return np.nan
+        return None
     if location_value_prefix not in full_location_value:
         return full_location_value.strip()
 
@@ -103,18 +127,23 @@ def parse_location(data: pd.DataFrame) -> pd.DataFrame:
 
 
 def get_hnum(address: str) -> str:
-    address = "" if address is None else address
+    if not address:
+        return None
     result = [k for (k, v) in usaddress.parse(address) if re.search("Address", v)]
     result = " ".join(result)
     fraction = re.findall("\d+[\/]\d+", address)
     if not bool(re.search("\d+[\/]\d+", result)) and len(fraction) != 0:
         result = f"{result} {fraction[0]}"
 
+    if result == "":
+        return None
+
     return result
 
 
 def get_sname(address: str) -> str:
-    address = "" if address is None else address
+    if not address:
+        return None
     result = (
         [k for (k, v) in usaddress.parse(address) if re.search("Street", v)]
         if address is not None
@@ -127,39 +156,46 @@ def get_sname(address: str) -> str:
         return result.strip(",")
 
 
-def clean_streetname(x: str, n: int) -> str:
-    x = "" if x is None else x
-    if (" at " in x.lower()) | (" and " in x.lower()) | ("&" in x):
-        x = re.split("&| AND | and | AT | at", x)[n]
+def clean_streetname(address: str, n: int) -> str:
+    address = "" if address is None else address
+    if (" at " in address.lower()) | (" and " in address.lower()) | ("&" in address):
+        address = re.split("&| AND | and | AT | at", address)[n]
     else:
-        x = ""
-    return x
+        address = ""
+    return address
 
 
 def geo_parser(geo: dict) -> dict:
-    return dict(
+    parsed_geo = dict(
         geo_message=geo.get("Message", "msg err"),
-        geo_grc=geo.get("Geosupport Return Code (GRC)", ""),
-        geo_reason_code=geo.get("Reason Code", ""),
-        geo_housenum=geo.get("House Number - Display Format", ""),
-        geo_streetname=geo.get("First Street Name Normalized", ""),
+        # geo_message=geo.get("Message", None),
+        geo_grc=geo.get("Geosupport Return Code (GRC)", None),
+        geo_reason_code=geo.get("Reason Code", None),
+        geo_housenum=geo.get("House Number - Display Format", None),
+        geo_streetname=geo.get("First Street Name Normalized", None),
         geo_bbl=geo.get("BOROUGH BLOCK LOT (BBL)", {}).get(
             "BOROUGH BLOCK LOT (BBL)",
-            "",
+            None,
         ),
         geo_borough=geo.get("BOROUGH BLOCK LOT (BBL)", {}).get(
             "Borough Code",
-            "",
+            None,
         ),
         geo_bin=geo.get(
-            "Building Identification Number (BIN) of Input Address or NAP", ""
+            "Building Identification Number (BIN) of Input Address or NAP", None
         ),
-        geo_latitude=geo.get("Latitude", ""),
-        geo_longitude=geo.get("Longitude", ""),
-        geo_x_coord=geo.get("SPATIAL COORDINATES", {}).get("X Coordinate", ""),
-        geo_y_coord=geo.get("SPATIAL COORDINATES", {}).get("Y Coordinate", ""),
-        geo_from_node=geo.get("From Node", ""),
-        geo_to_node=geo.get("To Node", ""),
-        geo_grc2=geo.get("Geosupport Return Code 2 (GRC 2)", ""),
-        geo_message2=geo.get("Message 2", "msg2 err"),
+        geo_latitude=geo.get("Latitude", None),
+        geo_longitude=geo.get("Longitude", None),
+        geo_x_coord=geo.get("SPATIAL COORDINATES", {}).get("X Coordinate", None),
+        geo_y_coord=geo.get("SPATIAL COORDINATES", {}).get("Y Coordinate", None),
+        geo_from_node=geo.get("From Node", None),
+        geo_to_node=geo.get("To Node", None),
+        # geo_grc2=geo.get("Geosupport Return Code 2 (GRC 2)", ""),
+        # geo_message2=geo.get("Message 2", "msg2 err"),
     )
+    columns_with_blank_success_value = ["geo_message", "geo_reason_code"]
+    # replace empty string with None
+    for column in parsed_geo:
+        if parsed_geo.get(column) == "":
+            parsed_geo[column] = None
+    return parsed_geo

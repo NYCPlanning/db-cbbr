@@ -9,7 +9,7 @@ docker run -it --rm \
     -w /home/db-cbbr \
     --env-file .env \
     --network="host" \
-    nycplanning/docker-geosupport:latest bash -c "python3 -m geocode"
+    nycplanning/docker-geosupport:latest bash -c "python3 -m library.geocode"
 
 echo "Assign geometries from geocoding ..."
 run_sql sql/assign_geoms.sql

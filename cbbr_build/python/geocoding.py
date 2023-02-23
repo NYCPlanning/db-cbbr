@@ -1,4 +1,4 @@
-# DEPRECATED
+# DEPRECATED in favor of geocode.py
 from multiprocessing import Pool, cpu_count
 from sqlalchemy import create_engine, text
 from geosupport import Geosupport, GeosupportError
@@ -9,7 +9,7 @@ import json
 import re
 import os
 import numpy as np
-from geocoding_utils import parse_location
+from geocode_utils import parse_location
 
 g = Geosupport()
 

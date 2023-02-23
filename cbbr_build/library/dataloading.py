@@ -1,3 +1,4 @@
+# DEPRECATED
 from cook import Importer
 import os
 from sqlalchemy import create_engine

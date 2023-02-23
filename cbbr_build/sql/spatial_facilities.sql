@@ -35,7 +35,7 @@ WITH master AS (
                                     facname
                               FROM
                                     singlename)
-                              AND a.borough = b.boro)
+                              AND upper(a.borough) = upper(b.boro))
             UPDATE
                   _cbbr_submissions
             SET
@@ -74,7 +74,7 @@ WITH master AS (
             AND (('%' || upper(replace(a.facility_or_park_name, ' Branch', ' Library')) || '%' LIKE '%' || upper(b.facname) || '%')
                   OR ('%' || upper(replace(a.facility_or_park_name, ' Branch', '')) || '%' LIKE '%' || upper(b.facname) || '%')
                   OR ('%' || upper(a.facility_or_park_name) || '%' LIKE '%' || upper(b.facname) || '%'))
-            AND a.borough = b.boro
+            AND upper(a.borough) = upper(b.boro)
             AND a.geom IS NULL)
 UPDATE
       _cbbr_submissions
@@ -111,7 +111,7 @@ WITH master AS (
             NOT LIKE '%AND%'
             AND regexp_replace(a.facility_or_park_name, '\D', '', 'g') = regexp_replace(b.facname,'\D', '', 'g')
             AND regexp_replace(a.facility_or_park_name, '\D', '', 'g') IS NOT NULL
-            AND a.borough = b.boro
+            AND upper(a.borough) = upper(b.boro)
             AND a.geom IS NULL)
 UPDATE
       _cbbr_submissions
@@ -158,7 +158,7 @@ WITH master AS (
             NOT LIKE '%AND%'
             AND regexp_replace(a.facility_or_park_name, '\D', '', 'g') = regexp_replace(b.facname,'\D', '', 'g')
             AND regexp_replace(a.facility_or_park_name, '\D', '', 'g') <> ''
-                  AND a.borough = b.boro
+                  AND upper(a.borough) = upper(b.boro)
                   AND a.geom IS NULL)
             UPDATE
                   _cbbr_submissions
@@ -206,7 +206,7 @@ WITH master AS (
             NOT LIKE '%AND%'
             AND regexp_replace(a.facility_or_park_name, '\D', '', 'g') = regexp_replace(replace(replace(b.facname,' 0', ' '),' 0', ' '),'\D', '', 'g')
             AND regexp_replace(a.facility_or_park_name, '\D', '', 'g') <> ''
-                  AND a.borough = b.boro
+                  AND upper(a.borough) = upper(b.boro)
                   AND a.geom IS NULL)
             UPDATE
                   _cbbr_submissions
@@ -260,7 +260,7 @@ WITH master AS (
             NOT LIKE '%GARDEN%'
             AND upper(a.facility_or_park_name)
             NOT LIKE '%WOOD%'
-            AND a.borough = b.boro
+            AND upper(a.borough) = upper(b.boro)
             AND a.geom IS NULL)
 UPDATE
       _cbbr_submissions

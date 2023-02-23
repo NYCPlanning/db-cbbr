@@ -30,7 +30,7 @@ WITH master AS (
                   WHEN b.borough = 'Q' THEN
                         'Queens'
                   WHEN b.borough = 'R' THEN
-                        'Staten Island'
+                        'SI'
                   ELSE
                         NULL
                   END))
@@ -74,7 +74,7 @@ WITH master AS (
                   WHEN b.borough = 'Q' THEN
                         'Queens'
                   WHEN b.borough = 'R' THEN
-                        'Staten Island'
+                        'SI'
                   ELSE
                         NULL
                   END))
@@ -118,7 +118,7 @@ WITH master AS (
                   WHEN b.borough = 'Q' THEN
                         'Queens'
                   WHEN b.borough = 'R' THEN
-                        'Staten Island'
+                        'SI'
                   ELSE
                         NULL
                   END))

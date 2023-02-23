@@ -16,7 +16,7 @@ DROP TABLE IF EXISTS cbbr_export;
 SELECT
     tracking_code AS trackingnum,
     borough,
-    boro_code,
+    borough_code,
     cd,
     commdist,
     type_br,
@@ -29,7 +29,7 @@ SELECT
     explanation,
     facility_or_park_name AS sitename,
     address,
-    street_name AS streetsegment,
+    streetname AS streetsegment,
     between_cross_street_1 AS streetcross1,
     and_cross_street_2 AS streetcross2,
     (

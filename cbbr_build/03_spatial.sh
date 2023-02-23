@@ -2,6 +2,7 @@
 source config.sh
 
 echo "CBBR Version $VERSION : 03 Spatial"
+# TODO delete tables that are created by this stage
 echo "Geocode with geosupport image  ..."
 docker run -it --rm \
     -v $(pwd):/home/db-cbbr \

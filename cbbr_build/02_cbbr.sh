@@ -2,6 +2,7 @@
 source config.sh
 
 echo "CBBR Version $VERSION : 02 CBBR"
+# TODO delete tables that are created by this stage
 echo "Create build tables to modify ..."
 run_sql sql/preprocessing.sql
 

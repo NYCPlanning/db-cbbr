@@ -1,9 +1,10 @@
 import os
-from multiprocessing import Pool, cpu_count
 from sqlalchemy import create_engine, text
 from geosupport import Geosupport, GeosupportError
 import pandas as pd
 import numpy as np
+import copy
+from multiprocessing import Pool, cpu_count
 from geocode_utils import (
     parse_location,
     get_hnum,
@@ -34,6 +35,7 @@ def geosupport_1B_address(input_record: dict) -> dict:
 
 def geosupport_1B_place(input_record: dict) -> dict:
     """1B function - geocode based on the place name"""
+    # TODO raise better errors, e.g. no place name currently yields "STREET NAME IS MISSING"
     borough = input_record.get("borough_code", "")
     street_name = input_record.get("facility_or_park_name", "")
 
@@ -74,7 +76,7 @@ GEOSUPPORT_FUNCTION_HIERARCHY = [
 
 def geocode(inputs: dict):
     geo_error = None
-    outputs = inputs
+    outputs = copy.deepcopy(inputs)
 
     input_location = inputs.get("location")
     if not input_location:
@@ -108,6 +110,7 @@ def geocode(inputs: dict):
 
 
 if __name__ == "__main__":
+    # TODO formally move this to test files
     # print("creating fake data ...")
     # cbbr_data = pd.DataFrame.from_dict(
     #     {
@@ -116,8 +119,12 @@ if __name__ == "__main__":
     #             "fake_address",
     #             "real_address_works",
     #             "real_address_fails",
+    #             "real_place_works",
+    #             "real_street_fails",
     #         ],
     #         "borough_code": [
+    #             "3",
+    #             "3",
     #             "3",
     #             "3",
     #             "3",
@@ -127,8 +134,10 @@ if __name__ == "__main__":
     #             "Site Name: Little Park",
     #             "Site Name: Home; Street Name: 1991 August Ave",
     #             "Site Name: Pena-Herrera Park;   Street Name: 4601 3 Avenue",
-    #             # "Site Name: Kosciuszko Pool;   Street Name: 670 Marcy Avenue, Brooklyn, New York, NY",
-    #             "Site Name: Kosciuszko Pool;   Street Name: 658 DEKALB AVENUE, Brooklyn, New York, NY",
+    #             "Site Name: Kosciuszko Pool;   Street Name: 670 Marcy Avenue, Brooklyn, New York, NY",
+    #             # "Site Name: Kosciuszko Pool;   Street Name: 658 DEKALB AVENUE, Brooklyn, New York, NY",
+    #             "Site Name: Kosciuszko Pool;   Street Name: Brooklyn, New York, NY",
+    #             "Street Name: Winthrop Street    Cross Street 1: Flatbush Avenue  Cross Street 2: Flatbush Avenue",
     #         ],
     #     }
     # )
@@ -160,6 +169,7 @@ if __name__ == "__main__":
 
     geocoded_cbbr_data = pd.DataFrame(geocoded_records)
     print("done geocoding")
+    # TODO formally move this to test files
     # geocoded_cbbr_data.to_csv("geocoded_cbbr_data.csv")
     geocoded_cbbr_data.to_sql(
         "_cbbr_submissions", engine, if_exists="replace", chunksize=500, index=False

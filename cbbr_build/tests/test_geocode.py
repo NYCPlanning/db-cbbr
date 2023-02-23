@@ -1,11 +1,9 @@
-# test boilerplate approaches used in other test files
-import pytest
+# TODO
+# test primary geocode script
 import pytest
 import pandas as pd
 import numpy as np
 
-# ensure imports or project modules work
-from library.helper.geocode_utils import parse_location
 from library.geocode import geosupport_1B_address
 
 

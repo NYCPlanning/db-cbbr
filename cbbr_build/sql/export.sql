@@ -29,7 +29,7 @@ SELECT
     explanation,
     facility_or_park_name AS sitename,
     address,
-    streetname AS streetsegment,
+    street_name AS streetsegment,
     between_cross_street_1 AS streetcross1,
     and_cross_street_2 AS streetcross2,
     (

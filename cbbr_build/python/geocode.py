@@ -19,7 +19,7 @@ def geosupport_1B_address(input_record: dict) -> dict:
     """1B function - geocode based on the address number and street name"""
     borough = input_record.get("borough_code", "")
     house_number = input_record.get("addressnum", "")
-    street_name = input_record.get("streetname", "")
+    street_name = input_record.get("street_name", "")
 
     # use geosupport function
     geo_function_result = geo_client["1B"](
@@ -53,7 +53,7 @@ def geosupport_1B_place(input_record: dict) -> dict:
 def geosupport_1A_address(input_record: dict) -> dict:
     borough = input_record.get("borough_code", "")
     house_number = input_record.get("addressnum", "")
-    street_name = input_record.get("streetname", "")
+    street_name = input_record.get("street_name", "")
 
     # use geosupport function
     geo_function_result = geo_client["1A"](
@@ -152,7 +152,7 @@ if __name__ == "__main__":
     # parse components of location column
     cbbr_data = parse_location(cbbr_data)
     cbbr_data["addressnum"] = cbbr_data.address.apply(get_hnum)
-    cbbr_data["streetname"] = cbbr_data.address.apply(get_sname)
+    cbbr_data["street_name"] = cbbr_data.address.apply(get_sname)
 
     cbbr_data["geo_from_x_coord"] = np.nan
     cbbr_data["geo_from_y_coord"] = np.nan

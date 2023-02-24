@@ -1,4 +1,4 @@
--- Create tables to export and reorder and rename columns
+-- Create tables to export
 -- cbbr_submissions_needgeoms
 DROP TABLE IF EXISTS cbbr_submissions_needgeoms;
 
@@ -14,7 +14,8 @@ WHERE
 DROP TABLE IF EXISTS cbbr_export;
 
 SELECT
-    tracking_code AS trackingnum,
+    unique_id,
+    tracking_code,
     borough,
     borough_code,
     cd,
@@ -22,34 +23,34 @@ SELECT
     type_br,
     "type",
     priority,
-    agency_acronym AS agencyacro,
+    agency_acronym,
     agency,
     need,
     request,
     explanation,
-    facility_or_park_name AS sitename,
-    address,
-    street_name AS streetsegment,
-    between_cross_street_1 AS streetcross1,
-    and_cross_street_2 AS streetcross2,
+    "location",
+    facility_or_park_name AS site_name,
+    "address",
+    street_name,
+    between_cross_street_1 AS street_cross_1,
+    and_cross_street_2 AS street_cross_2,
     (
         CASE WHEN supporters_1 IS NULL
             OR supporters_1 IN ('', ' ', 'n/a') THEN
             NULL
         ELSE
             supporters_1
-        END) AS supporters1,
+        END) AS supporters_1,
     (
         CASE WHEN supporters_2 IS NULL
             OR supporters_2 IN ('', ' ', 'n/a') THEN
             NULL
         ELSE
             supporters_2
-        END) AS supporters2,
+        END) AS supporters_2,
     parent_tracking_code,
-    agency_category_response AS agyresponsecat,
-    agency_response AS agyresponse,
-    unique_id,
+    agency_category_response,
+    agency_response,
     geo_function,
     geom INTO cbbr_export
 FROM
@@ -75,7 +76,6 @@ FROM
 WHERE
     ST_GeometryType (geom) = 'ST_MultiPoint';
 
--- drop geom column from cbbr_export
-ALTER TABLE cbbr_export
-    DROP COLUMN IF EXISTS geom;
-
+-- -- drop geom column from cbbr_export
+-- ALTER TABLE cbbr_export
+--     DROP COLUMN IF EXISTS geom;

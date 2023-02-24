@@ -1,5 +1,5 @@
 -- Create tables to export
--- cbbr_submissions_needgeoms
+-- cbbr_submissions_needgeoms: all records without a geometry
 DROP TABLE IF EXISTS cbbr_submissions_needgeoms;
 
 SELECT
@@ -8,9 +8,67 @@ FROM
     _cbbr_submissions
 WHERE
     geom IS NULL
-    AND "type" = 'site';
+ORDER BY
+    location ASC;
 
--- cbbr_export
+-- cbbr_submissions_needgeoms_c: lowest priority)
+DROP TABLE IF EXISTS cbbr_submissions_needgeoms_c;
+
+SELECT
+    * INTO cbbr_submissions_needgeoms_c
+FROM
+    _cbbr_submissions
+WHERE
+    geom IS NULL
+ORDER BY
+    location ASC;
+
+-- cbbr_submissions_needgeoms_b
+DROP TABLE IF EXISTS cbbr_submissions_needgeoms_b;
+
+SELECT
+    * INTO cbbr_submissions_needgeoms_b
+FROM
+    cbbr_submissions_needgeoms_c
+WHERE
+    type_br = 'C'
+ORDER BY
+    location ASC;
+
+-- remove B from C table
+DELETE FROM cbbr_submissions_needgeoms_c
+WHERE EXISTS (
+        SELECT
+            1
+        FROM
+            cbbr_submissions_needgeoms_b
+        WHERE
+            cbbr_submissions_needgeoms_c.unique_id = cbbr_submissions_needgeoms_b.unique_id);
+
+--
+-- cbbr_submissions_needgeoms_a: highest priority
+DROP TABLE IF EXISTS cbbr_submissions_needgeoms_a;
+
+SELECT
+    * INTO cbbr_submissions_needgeoms_a
+FROM
+    cbbr_submissions_needgeoms_b
+WHERE
+    "type" = 'site'
+ORDER BY
+    location ASC;
+
+-- remove A from B table
+DELETE FROM cbbr_submissions_needgeoms_b
+WHERE EXISTS (
+        SELECT
+            1
+        FROM
+            cbbr_submissions_needgeoms_a
+        WHERE
+            cbbr_submissions_needgeoms_b.unique_id = cbbr_submissions_needgeoms_a.unique_id);
+
+-- cbbr_export: final table
 DROP TABLE IF EXISTS cbbr_export;
 
 SELECT

@@ -17,6 +17,9 @@ CSV_export $BUILD_ENGINE _cbbr_submissions cbbr_submissions_build
 CSV_export $BUILD_ENGINE cbbr_export cbbr_export
 
 CSV_export $BUILD_ENGINE cbbr_submissions_needgeoms cbbr_submissions_needgeoms
+CSV_export $BUILD_ENGINE cbbr_submissions_needgeoms cbbr_submissions_needgeoms_a
+CSV_export $BUILD_ENGINE cbbr_submissions_needgeoms cbbr_submissions_needgeoms_b
+CSV_export $BUILD_ENGINE cbbr_submissions_needgeoms cbbr_submissions_needgeoms_c
 CSV_export $BUILD_ENGINE cbbr_export_poly cbbr_submissions_poly
 CSV_export $BUILD_ENGINE cbbr_export_pts cbbr_submissions_pts
 

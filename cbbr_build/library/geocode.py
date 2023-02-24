@@ -134,7 +134,10 @@ def geocode_record(inputs: dict) -> dict:
     # geo_result_error = geo_parser(geo_result_error)
     # outputs.update(dict(geo_function=f"{last_attempted_geo_function} FAILED"))
     # outputs.update(geo_result_error)
+
     # TODO for a record, store all errors as each function is attempted
+    # maybe format as geosupport_1B_address: Error message; geosupport_1B_place: Error message;
+    # shorter function names would help
     outputs.update(dict(geo_function=f"GEOCODING FAILED"))
 
     return outputs

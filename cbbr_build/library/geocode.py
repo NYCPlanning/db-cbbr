@@ -18,7 +18,7 @@ geo_client = Geosupport()
 
 
 def geosupport_1B_address(input_record: dict) -> dict:
-    """1B function - geocode based on the address number and street name"""
+    """1B function - geocode address based on the address number and street name"""
     borough = input_record.get("borough_code", "")
     house_number = input_record.get("addressnum", "")
     street_name = input_record.get("street_name", "")
@@ -34,7 +34,7 @@ def geosupport_1B_address(input_record: dict) -> dict:
 
 
 def geosupport_1B_place(input_record: dict) -> dict:
-    """1B function - geocode based on the place name"""
+    """1B function - geocode address based on the place name"""
     borough = input_record.get("borough_code", "")
     street_name = input_record.get("facility_or_park_name", "")
 
@@ -48,16 +48,42 @@ def geosupport_1B_place(input_record: dict) -> dict:
     return geo_function_result
 
 
-def geosupport_1A_address(input_record: dict) -> dict:
+def geosupport_2_street_name(input_record: dict) -> dict:
+    """2 function - geocode intersection based on the two street names (primary and 1st cross street)"""
     borough = input_record.get("borough_code", "")
-    house_number = input_record.get("addressnum", "")
     street_name = input_record.get("street_name", "")
+    cross_street_1 = input_record.get("between_cross_street_1", "")
+    cross_street_2 = input_record.get("and_cross_street_2", "")
+    if cross_street_1 != cross_street_2:
+        raise GeosupportError("UNLIKELY TO BE AN INTERSECTION")
+        # NOTE This error message won't show in data since, if no function work, geo_message will be GEOCODING FAILED
 
     # use geosupport function
-    geo_function_result = geo_client["1A"](
+    geo_function_result = geo_client["2"](
         borough=borough,
-        street_name=street_name,
-        house_number=house_number,
+        street_name_1=street_name,
+        street_name_2=cross_street_1,
+    )
+
+    return geo_function_result
+
+
+def geosupport_3(input_record: dict) -> dict:
+    """2 function - geocode street segment based on the three street names"""
+    borough = input_record.get("borough_code", "")
+    street_name = input_record.get("street_name", "")
+    cross_street_1 = input_record.get("between_cross_street_1", "")
+    cross_street_2 = input_record.get("and_cross_street_2", "")
+    # if cross_street_1 != cross_street_2:
+    #     # raise ValueError("UNLIKELY TO BE AN INTERSECTION")
+    #     raise GeosupportError("UNLIKELY TO BE AN INTERSECTION")
+
+    # use geosupport function
+    geo_function_result = geo_client["2"](
+        borough=borough,
+        street_name_1=street_name,
+        street_name_2=cross_street_1,
+        street_name_3=cross_street_2,
     )
 
     return geo_function_result
@@ -66,9 +92,9 @@ def geosupport_1A_address(input_record: dict) -> dict:
 GEOSUPPORT_FUNCTION_HIERARCHY = [
     geosupport_1B_address,
     geosupport_1B_place,
-    # geosupport_1A_address,
-    # geosupport_2,
-    # failed_all_functions,
+    geosupport_2_street_name,
+    # geosupport_2_cross_streets,
+    geosupport_3,
 ]
 
 
@@ -101,13 +127,15 @@ def geocode_record(inputs: dict) -> dict:
 
         except GeosupportError as e:
             # try the next function but remember this error
-            geo_error = e
+            # geo_error = e
             continue
 
-    geo_result_error = geo_error.result
-    geo_result_error = geo_parser(geo_result_error)
-    outputs.update(dict(geo_function=f"{last_attempted_geo_function} FAILED"))
-    outputs.update(geo_result_error)
+    # geo_result_error = geo_error.result
+    # geo_result_error = geo_parser(geo_result_error)
+    # outputs.update(dict(geo_function=f"{last_attempted_geo_function} FAILED"))
+    # outputs.update(geo_result_error)
+    # TODO for a record, store all errors as each function is attempted
+    outputs.update(dict(geo_function=f"GEOCODING FAILED"))
 
     return outputs
 

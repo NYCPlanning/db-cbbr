@@ -126,7 +126,7 @@ def geocode_record(inputs: dict) -> dict:
             return outputs
 
         except GeosupportError as e:
-            # try the next function but remember this error
+            # # try the next function but remember this error
             # geo_error = e
             continue
 

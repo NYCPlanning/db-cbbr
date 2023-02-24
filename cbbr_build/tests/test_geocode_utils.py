@@ -22,17 +22,14 @@ def example_cbbr_data():
     return pd.DataFrame.from_dict(
         {
             "test_id": [
-                "null_values",
+                "empty_location",
+                "invalid_location",
                 "site_name_only",
                 "no_site_name",
             ],
-            "boro_name": [
-                None,
-                "Brooklyn",
-                "Brooklyn",
-            ],
             "location": [
                 None,
+                ";",
                 "Site Name: Linden Park Comfort Station",
                 "Street Name: Atlantic Avenue;    Cross Street 1: Crescent Street;",
             ],
@@ -45,17 +42,14 @@ def example_cbbr_data_parsed():
     return pd.DataFrame.from_dict(
         {
             "test_id": [
-                "null_values",
+                "empty_location",
+                "invalid_location",
                 "site_name_only",
                 "no_site_name",
             ],
-            "boro_name": [
-                None,
-                "Brooklyn",
-                "Brooklyn",
-            ],
             "location": [
                 None,
+                ";",
                 "Site Name: Linden Park Comfort Station",
                 "Street Name: Atlantic Avenue;    Cross Street 1: Crescent Street;",
             ],
@@ -63,8 +57,10 @@ def example_cbbr_data_parsed():
                 None,
                 None,
                 None,
+                None,
             ],
             "between_cross_street_1": [
+                None,
                 None,
                 None,
                 "Crescent Street",
@@ -72,9 +68,11 @@ def example_cbbr_data_parsed():
             "address": [
                 None,
                 None,
+                None,
                 "Atlantic Avenue",
             ],
             "facility_or_park_name": [
+                None,
                 None,
                 "Linden Park Comfort Station",
                 None,
@@ -164,7 +162,6 @@ def test_remove_cross_street_1_name(location_value, expected_value):
     )
 
 
-@pytest.mark.skip(reason="dev in progress")
 def test_parse_location_site(example_cbbr_data, example_cbbr_data_parsed):
     parsed_data = parse_location(example_cbbr_data)
 

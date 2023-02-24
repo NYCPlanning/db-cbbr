@@ -15,8 +15,6 @@ LOCATION_PREFIX_TO_COLUMN = [
 ]
 
 GEOCODE_COLUMNS = [
-    "addressnum",
-    "street_name",
     "geo_from_x_coord",
     "geo_from_y_coord",
     "geo_to_x_coord",
@@ -122,7 +120,7 @@ def parse_location(data: pd.DataFrame) -> pd.DataFrame:
 
     data = data.drop([temp_location_column], axis=1)
     data = data.where(pd.notnull(data), None)
-
+    # breakpoint()
     return data
 
 
@@ -167,8 +165,7 @@ def clean_streetname(address: str, n: int) -> str:
 
 def geo_parser(geo: dict) -> dict:
     parsed_geo = dict(
-        geo_message=geo.get("Message", "msg err"),
-        # geo_message=geo.get("Message", None),
+        geo_message=geo.get("Message", None),
         geo_grc=geo.get("Geosupport Return Code (GRC)", None),
         geo_reason_code=geo.get("Reason Code", None),
         geo_housenum=geo.get("House Number - Display Format", None),
@@ -193,9 +190,9 @@ def geo_parser(geo: dict) -> dict:
         # geo_grc2=geo.get("Geosupport Return Code 2 (GRC 2)", ""),
         # geo_message2=geo.get("Message 2", "msg2 err"),
     )
-    columns_with_blank_success_value = ["geo_message", "geo_reason_code"]
-    # replace empty string with None
+    # replace empty strings with None
     for column in parsed_geo:
         if parsed_geo.get(column) == "":
             parsed_geo[column] = None
+
     return parsed_geo

@@ -7,6 +7,7 @@ from multiprocessing import Pool, cpu_count
 from geosupport import Geosupport, GeosupportError
 from library.helper.geocode_utils import (
     GEOCODE_COLUMNS,
+    LOCATION_PREFIX_TO_COLUMN,
     parse_location,
     get_hnum,
     get_sname,
@@ -34,7 +35,6 @@ def geosupport_1B_address(input_record: dict) -> dict:
 
 def geosupport_1B_place(input_record: dict) -> dict:
     """1B function - geocode based on the place name"""
-    # TODO raise better errors, e.g. no place name currently yields "STREET NAME IS MISSING"
     borough = input_record.get("borough_code", "")
     street_name = input_record.get("facility_or_park_name", "")
 
@@ -68,6 +68,7 @@ GEOSUPPORT_FUNCTION_HIERARCHY = [
     geosupport_1B_place,
     # geosupport_1A_address,
     # geosupport_2,
+    # failed_all_functions,
 ]
 
 
@@ -78,6 +79,10 @@ def geocode_record(inputs: dict) -> dict:
     input_location = inputs.get("location")
     if not input_location:
         outputs.update(dict(geo_function="NO LOCATION DATA"))
+        return outputs
+
+    if not any([pair[0] in input_location for pair in LOCATION_PREFIX_TO_COLUMN]):
+        outputs.update(dict(geo_function="INVALID LOCATION DATA"))
         return outputs
 
     if "district wide" in input_location.lower():
@@ -112,11 +117,6 @@ def geocode_records(cbbr_data: pd.DataFrame) -> pd.DataFrame:
     cbbr_data["addressnum"] = cbbr_data["address"].apply(get_hnum)
     cbbr_data["street_name"] = cbbr_data["address"].apply(get_sname)
 
-    # cbbr_data["geo_from_x_coord"] = None
-    # cbbr_data["geo_from_y_coord"] = None
-    # cbbr_data["geo_to_x_coord"] = None
-    # cbbr_data["geo_to_y_coord"] = None
-
     data_records = cbbr_data.to_dict("records")
     # Multiprocess
     with Pool(processes=cpu_count()) as pool:
@@ -139,8 +139,6 @@ if __name__ == "__main__":
     print("start geocoding ...")
     geocoded_cbbr_data = geocode_records(cbbr_data)
     print("start exporting to DB ...")
-    # TODO formally move this to test files
-    # geocoded_cbbr_data.to_csv("geocoded_cbbr_data.csv")
     geocoded_cbbr_data.to_sql(
         "_cbbr_submissions", engine, if_exists="replace", chunksize=500, index=False
     )

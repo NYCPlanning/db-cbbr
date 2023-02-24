@@ -1,8 +1,5 @@
 # test boilerplate approaches used in other test files
 import pytest
-import pytest
-import pandas as pd
-import numpy as np
 
 # ensure imports or project modules work
 from library.helper.geocode_utils import parse_location

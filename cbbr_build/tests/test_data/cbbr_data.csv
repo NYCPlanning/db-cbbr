@@ -1,6 +1,0 @@
-test_id,borough_code,location,and_cross_street_2,between_cross_street_1,address,facility_or_park_name,addressnum,streetname
-fake_park,3,Site Name: Little Park,,,,Little Park,,
-fake_address,3,Site Name: Home; Street Name: 1991 August Ave,,,1991 August Ave,Home,1991,August Ave
-real_address_works,3,Site Name: Pena-Herrera Park;   Street Name: 4601 3 Avenue,,,4601 3 Avenue,Pena-Herrera Park,4601,3 Avenue
-real_address_fails,3,"Site Name: Kosciuszko Pool;   Street Name: 670 Marcy Avenue, Brooklyn, New York, NY",,,"670 Marcy Avenue, Brooklyn, New York, NY",Kosciuszko Pool,670,Marcy Avenue
-real_place_works,3,"Site Name: Kosciuszko Pool;   Street Name: Brooklyn, New York, NY",,,"Brooklyn, New York, NY",Kosciuszko Pool,,"Brooklyn, New York, NY"

@@ -11,7 +11,7 @@ docker run -it --rm \
     --network="host" \
     nycplanning/docker-geosupport:latest bash -c "python3 -m library.geocode"
 
-echo "Assign geometries from geocoding ..."
+echo "Assign DoiTT geometries to geocoded data ..."
 run_sql sql/assign_geoms.sql
 
 # ## Skipping for dev of initial FY2024 build

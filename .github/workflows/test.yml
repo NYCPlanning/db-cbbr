@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  branch_lint:
+  test_lint:
     name: Linting tests - python
     runs-on: ubuntu-20.04
     steps:
@@ -23,7 +23,7 @@ jobs:
       - name: black linter
         run: black --diff --check ./
 
-  branch_unit_tests:
+  test_unit:
     name: Unit tests
     runs-on: ubuntu-20.04
     # container:
@@ -41,7 +41,7 @@ jobs:
         run: |
           echo "running tests ..."
 
-  # branch_build_tests:
+  # test_build:
   #   name: Build tests
   #   uses: ./.github/workflows/build.yml
   #   with:

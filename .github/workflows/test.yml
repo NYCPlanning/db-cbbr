@@ -32,12 +32,16 @@ jobs:
       - name: checkout
         uses: actions/checkout@v3
 
-      - name: use geosupport docker image in this step
+      - name: run pytest via geosupport image
         uses: addnab/docker-run-action@v3
         with:
           image: nycplanning/docker-geosupport:latest
           run: |
+            cd cbbr_build
             python3 -m pip list
+            python3 -m pip install requirements.txt
+            python3 -m pip list
+            python 3 -m pytest
 
       - name: some tests [PLACEHOLDER]
         run: |

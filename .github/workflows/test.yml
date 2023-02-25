@@ -44,7 +44,7 @@ jobs:
             python3 -m pip list
             python3 -m pip install --requirement requirements.txt
             python3 -m pip list
-            python 3 -m pytest
+            python3 -m pytest
 
       - name: some tests [PLACEHOLDER]
         run: |

@@ -33,9 +33,11 @@ jobs:
         uses: actions/checkout@v3
 
       - name: use geosupport docker image in this step
-        uses: nycplanning/docker-geosupport:latest
-        run: |
-          python3 -m pip list
+        uses: addnab/docker-run-action@v3
+        with:
+          image: nycplanning/docker-geosupport:latest
+          run: |
+            python3 -m pip list
 
       - name: some tests [PLACEHOLDER]
         run: |

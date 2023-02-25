@@ -26,9 +26,16 @@ jobs:
   branch_unit_tests:
     name: Unit tests
     runs-on: ubuntu-20.04
+    # container:
+    #   image: nycplanning/docker-geosupport:latest
     steps:
       - name: checkout
         uses: actions/checkout@v3
+
+      - name: use geosupport docker image in this step
+        uses: nycplanning/docker-geosupport:latest
+        run: |
+          python3 -m pip list
 
       - name: some tests [PLACEHOLDER]
         run: |

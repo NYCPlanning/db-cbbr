@@ -6,7 +6,7 @@ on:
 
 jobs:
   test_lint:
-    name: Linting tests - python
+    name: Linting tests
     runs-on: ubuntu-20.04
     steps:
       - name: checkout

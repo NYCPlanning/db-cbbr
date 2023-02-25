@@ -65,3 +65,10 @@ ALTER TABLE _dpr_parksproperties RENAME COLUMN wkb_geometry TO geom;
 
 ALTER TABLE _dcp_facilities RENAME COLUMN wkb_geometry TO geom;
 
+-- remove linebreaks from certain text columns
+UPDATE
+    _cbbr_submissions
+SET
+    explanation = replace(explanation, E'\n', ' '),
+    additional_comment = replace(additional_comment, E'\n', ' ');
+

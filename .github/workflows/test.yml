@@ -36,6 +36,9 @@ jobs:
         uses: addnab/docker-run-action@v3
         with:
           image: nycplanning/docker-geosupport:latest
+          options: |
+            -v ${{ github.workspace }}:/home/db-cbbr \
+            -w /home/db-cbbr
           run: |
             set -e
             ls

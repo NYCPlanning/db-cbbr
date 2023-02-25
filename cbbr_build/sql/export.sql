@@ -11,17 +11,40 @@ WHERE
 ORDER BY
     location ASC;
 
--- cbbr_submissions_needgeoms_c: lowest priority)
+-- cbbr_submissions_needgeoms_c: lowest priority
 DROP TABLE IF EXISTS cbbr_submissions_needgeoms_c;
 
 SELECT
-    * INTO cbbr_submissions_needgeoms_c
+    unique_id,
+    tracking_code,
+    borough,
+    borough_code,
+    cd,
+    commdist,
+    cb_label,
+    type_br,
+    "type",
+    need,
+    request,
+    explanation,
+    "location",
+    facility_or_park_name AS site_name,
+    "address",
+    street_name,
+    between_cross_street_1 AS street_cross_1,
+    and_cross_street_2 AS street_cross_2,
+    agency_acronym,
+    agency,
+    agency_category_response,
+    agency_response,
+    geo_function,
+    geom INTO cbbr_submissions_needgeoms_c
 FROM
     _cbbr_submissions
 WHERE
     geom IS NULL
 ORDER BY
-    location ASC;
+    cb_label ASC;
 
 -- cbbr_submissions_needgeoms_b
 DROP TABLE IF EXISTS cbbr_submissions_needgeoms_b;
@@ -33,7 +56,7 @@ FROM
 WHERE
     type_br = 'C'
 ORDER BY
-    location ASC;
+    cb_label ASC;
 
 -- remove B from C table
 DELETE FROM cbbr_submissions_needgeoms_c
@@ -56,7 +79,7 @@ FROM
 WHERE
     "type" = 'site'
 ORDER BY
-    location ASC;
+    cb_label ASC;
 
 -- remove A from B table
 DELETE FROM cbbr_submissions_needgeoms_b
@@ -78,11 +101,10 @@ SELECT
     borough_code,
     cd,
     commdist,
+    cb_label,
     type_br,
     "type",
     priority,
-    agency_acronym,
-    agency,
     need,
     request,
     explanation,
@@ -107,6 +129,8 @@ SELECT
             supporters_2
         END) AS supporters_2,
     parent_tracking_code,
+    agency_acronym,
+    agency,
     agency_category_response,
     agency_response,
     geo_function,

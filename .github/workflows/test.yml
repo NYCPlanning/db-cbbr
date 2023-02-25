@@ -42,7 +42,7 @@ jobs:
             ls
             cd cbbr_build
             python3 -m pip list
-            python3 -m pip install requirements.txt
+            python3 -m pip install --requirement requirements.txt
             python3 -m pip list
             python 3 -m pytest
 

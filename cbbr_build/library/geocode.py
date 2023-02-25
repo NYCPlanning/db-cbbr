@@ -144,9 +144,9 @@ def geocode_record(inputs: dict) -> dict:
 
 
 def geocode_records(cbbr_data: pd.DataFrame) -> pd.DataFrame:
-    cbbr_data[GEOCODE_COLUMNS] = None
     cbbr_data["addressnum"] = cbbr_data["address"].apply(get_hnum)
     cbbr_data["street_name"] = cbbr_data["address"].apply(get_sname)
+    cbbr_data[GEOCODE_COLUMNS] = None
 
     data_records = cbbr_data.to_dict("records")
     # Multiprocess

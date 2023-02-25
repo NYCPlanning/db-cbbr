@@ -6,7 +6,7 @@ on:
 
 jobs:
   branch_lint:
-    name: Linting tests (python files)
+    name: Linting tests - python
     runs-on: ubuntu-20.04
     steps:
       - name: checkout

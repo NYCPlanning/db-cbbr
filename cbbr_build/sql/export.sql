@@ -44,7 +44,8 @@ FROM
 WHERE
     geom IS NULL
 ORDER BY
-    cb_label ASC;
+    cb_label ASC,
+    "location" ASC;
 
 -- cbbr_submissions_needgeoms_b
 DROP TABLE IF EXISTS cbbr_submissions_needgeoms_b;
@@ -56,7 +57,8 @@ FROM
 WHERE
     type_br = 'C'
 ORDER BY
-    cb_label ASC;
+    cb_label ASC,
+    "location" ASC;
 
 -- remove B from C table
 DELETE FROM cbbr_submissions_needgeoms_c
@@ -79,7 +81,8 @@ FROM
 WHERE
     "type" = 'site'
 ORDER BY
-    cb_label ASC;
+    cb_label ASC,
+    "location" ASC;
 
 -- remove A from B table
 DELETE FROM cbbr_submissions_needgeoms_b

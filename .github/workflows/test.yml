@@ -33,6 +33,8 @@ jobs:
         - ${{ github.workspace }}:/home/db-cbbr
       options: -w /home/db-cbbr
     steps:
+      - name: checkout
+        uses: actions/checkout@v3
       - name: Check for dockerenv file
         run: (ls /.dockerenv && echo Found dockerenv) || (echo No dockerenv)
       - name: Run pytest

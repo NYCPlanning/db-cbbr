@@ -7,7 +7,7 @@ on:
 jobs:
   test_lint:
     name: Linting tests
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - name: checkout
         uses: actions/checkout@v3
@@ -23,7 +23,8 @@ jobs:
       - name: black linter
         run: black --diff --check ./
 
-  container-test-job:
+  test_container_job:
+    name: Unit tests - container
     runs-on: ubuntu-latest
     container:
       image: nycplanning/docker-geosupport:latest
@@ -33,7 +34,7 @@ jobs:
         - ${{ github.workspace }}:/home/db-cbbr
       options: -w /home/db-cbbr
     steps:
-      - name: checkout
+      - name: Checkout
         uses: actions/checkout@v3
       - name: Check for dockerenv file
         run: (ls /.dockerenv && echo Found dockerenv) || (echo No dockerenv)
@@ -43,17 +44,17 @@ jobs:
           cd cbbr_build
           python3 -m pip list
           # python3 -m pip install --requirement requirements.txt
-          # python3 -m pip install pytest
+          python3 -m pip install pytest
           python3 -m pip list
           python3 -m pytest
 
-  test_unit:
+  test_container_step:
     name: Unit tests
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     # container:
     #   image: nycplanning/docker-geosupport:latest
     steps:
-      - name: checkout
+      - name: Checkout
         uses: actions/checkout@v3
 
       # - name: run pytest via geosupport image A
@@ -64,7 +65,7 @@ jobs:
       #     #   cd cbbr_build
       #     #   python3 -m pip list
 
-      - name: run pytest via geosupport image
+      - name: Run pytest via geosupport container
         uses: addnab/docker-run-action@v3
         with:
           image: nycplanning/docker-geosupport:latest
@@ -75,7 +76,7 @@ jobs:
             cd cbbr_build
             python3 -m pip list
             # python3 -m pip install --requirement requirements.txt
-            # python3 -m pip install pytest
+            python3 -m pip install pytest
             python3 -m pip list
             python3 -m pytest
 

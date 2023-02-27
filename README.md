@@ -21,16 +21,17 @@ CBBR is primarily built for planning coordination and information purposes only
 
 ## Building Preparation
 
-1. `cd cbbr_build` navigate to the building directory
-2. Set `RECIPE_ENGINE`, `BUILD_ENGINE`, and `EDM_DATA` in `.env`
-3. Start postgis docker container for local database:
+1. `cd cbbr_build` to navigate to the build directory
+2. Create `cbbr_build/.env` and set environment variables `RECIPE_ENGINE`, `BUILD_ENGINE`, and `EDM_DATA`
+3. In `cbbr_build/.version.env` set input dataset versions
+4. Start a postgis docker container to create a local database:
 
     ```bash
     docker run --name <custom_container_name> -e POSTGRES_PASSWORD=postgres -p 5432:5432 -d postgis/postgis
     ```
 
-4. Create and/or activate a python virtual environment
-5. `./dev_python_packages.sh` to install python packages
+5. (Optional) Create and/or activate a python virtual environment
+6. (Optional) `./dev_python_packages.sh` to install python packages
 
 ## Building Instructions
 

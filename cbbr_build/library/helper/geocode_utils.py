@@ -119,8 +119,9 @@ def parse_location(data: pd.DataFrame) -> pd.DataFrame:
         )
 
     data = data.drop([temp_location_column], axis=1)
+    # convert all nan values to None
     data = data.where(pd.notnull(data), None)
-    # breakpoint()
+
     return data
 
 

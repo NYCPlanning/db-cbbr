@@ -19,9 +19,13 @@ geo_client = Geosupport()
 
 def geosupport_1B_address(input_record: dict) -> dict:
     """1B function - geocode address based on the address number and street name"""
-    borough = input_record.get("borough_code", "")
-    house_number = input_record.get("addressnum", "")
-    street_name = input_record.get("street_name", "")
+    borough = input_record.get("borough_code")
+    house_number = input_record.get("addressnum")
+    street_name = input_record.get("street_name")
+    if not house_number:
+        # no house_number indicates unlikely to be an address
+        # NOTE This error message won't show in data since, if no function work, geo_message will be GEOCODING FAILED
+        raise GeosupportError("UNLIKELY TO BE AN ADDRESS")
 
     # use geosupport function
     geo_function_result = geo_client["1B"](
@@ -35,8 +39,8 @@ def geosupport_1B_address(input_record: dict) -> dict:
 
 def geosupport_1B_place(input_record: dict) -> dict:
     """1B function - geocode address based on the place name"""
-    borough = input_record.get("borough_code", "")
-    street_name = input_record.get("facility_or_park_name", "")
+    borough = input_record.get("borough_code")
+    street_name = input_record.get("facility_or_park_name")
 
     # use geosupport function
     geo_function_result = geo_client["1A"](
@@ -50,13 +54,15 @@ def geosupport_1B_place(input_record: dict) -> dict:
 
 def geosupport_2_street_name(input_record: dict) -> dict:
     """2 function - geocode intersection based on the two street names (primary and 1st cross street)"""
-    borough = input_record.get("borough_code", "")
-    street_name = input_record.get("street_name", "")
-    cross_street_1 = input_record.get("between_cross_street_1", "")
-    cross_street_2 = input_record.get("and_cross_street_2", "")
-    if cross_street_1 != cross_street_2:
-        raise GeosupportError("UNLIKELY TO BE AN INTERSECTION")
+    borough = input_record.get("borough_code")
+    street_name = input_record.get("street_name")
+    cross_street_1 = input_record.get("between_cross_street_1")
+    cross_street_2 = input_record.get("and_cross_street_2")
+    if cross_street_2 and cross_street_1 != cross_street_2:
+        # non-null value for cross_street_2 that isn't the same as cross_street_1
+        # indicates a likely street segment
         # NOTE This error message won't show in data since, if no function work, geo_message will be GEOCODING FAILED
+        raise GeosupportError("UNLIKELY TO BE AN INTERSECTION")
 
     # use geosupport function
     geo_function_result = geo_client["2"](
@@ -69,17 +75,16 @@ def geosupport_2_street_name(input_record: dict) -> dict:
 
 
 def geosupport_3(input_record: dict) -> dict:
-    """2 function - geocode street segment based on the three street names"""
-    borough = input_record.get("borough_code", "")
-    street_name = input_record.get("street_name", "")
-    cross_street_1 = input_record.get("between_cross_street_1", "")
-    cross_street_2 = input_record.get("and_cross_street_2", "")
-    # if cross_street_1 != cross_street_2:
-    #     # raise ValueError("UNLIKELY TO BE AN INTERSECTION")
-    #     raise GeosupportError("UNLIKELY TO BE AN INTERSECTION")
+    """3 function - geocode street segment based on the three street names"""
+    borough = input_record.get("borough_code")
+    street_name = input_record.get("street_name")
+    cross_street_1 = input_record.get("between_cross_street_1")
+    cross_street_2 = input_record.get("and_cross_street_2")
+    if not cross_street_1 or not cross_street_2:
+        raise GeosupportError("UNLIKELY TO BE A STREET SEGMENT")
 
     # use geosupport function
-    geo_function_result = geo_client["2"](
+    geo_function_result = geo_client["3"](
         borough=borough,
         street_name_1=street_name,
         street_name_2=cross_street_1,

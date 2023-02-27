@@ -55,5 +55,4 @@ def test_geocode(example_cbbr_data, example_cbbr_data_geocoded):
     pd.testing.assert_frame_equal(
         geocoded_data,
         example_cbbr_data_geocoded,
-        by_blocks=True,
     )

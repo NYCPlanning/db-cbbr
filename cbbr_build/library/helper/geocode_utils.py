@@ -15,10 +15,6 @@ LOCATION_PREFIX_TO_COLUMN = [
 ]
 
 GEOCODE_COLUMNS = [
-    "geo_from_x_coord",
-    "geo_from_y_coord",
-    "geo_to_x_coord",
-    "geo_to_y_coord",
     "geo_function",
     "geo_message",
     "geo_grc",
@@ -33,7 +29,11 @@ GEOCODE_COLUMNS = [
     "geo_x_coord",
     "geo_y_coord",
     "geo_from_node",
+    "geo_from_x_coord",
+    "geo_from_y_coord",
     "geo_to_node",
+    "geo_to_x_coord",
+    "geo_to_y_coord",
 ]
 
 
@@ -187,7 +187,11 @@ def geo_parser(geo: dict) -> dict:
         geo_x_coord=geo.get("SPATIAL COORDINATES", {}).get("X Coordinate", None),
         geo_y_coord=geo.get("SPATIAL COORDINATES", {}).get("Y Coordinate", None),
         geo_from_node=geo.get("From Node", None),
+        geo_from_x_coord=geo.get("geo_from_x_coord", None),
+        geo_from_y_coord=geo.get("geo_from_y_coord", None),
         geo_to_node=geo.get("To Node", None),
+        geo_to_x_coord=geo.get("geo_to_x_coord", None),
+        geo_to_y_coord=geo.get("geo_to_y_coord", None),
         # geo_grc2=geo.get("Geosupport Return Code 2 (GRC 2)", ""),
         # geo_message2=geo.get("Message 2", "msg2 err"),
     )

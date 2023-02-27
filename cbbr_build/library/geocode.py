@@ -90,6 +90,17 @@ def geosupport_3(input_record: dict) -> dict:
         street_name_2=cross_street_1,
         street_name_3=cross_street_2,
     )
+    # determine other geography details
+    geo_from_node = geo_function_result.get("From Node", None)
+    geo_to_node = geo_function_result.get("To Node", None)
+    geo_from_coords = geo_client["2"](node=geo_from_node).get("SPATIAL COORDINATES", {})
+
+    geo_function_result["geo_from_x_coord"] = geo_from_coords.get("X Coordinate", "")
+    geo_function_result["geo_from_y_coord"] = geo_from_coords.get("Y Coordinate", "")
+
+    geo_from_coords = geo_client["2"](node=geo_to_node).get("SPATIAL COORDINATES", {})
+    geo_function_result["geo_to_x_coord"] = geo_from_coords.get("X Coordinate", "")
+    geo_function_result["geo_to_y_coord"] = geo_from_coords.get("Y Coordinate", "")
 
     return geo_function_result
 

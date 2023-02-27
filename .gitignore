@@ -1,3 +1,7 @@
 *.vscode
 *.DS_Store
-cbbr_build/.env
+**/__pycache__/
+.env
+
+.library/
+

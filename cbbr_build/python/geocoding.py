@@ -1,5 +1,6 @@
+# DEPRECATED in favor of geocode.py
 from multiprocessing import Pool, cpu_count
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 from geosupport import Geosupport, GeosupportError
 from pathlib import Path
 import pandas as pd
@@ -8,13 +9,13 @@ import json
 import re
 import os
 import numpy as np
+from geocode_utils import parse_location
 
 g = Geosupport()
 
 def get_hnum(address):
     address = '' if address is None else address
-    result = [k for (k,v) in usaddress.parse(address) \
-            if re.search("Address", v)]
+    result = [k for (k,v) in usaddress.parse(address) if re.search("Address", v)]
     result = ' '.join(result)
     fraction = re.findall('\d+[\/]\d+', address)
     if not bool(re.search('\d+[\/]\d+', result)) and len(fraction) != 0:
@@ -22,19 +23,21 @@ def get_hnum(address):
     return result
 
 def get_sname(address):
+    address = '' if address is None else address
     result = [k for (k,v) in usaddress.parse(address) \
-            if re.search("Street", v)]  if address is not None else ''
+            if re.search("Street", v)] if address is not None else ''
     result = ' '.join(result)
     if result == '':
-        return address
+        return address.strip(",")
     else: 
-        return result
+        return result.strip(",")
 
 def clean_streetname(x, n):
     x = '' if x is None else x
     if (' at ' in x.lower())|(' and ' in x.lower())|('&' in x):
         x = re.split('&| AND | and | AT | at',x)[n]
-    else: x = ''
+    else:
+        x = ''
     return x
 
 def geocode(inputs):
@@ -133,6 +136,7 @@ def geocode(inputs):
                         except GeosupportError as e:
                             geo = e.result
                             geo = geo_parser(geo)
+                            geo.update(dict(geo_function='GEOCODE FAILED'))
 
     geo.update(inputs)
     return geo
@@ -158,19 +162,35 @@ def geo_parser(geo):
 if __name__ == '__main__':
     # connect to postgres db
     engine = create_engine(os.environ['BUILD_ENGINE'])
+    select_query = text("SELECT * FROM _cbbr_submissions")
+    with engine.begin() as conn:
+        df = pd.read_sql(select_query, conn)
 
-    df = pd.read_sql('SELECT * FROM cbbr_submissions', engine)
+    print('parsing data for geocoding ...')
+    # parse components of location column
+    df = parse_location(df)
+
+    # use parsed location components
     df['addressnum'] = df.address.apply(get_hnum)
     df['streetname'] = df.address.apply(get_sname)
+    df['street_name'] = df['streetname']
     df['streetname_1'] = df['address'].apply(lambda x: clean_streetname(x, 0))
     df['streetname_2'] = df['address'].apply(lambda x: clean_streetname(x, -1))
-    df['streetname_1'] = np.where(df.streetname_1 == '',df.street_name.apply(lambda x: clean_streetname(x, 0)),df.streetname_1)
-    df['streetname_2'] = np.where(df.streetname_2 == '',df.street_name.apply(lambda x: clean_streetname(x, 0)),df.streetname_2)
-    df['between_cross_street_1'] = df.between_cross_street_1.apply(get_sname)
-    df['and_cross_street_2'] = df.and_cross_street_2.apply(get_sname)
+    df['streetname_1'] = np.where(df.streetname_1 == '', df.street_name.apply(lambda x: clean_streetname(x, 0)), df.streetname_1)
+    df['streetname_2'] = np.where(df.streetname_2 == '', df.street_name.apply(lambda x: clean_streetname(x, 0)), df.streetname_2)
+    
+    df['geo_from_x_coord'] = np.nan
+    df['geo_from_y_coord'] = np.nan
+    df['geo_to_x_coord'] = np.nan
+    df['geo_to_y_coord'] = np.nan
+
+    # df['between_cross_street_1'] = df['cross_street1'].apply(get_sname)
+    # df['and_cross_street_2'] = df['cross_street2'].apply(get_sname)
+    df['geo_to_y_coord'] = np.nan
+    df['geo_to_y_coord'] = np.nan
 
     records = df.to_dict('records')
-    
+
     print('start geocoding ...')
     # Multiprocess
     with Pool(processes=cpu_count()) as pool:
@@ -178,4 +198,4 @@ if __name__ == '__main__':
     
     print('geocoding finished, dumping to postgres ...')
     df = pd.DataFrame(it)
-    df.to_sql('cbbr_submissions', engine, if_exists='replace', chunksize=500, index=False)
+    df.to_sql('_cbbr_submissions', engine, if_exists='replace', chunksize=500, index=False)

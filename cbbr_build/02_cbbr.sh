@@ -1,8 +1,21 @@
 #!/bin/bash
 source config.sh
 
-# psql $BUILD_ENGINE -f sql/cbbr_submissions.sql
-psql $BUILD_ENGINE -f sql/apply_agency_updates.sql
-psql $BUILD_ENGINE -f sql/normalize_agency.sql
-psql $BUILD_ENGINE -f sql/normalize_commdist.sql
-psql $BUILD_ENGINE -f sql/normalize_denominator.sql
+echo "CBBR Version $VERSION : 02 CBBR"
+# TODO delete tables that are created by this stage
+echo "Create build tables to modify ..."
+run_sql sql/preprocessing.sql
+
+## Skipping for dev of initial FY2024 build
+# psql $BUILD_ENGINE -f sql/apply_agency_updates.sql
+
+echo "Normalize agency values ..."
+run_sql sql/normalize_agency.sql
+
+echo "Normalize commdist values ..."
+run_sql sql/normalize_commdist.sql
+
+echo "Normalize denominator values ..."
+run_sql sql/normalize_denominator.sql
+
+echo "Done!"

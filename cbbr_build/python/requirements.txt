@@ -1,5 +1,0 @@
-psycopg2-binary
-pandas
-geopandas
-usaddress
-python-dotenv

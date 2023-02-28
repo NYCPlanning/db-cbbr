@@ -75,7 +75,7 @@ def geosupport_2_street_name(input_record: dict) -> dict:
 
 
 def geosupport_3(input_record: dict) -> dict:
-    """3 function - geocode street segment based on the three street names"""
+    """3 function - geocode street segment (1 block) based on the three street names"""
     borough = input_record.get("borough_code")
     street_name = input_record.get("street_name")
     cross_street_1 = input_record.get("between_cross_street_1")

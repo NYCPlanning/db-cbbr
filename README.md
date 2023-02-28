@@ -19,7 +19,9 @@ The spatial data are not 100% reliable, accurate, or exhaustive
 
 CBBR is primarily built for planning coordination and information purposes only
 
-## Building Preparation
+## Building Dataset
+
+### Building Preparation
 
 1. `cd cbbr_build` to navigate to the build directory
 2. Create `cbbr_build/.env` and set environment variables `RECIPE_ENGINE`, `BUILD_ENGINE`, and `EDM_DATA`
@@ -40,3 +42,27 @@ CBBR is primarily built for planning coordination and information purposes only
 3. `./03_spatial.sh` to geocode the dataset
 4. `./04_export.sh` to export the dataset as csv
 5. `./05_archive.sh` to archive the cbbr to EDM postgresDB
+
+## Dev
+
+### Notes
+
+- Since there is no devcontainer for this repo, dev and building rely on the local postgres service to run commands like `psql $BUILD_ENGINE -f $target_dir/$name.sql`
+- Dev, linting, and formatting of python files won't benefit from the packages used during the build since they are currently run from within the `nycplanning/docker-geosupport` container
+
+### Test
+
+1. Do all non-optional building preparation steps
+2. Start a terminal within the Geosupport docker container:
+
+    ```bash
+    docker run -it --rm \
+        -v $(pwd):/home/db-cbbr \
+        -w /home/db-cbbr \
+        --env-file .env \
+        --network="host" \
+        nycplanning/docker-geosupport:latest bash
+    ```
+
+3. Install pytest with `python3 -m pip install pytest`
+4. Run python tests with `python3 -m pytest`

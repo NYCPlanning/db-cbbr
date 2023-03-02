@@ -9,22 +9,22 @@ jobs:
     name: Linting tests
     runs-on: ubuntu-latest
     steps:
-      - name: checkout
+      - name: Checkout
         uses: actions/checkout@v3
 
-      - name: setup python
+      - name: Setup python
         uses: actions/setup-python@v4.5.0
         with:
           python-version: "3.11.1"
 
-      - name: setup
+      - name: Setup linting
         run: pip install black==22.8.0
 
-      - name: black linter
+      - name: Black linting
         run: black --diff --check ./
 
   test_container_job:
-    name: Unit tests - container
+    name: Unit tests - geosupport container
     runs-on: ubuntu-latest
     container:
       image: nycplanning/docker-geosupport:latest
@@ -44,7 +44,6 @@ jobs:
         working-directory: cbbr_build
         run: |
           python3 -m pip list
-          # python3 -m pip install --requirement requirements.txt
           python3 -m pip install pytest
           python3 -m pip list
 

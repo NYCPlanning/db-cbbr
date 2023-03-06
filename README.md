@@ -32,9 +32,6 @@ CBBR is primarily built for planning coordination and information purposes only
     docker run --name <custom_container_name> -e POSTGRES_PASSWORD=postgres -p 5432:5432 -d postgis/postgis
     ```
 
-5. (Optional) Create and/or activate a python virtual environment
-6. (Optional) `./dev_python_packages.sh` to install python packages
-
 ## Building Instructions
 
 1. `./01_dataloading.sh` to load all source data into the postgresDB container
@@ -45,15 +42,20 @@ CBBR is primarily built for planning coordination and information purposes only
 
 ## Dev
 
+### Dev Preparation
+
+1. Create and/or activate a python virtual environment
+2. `./dev_python_packages.sh` to install python packages
+
 ### Notes
 
-- Since there is no devcontainer for this repo, dev and building rely on the local postgres service to run commands like `psql $BUILD_ENGINE -f $target_dir/$name.sql`
-- Dev, linting, and formatting of python files won't benefit from the packages used during the build since they are currently run from within the `nycplanning/docker-geosupport` container
+- Dev, linting, formatting, and testing of python files requires the use of a local python interpreter with packages listed in `requirements.txt`, rather than the packages used during the build.
+  - The build currently runs python files from within the `nycplanning/docker-geosupport` container.
+- Since there is no devcontainer for this repo, local data building and dev rely on the local postgres service to run scripts with commands like `psql $BUILD_ENGINE -f $target_dir/$name.sql`.
 
 ### Test
 
-1. Do all non-optional building preparation steps
-2. Start a terminal within the Geosupport docker container:
+1. Start a terminal within the Geosupport docker container:
 
     ```bash
     docker run -it --rm \
@@ -64,5 +66,5 @@ CBBR is primarily built for planning coordination and information purposes only
         nycplanning/docker-geosupport:latest bash
     ```
 
-3. Install pytest with `python3 -m pip install pytest`
-4. Run python tests with `python3 -m pytest`
+2. Install pytest with `python3 -m pip install pytest`
+3. Run python tests with `python3 -m pytest`

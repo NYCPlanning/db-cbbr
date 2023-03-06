@@ -19,7 +19,9 @@ The spatial data are not 100% reliable, accurate, or exhaustive
 
 CBBR is primarily built for planning coordination and information purposes only
 
-## Building Preparation
+## Building Dataset
+
+### Building Preparation
 
 1. `cd cbbr_build` to navigate to the build directory
 2. Create `cbbr_build/.env` and set environment variables `RECIPE_ENGINE`, `BUILD_ENGINE`, and `EDM_DATA`
@@ -30,9 +32,6 @@ CBBR is primarily built for planning coordination and information purposes only
     docker run --name <custom_container_name> -e POSTGRES_PASSWORD=postgres -p 5432:5432 -d postgis/postgis
     ```
 
-5. (Optional) Create and/or activate a python virtual environment
-6. (Optional) `./dev_python_packages.sh` to install python packages
-
 ## Building Instructions
 
 1. `./01_dataloading.sh` to load all source data into the postgresDB container
@@ -40,3 +39,32 @@ CBBR is primarily built for planning coordination and information purposes only
 3. `./03_spatial.sh` to geocode the dataset
 4. `./04_export.sh` to export the dataset as csv
 5. `./05_archive.sh` to archive the cbbr to EDM postgresDB
+
+## Dev
+
+### Dev Preparation
+
+1. Create and/or activate a python virtual environment
+2. `./dev_python_packages.sh` to install python packages
+
+### Notes
+
+- Dev, linting, formatting, and testing of python files requires the use of a local python interpreter with packages listed in `requirements.txt`, rather than the packages used during the build.
+  - The build currently runs python files from within the `nycplanning/docker-geosupport` container.
+- Since there is no devcontainer for this repo, local data building and dev rely on the local postgres service to run scripts with commands like `psql $BUILD_ENGINE -f $target_dir/$name.sql`.
+
+### Test
+
+1. Start a terminal within the Geosupport docker container:
+
+    ```bash
+    docker run -it --rm \
+        -v $(pwd):/home/db-cbbr \
+        -w /home/db-cbbr \
+        --env-file .env \
+        --network="host" \
+        nycplanning/docker-geosupport:latest bash
+    ```
+
+2. Install pytest with `python3 -m pip install pytest`
+3. Run python tests with `python3 -m pytest`

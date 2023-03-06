@@ -1,4 +1,4 @@
--- create versions of relvant import date to modify
+-- create versions of relvant import data to modify
 DROP TABLE IF EXISTS _cbbr_submissions;
 
 CREATE TABLE _cbbr_submissions AS TABLE cbbr_submissions;
@@ -64,4 +64,11 @@ ALTER TABLE _doitt_buildingfootprints RENAME COLUMN wkb_geometry TO geom;
 ALTER TABLE _dpr_parksproperties RENAME COLUMN wkb_geometry TO geom;
 
 ALTER TABLE _dcp_facilities RENAME COLUMN wkb_geometry TO geom;
+
+-- remove linebreaks from certain text columns
+UPDATE
+    _cbbr_submissions
+SET
+    explanation = replace(explanation, E'\n', ' '),
+    additional_comment = replace(additional_comment, E'\n', ' ');
 

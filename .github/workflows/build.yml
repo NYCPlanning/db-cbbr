@@ -1,4 +1,4 @@
-name: Build - Run Community Board Budget Requests (CBBR) Update 
+name: Build - Run CBBR Build 
 
 on:
   workflow_dispatch:

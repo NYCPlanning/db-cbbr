@@ -1,4 +1,4 @@
-name: Build - Run CBBR Build 
+name: Build - Run CBBR Build
 
 on:
   workflow_dispatch:
@@ -35,14 +35,13 @@ jobs:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
     steps:
-      - name: Checkout 
+      - name: Checkout
         uses: actions/checkout@v2
-        
+
       - name: Setup python
         uses: actions/setup-python@v4.5.0
         with:
           python-version: "3.11.1"
-
 
       - name: install dependencies ...
         working-directory: cbbr_build
@@ -57,23 +56,21 @@ jobs:
           pip3 install requirements.txt
 
       - name: Dataloading ...
-        working_directory: cbbr_build
+        working-directory: cbbr_build
         run: ./01_dataloading.sh
 
       - name: Create Build Tables and Normalize CBBR Values
-        working_directory: cbbr_build
+        working-directory: cbbr_build
         run: ./02_cbbr.sh
 
       - name: Assign Geometries from DOITT, Parks, Facilties DB and Run Spatial
-        working_directory: cbbr_build
+        working-directory: cbbr_build
         run: ./03_spatial.sh
 
       - name: Export CBBR Output to DO (edm-publishing)
-        working_directory: cbbr_build
+        working-directory: cbbr_build
         run: ./04_export.sh
 
-      - name: Archive CBBR to EDM-DATA 
-        working_diretory: cbbr_build
+      - name: Archive CBBR to EDM-DATA
+        working-directory: cbbr_build
         run: ./05_archive.sh
-
-

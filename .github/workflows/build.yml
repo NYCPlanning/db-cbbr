@@ -39,6 +39,7 @@ jobs:
 
 
       - name: install dependencies ...
+        working-directory: cbbr_build
         run: |
           sudo apt update
           sudo apt install -y gdal-bin
@@ -48,4 +49,25 @@ jobs:
           mc alias set spaces $AWS_S3_ENDPOINT $AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY --api S3v4
           sudo apt install python3-pip
           pip3 install requirements.txt
+
+      - name: Dataloading ...
+        working_directory: cbbr_build
+        run: ./01_dataloading.sh
+
+      - name: Create Build Tables and Normalize CBBR Values
+        working_directory: cbbr_build
+        run: ./02_cbbr.sh
+
+      - name: Assign Geometries from DOITT, Parks, Facilties DB and Run Spatial
+        working_directory: cbbr_build
+        run: ./03_spatial.sh
+
+      - name: Export CBBR Output to DO (edm-publishing)
+        working_directory: cbbr_build
+        run: ./04_export.sh
+
+      - name: Archive CBBR to EDM-DATA 
+        working_diretory: cbbr_build
+        run: ./05_archive.sh
+
 

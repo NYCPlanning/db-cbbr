@@ -16,7 +16,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-20.04
-    container: nycplanning/docker-geosupport:latest
     services:
       postgres:
         image: postgis/postgis:12-3.0-alpine
@@ -55,6 +54,9 @@ jobs:
           mc alias set spaces $AWS_S3_ENDPOINT $AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY --api S3v4
           sudo apt install python3-pip
           pip3 install -r requirements.txt
+
+      - name: Check for dockerenv file
+        run: (ls /.dockerenv && echo Found dockerenv) || (echo No dockerenv)
 
       - name: Dataloading ...
         working-directory: cbbr_build

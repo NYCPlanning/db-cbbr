@@ -55,6 +55,15 @@ jobs:
           sudo apt install python3-pip
           pip3 install -r requirements.txt
 
+      - name: Create .env
+        working-directory: cbbr_build
+        run: |
+          touch .env
+          echo BUILD_ENGINE=${{ secrets.BUILD_ENGINE }} >> .env
+          echo EDM_DATA=${{ secrets.EDM_DATA }} >> .env
+          echo RECIPE_ENGINE=${{ secrets.RECIPE_ENGINE }} >> .env
+          cat .env
+
       - name: Dataloading ...
         working-directory: cbbr_build
         run: ./01_dataloading.sh

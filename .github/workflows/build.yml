@@ -16,6 +16,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-20.04
+    container: nycplanning/docker-geosupport:latest
     services:
       postgres:
         image: postgis/postgis:12-3.0-alpine

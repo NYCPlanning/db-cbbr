@@ -55,7 +55,6 @@ jobs:
           sudo apt install python3-pip
           pip3 install -r requirements.txt
 
-    steps:
       - name: Checkout
         uses: actions/checkout@v3
 

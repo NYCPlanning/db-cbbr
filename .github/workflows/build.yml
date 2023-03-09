@@ -79,5 +79,6 @@ jobs:
         run: ./04_export.sh
 
       - name: Archive CBBR to EDM-DATA
+        if: github.event.inputs.run_export
         working-directory: cbbr_build
         run: ./05_archive.sh

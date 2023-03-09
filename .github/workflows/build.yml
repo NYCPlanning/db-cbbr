@@ -75,6 +75,7 @@ jobs:
         run: ./03_spatial.sh
 
       - name: Export CBBR Output to DO (edm-publishing)
+        if: github.event.inputs.run_export
         working-directory: cbbr_build
         run: ./04_export.sh
 

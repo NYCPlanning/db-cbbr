@@ -7,7 +7,7 @@ echo "Geocode with geosupport image  ..."
 docker run -it --rm \
     -v $(pwd):/home/db-cbbr \
     -w /home/db-cbbr \
-    --env-file .env \
+    --env BUILD_ENGINE \
     --network="host" \
     nycplanning/docker-geosupport:latest bash -c "python3 -m library.geocode"
 

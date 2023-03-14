@@ -15,6 +15,8 @@ DROP TABLE IF EXISTS _dcp_facilities;
 
 CREATE TABLE _dcp_facilities AS TABLE dcp_facilities;
 
+CREATE TABLE _corrections_geom AS TABLE corrections_geom;
+
 -- -- extract geometries from manually researched json files
 -- UPDATE
 --     cbbr_geoms
@@ -64,6 +66,8 @@ ALTER TABLE _doitt_buildingfootprints RENAME COLUMN wkb_geometry TO geom;
 ALTER TABLE _dpr_parksproperties RENAME COLUMN wkb_geometry TO geom;
 
 ALTER TABLE _dcp_facilities RENAME COLUMN wkb_geometry TO geom;
+
+ALTER TABLE _corrections_geom RENAME COLUMN wkt to geom;
 
 -- remove linebreaks from certain text columns
 UPDATE

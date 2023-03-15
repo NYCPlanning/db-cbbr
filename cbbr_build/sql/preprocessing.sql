@@ -15,6 +15,8 @@ DROP TABLE IF EXISTS _dcp_facilities;
 
 CREATE TABLE _dcp_facilities AS TABLE dcp_facilities;
 
+DROP TABLE IF EXISTS _corrections_geom;
+
 CREATE TABLE _corrections_geom AS TABLE corrections_geom;
 
 -- -- extract geometries from manually researched json files

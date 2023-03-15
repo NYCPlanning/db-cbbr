@@ -14,9 +14,3 @@ UPDATE _cbbr_submissions a
 SET geom = b._geom
 FROM  _corrections_multigeom b
 WHERE a.unique_id = b.unique_id;
-
-
-
-
-
-

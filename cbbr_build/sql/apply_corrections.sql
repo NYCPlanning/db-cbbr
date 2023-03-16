@@ -3,14 +3,42 @@
 
 -- Create update points corrections table
 
-WITH _corrections_multigeom AS (
+WITH _cbbr_point_corrections AS (
    SELECT unique_id, ST_Multi(ST_Collect(geom)) AS _geom
-   FROM _corrections_geom
+   FROM _cbbr_point_corrections
    GROUP BY unique_id 
 )
 
 -- update _cbbr_submissions table with update geoms from manually mapped corrections table 
 UPDATE _cbbr_submissions a
 SET geom = b._geom
-FROM  _corrections_multigeom b
+FROM  _cbbr_point_corrections b
+WHERE a.unique_id = b.unique_id;
+
+
+--- Try Lines
+WITH _cbbr_line_corrections AS (
+   SELECT unique_id, ST_Multi(ST_Collect(geom)) AS _geom
+   FROM _cbbr_line_corrections
+   GROUP BY unique_id 
+)
+
+-- 
+UPDATE _cbbr_submissions a
+SET geom = b._geom
+FROM  _cbbr_line_corrections b
+WHERE a.unique_id = b.unique_id;
+
+
+---Try polygons
+WITH _cbbr_poly_corrections AS (
+   SELECT unique_id, ST_Multi(ST_Collect(geom)) AS _geom
+   FROM _cbbr_poly_corrections
+   GROUP BY unique_id 
+)
+
+-- 
+UPDATE _cbbr_submissions a
+SET geom = b._geom
+FROM  _cbbr_poly_corrections b
 WHERE a.unique_id = b.unique_id;

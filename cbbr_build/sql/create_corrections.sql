@@ -1,28 +1,51 @@
 /* Read in points geometry from the csv table */
-DROP TABLE IF EXISTS corrections_geom;
-CREATE TABLE corrections_geom (
-    WKT GEOMETRY(PointZ, 4326), --I think we can just turn this into text and then convert once we have all the geometries that were manually mapped
+DROP TABLE IF EXISTS cbbr_point_corrections;
+CREATE TABLE cbbr_point_corrections (
+    WKT text, --I think we can just turn this into text and then convert once we have all the geometries that were manually mapped
     OBJECTID text, --these can be deleted in preprocessing of the tables 
     unique_id text,
-    editor text, -- delete in preprocessing
-    layer text, -- delete in preprocessing
-    "path" text -- delete in preprocessing
+    editor text,
+    cartodb_id text,
+    shape_leng numeric
+
 
 );
-\COPY corrections_geom FROM 'cbbr_geom_corrections/cbbr_locations_point_all.csv' DELIMITER ',' CSV HEADER;
+\COPY cbbr_point_corrections FROM 'cbbr_geom_corrections/processed/cbbr_point_corrections.csv' DELIMITER ',' CSV HEADER;
 
-/*
-DROP TABLE IF EXISTS corrections_lines_geom;
-CREATE TABLE corrections_lines_geom (
-    WKT GEOMETRY(MultiCurveZ, 4326),
+
+DROP TABLE IF EXISTS cbbr_line_corrections;
+CREATE TABLE  cbbr_line_corrections(
+    WKT text,
     OBJECTID text,
     Shape_Length numeric,
     unique_id text,
     cartodb_id text,
-    editor text, 
-    layer text,
-    "path" text
+    editor text
 
 );
-\COPY corrections_lines_geom FROM 'cbbr_geom_corrections/cbbr_locations_line_all.csv' DELIMITER ',' CSV HEADER;
-*/
+\COPY cbbr_line_corrections FROM 'cbbr_geom_corrections/processed/cbbr_line_corrections.csv' DELIMITER ',' CSV HEADER;
+
+
+DROP TABLE IF EXISTS cbbr_poly_corrections;
+CREATE TABLE  cbbr_poly_corrections(
+    WKT text, 
+    OBJECTID text,
+    Shape_Length numeric,
+    Shape_Area numeric,
+    unique_id text,
+    editor text
+
+);
+\COPY cbbr_poly_corrections FROM 'cbbr_geom_corrections/processed/cbbr_poly_corrections.csv' DELIMITER ',' CSV HEADER;
+
+--DROP TABLE IF EXISTS corrections_all_geom;
+--CREATE TABLE corrections_all_geom
+--SELECT WKT, unique_id, shape_leng
+--FROM cbbr_point_corrections
+--UNION
+--SELECT WKT, unique_id, Shape_Length
+--FROM cbbr_line_corrections
+--UNION
+--SELECT WKT, unique_id, Shape_Length, Shape_Area
+--FROM cbbr_poly_corrections;
+

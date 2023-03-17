@@ -100,6 +100,11 @@ function import_public {
 function Upload {
   local BRANCHNAME=$(git rev-parse --symbolic-full-name --abbrev-ref HEAD)
   local DATE=$(date "+%Y-%m-%d")
-  mc cp -r output/$VERSION spaces/edm-publishing/db-cbbr/$BRANCHNAME/$VERSION
-  ##mc cp -r output/$VERSION spaces/edm-publishing/db-cbbr/$target_dir/latest
+  local SPACES="spaces/edm-publishing/db-cbbr/$branchname"
+
+
+  mc rm -r --force $SPACES/latest
+  mc cp -r output $SPACES/latest
+  mc rm -r --force $SPACES/$VERSION
+  mc cp -r output $SPACES/$VERSION
 }

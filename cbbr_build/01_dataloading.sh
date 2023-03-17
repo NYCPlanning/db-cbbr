@@ -33,8 +33,9 @@ import_public cbbr_submissions
 import_public dpr_parksproperties $DPR_PARKS_VERSION
 import_public dcp_facilities $DCP_FACILITIES_VERSION
 import_public doitt_buildingfootprints $DOITT_FOOTPRINTS_VERSION # last version with a valid sql archive in in edm-recipes
-# Skipping import of cbbr_submissions."2018/12/11" for dev of initial FY2024 build
-# import_public cbbr_agency_updates # DEPRICATED THIS INPUT DATA
+
+echo "Create Manually Mapped Corrections table..."
+run_sql sql/create_corrections.sql
 
 ## Skipping aggregate_geoms for dev of initial FY2024 build
 # echo "Aggregate geometries ..."

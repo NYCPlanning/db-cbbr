@@ -161,6 +161,18 @@ FROM
 WHERE
     ST_GeometryType (geom) = 'ST_MultiPoint';
 
+-- Export Records with GeometryCollection introduced in the manual mapping process 
+
+DROP TABLE IF EXISTS cbbr_export_geocollection;
+
+SELECT
+    * INTO cbbr_export_geocollection
+FROM
+    cbbr_export
+WHERE
+    ST_GeometryType (geom) = 'ST_GeometryCollection';
+
+
 -- -- drop geom column from cbbr_export
 -- ALTER TABLE cbbr_export
 --     DROP COLUMN IF EXISTS geom;

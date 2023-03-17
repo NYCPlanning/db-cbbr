@@ -23,10 +23,9 @@ run_sql sql/spatial_dpr_string_name.sql
 
 echo "Assign geometries from facilities data ..."
 run_sql sql/spatial_facilities.sql
-
-## Skipping for dev of initial FY2024 build
-# echo "Overwriting geometries with manual mapping..."
-# run_sql sql/spatial_manual_map.sql
+ 
+echo "Overwriting geometries with manual mapping..."
+run_sql sql/apply_corrections.sql
 
 echo "Running spatial_geomclean ..."
 run_sql sql/spatial_geomclean.sql

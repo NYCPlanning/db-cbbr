@@ -11,7 +11,8 @@ WITH _cbbr_point_corrections AS (
 
 -- update _cbbr_submissions table with update geoms from manually mapped corrections table 
 UPDATE _cbbr_submissions a
-SET geom = b._geom
+SET geom = b._geom,
+   geo_function = 'Manual_Research'
 FROM  _cbbr_point_corrections b
 WHERE a.unique_id = b.unique_id;
 
@@ -25,7 +26,8 @@ WITH _cbbr_line_corrections AS (
 
 -- 
 UPDATE _cbbr_submissions a
-SET geom = b._geom
+SET geom = b._geom,
+   geo_function = 'Manual_Research'
 FROM  _cbbr_line_corrections b
 WHERE a.unique_id = b.unique_id;
 
@@ -39,6 +41,7 @@ WITH _cbbr_poly_corrections AS (
 
 -- 
 UPDATE _cbbr_submissions a
-SET geom = b._geom
+SET geom = b._geom,
+   geo_function = 'Manual_Research'
 FROM  _cbbr_poly_corrections b
 WHERE a.unique_id = b.unique_id;

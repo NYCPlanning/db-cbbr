@@ -98,8 +98,8 @@ function import_public {
 
 ### Upload to DigitalOcean
 function Upload {
-  local branchname=$(git rev-parse --symbolic-full-name --abbrev-ref HEAD)
+  local BRANCHNAME=$(git rev-parse --symbolic-full-name --abbrev-ref HEAD)
   local DATE=$(date "+%Y-%m-%d")
-  mc cp -r output spaces/edm-publishing/db-cbbr/$target_dir/$DATE
-  mc cp -r output spaces/edm-publishing/db-cbbr/$target_dir/latest
+  mc cp -r output/$VERSION spaces/edm-publishing/db-cbbr/$BRANCHNAME/$VERSION
+  ##mc cp -r output/$VERSION spaces/edm-publishing/db-cbbr/$target_dir/latest
 }

@@ -103,6 +103,6 @@ DATE=$(date "+%Y-%m-%d")
 ##Upload to DigitalOcean
 function Upload {
   local target_dir=$1
-  mc cp -r $OUTPUT_DIRECTORY spaces/edm-publishing/db-cbbr/$target_dir/$DATE
-  mc cp -r $OUTPUT_DIRECTORY spaces/edm-publishing/db-cbbr/$target_dir/latest
+  mc cp -r $OUTPUT_DIRECTORY spaces/edm-publishing/db-cbbr/$BRANCHNAME/$VERSION
+  mc cp -r $OUTPUT_DIRECTORY spaces/edm-publishing/db-cbbr/$BRANCHNAME/latest
 }

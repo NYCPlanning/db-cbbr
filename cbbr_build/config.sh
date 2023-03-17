@@ -96,15 +96,13 @@ function import_public {
 }
 
 
-### Upload to DigitalOcean
+### Set Branch Name and Date vars for uploading to DO
+BRANCHNAME=$(git rev-parse --symbolic-full-name --abbrev-ref HEAD)
+DATE=$(date "+%Y-%m-%d")
+
+##Upload to DigitalOcean
 function Upload {
-  local BRANCHNAME=$(git rev-parse --symbolic-full-name --abbrev-ref HEAD)
-  local DATE=$(date "+%Y-%m-%d")
-  local SPACES="spaces/edm-publishing/db-cbbr/$branchname"
-
-
-  mc rm -r --force $SPACES/latest
-  mc cp -r cbbr_build/output/$VERSION $SPACES/latest
-  mc rm -r --force $SPACES/$VERSION
-  mc cp -r cbbr_build/output/$VERSION $SPACES/$VERSION
+  local target_dir=$1
+  mc cp -r output spaces/edm-publishing/db-cbbr/$target_dir/$DATE
+  mc cp -r output spaces/edm-publishing/db-cbbr/$target_dir/latest
 }

@@ -38,14 +38,5 @@ CREATE TABLE  cbbr_poly_corrections(
 );
 \COPY cbbr_poly_corrections FROM 'cbbr_geom_corrections/processed/cbbr_poly_corrections.csv' DELIMITER ',' CSV HEADER;
 
---DROP TABLE IF EXISTS corrections_all_geom;
---CREATE TABLE corrections_all_geom
---SELECT WKT, unique_id, shape_leng
---FROM cbbr_point_corrections
---UNION
---SELECT WKT, unique_id, Shape_Length
---FROM cbbr_line_corrections
---UNION
---SELECT WKT, unique_id, Shape_Length, Shape_Area
---FROM cbbr_poly_corrections;
+
 

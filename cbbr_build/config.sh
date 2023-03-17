@@ -94,3 +94,12 @@ function import_public {
   # Loading into Database
   psql $BUILD_ENGINE -f $target_dir/$name.sql
 }
+
+
+### Upload to DigitalOcean
+function Upload {
+  local branchname=$(git rev-parse --symbolic-full-name --abbrev-ref HEAD)
+  local DATE=$(date "+%Y-%m-%d")
+  mc cp -r output spaces/edm-publishing/db-cbbr/$target_folder/$DATE
+  mc cp -r output spaces/edm-publishing/db-cbbr/$target_folder/latest
+}

@@ -27,4 +27,7 @@ echo "Exporting output geometry tables to zip shapefiles ..."
 SHP_export $BUILD_ENGINE cbbr_export_poly MULTIPOLYGON cbbr_submissions_poly_shapefile
 SHP_export $BUILD_ENGINE cbbr_export_pts MULTIPOINT cbbr_submissions_pts_shapefile
 
+echo "Upload Output to DigitalOcean" 
+Upload $VERSION
+
 echo "Done!"

@@ -75,11 +75,11 @@ jobs:
         run: ./03_spatial.sh
 
       - name: Export CBBR Output to DO (edm-publishing)
-        if: github.event.inputs.run_export == true
         working-directory: cbbr_build
         run: ./04_export.sh
+        if: inputs.run_export == true
 
       - name: Archive CBBR to EDM-DATA
-        if: github.event.inputs.run_export == true
         working-directory: cbbr_build
         run: ./05_archive.sh
+        if: inputs.run_export == true

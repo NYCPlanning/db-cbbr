@@ -104,7 +104,7 @@ function Upload {
 
 
   mc rm -r --force $SPACES/latest
-  mc cp -r output $SPACES/latest
+  mc cp -r cbbr_build/output/$VERSION $SPACES/latest
   mc rm -r --force $SPACES/$VERSION
-  mc cp -r output $SPACES/$VERSION
+  mc cp -r cbbr_build/output/$VERSION $SPACES/$VERSION
 }

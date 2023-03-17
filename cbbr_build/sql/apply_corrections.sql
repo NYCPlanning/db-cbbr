@@ -19,7 +19,7 @@ WHERE a.unique_id = b.unique_id;
 
 --- Try Lines
 WITH _cbbr_line_corrections AS (
-   SELECT unique_id, ST_Multi(ST_Collect(geom)) AS _geom
+   SELECT unique_id, ST_Union(geom) AS _geom
    FROM _cbbr_line_corrections
    GROUP BY unique_id 
 )
@@ -34,7 +34,7 @@ WHERE a.unique_id = b.unique_id;
 
 ---Try polygons
 WITH _cbbr_poly_corrections AS (
-   SELECT unique_id, ST_Multi(ST_Collect(geom)) AS _geom
+   SELECT unique_id, ST_Union(geom) AS _geom
    FROM _cbbr_poly_corrections
    GROUP BY unique_id 
 )

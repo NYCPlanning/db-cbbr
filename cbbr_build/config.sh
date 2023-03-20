@@ -102,6 +102,6 @@ DATE=$(date "+%Y-%m-%d")
 
 ##Upload to DigitalOcean
 function Upload {
-  mc cp -r $OUTPUT_DIRECTORY/ spaces/edm-publishing/db-cbbr/$BRANCHNAME/$VERSION
-  mc cp -r $OUTPUT_DIRECTORY/ spaces/edm-publishing/db-cbbr/$BRANCHNAME/latest
+  mc cp -r $OUTPUT_DIRECTORY/cbbr_export.csv spaces/edm-publishing/db-cbbr/$BRANCHNAME/$VERSION
+#  mc cp -r $OUTPUT_DIRECTORY/ spaces/edm-publishing/db-cbbr/$BRANCHNAME/latest
 }

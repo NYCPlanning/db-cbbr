@@ -28,6 +28,17 @@ SHP_export $BUILD_ENGINE cbbr_export_poly MULTIPOLYGON cbbr_submissions_poly_sha
 SHP_export $BUILD_ENGINE cbbr_export_pts MULTIPOINT cbbr_submissions_pts_shapefile
 
 echo "Upload Output to DigitalOcean" 
+
+mkdir -p output/$VERSION
+(
+    cd output
+
+    display "Export CBBR to Digital Ocean"
+    CSV_export cbbr_export cbbr_export
+
+
+)
+
 Upload $VERSION &
 Upload $BRANCHNAME
 

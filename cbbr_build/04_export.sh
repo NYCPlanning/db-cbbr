@@ -30,8 +30,7 @@ SHP_export $BUILD_ENGINE cbbr_export_pts MULTIPOINT cbbr_submissions_pts_shapefi
 echo "Upload Output to DigitalOcean" 
 
 wait
-Upload $VERSION &
-Upload $BRANCHNAME
+Upload 
 wait
 exit 0
 

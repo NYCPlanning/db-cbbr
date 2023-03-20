@@ -96,12 +96,16 @@ function import_public {
 }
 
 
-### Set Branch Name and Date vars for uploading to DO
-BRANCHNAME=$(git rev-parse --symbolic-full-name --abbrev-ref HEAD)
-DATE=$(date "+%Y-%m-%d")
-
 ##Upload to DigitalOcean
 function Upload {
-  mc cp -r $OUTPUT_DIRECTORY/cbbr_export.csv spaces/edm-publishing/db-cbbr/$BRANCHNAME/$VERSION
-#  mc cp -r $OUTPUT_DIRECTORY/ spaces/edm-publishing/db-cbbr/$BRANCHNAME/latest
+    local BRANCHNAME=$(git rev-parse --symbolic-full-name --abbrev-ref HEAD)
+    local DATE=$(date "+%Y-%m-%d")
+    local SPACES="spaces/edm-publishing/db-developments/$BRANCHNAME"
+
+    pwd
+
+    mc rm -r --force $SPACES/latest
+    mc cp -r $SPACES/latest
+    mc rm -r --force $SPACES/$VERSION
+    mc cp -r $SPACES/$VERSION
 }

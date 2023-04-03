@@ -6,7 +6,7 @@ The Community Board Budget Requests Database is a way to quickly and easily expl
 
 ## Output files (FY2024)
 
-- [cbbr_submissions.csv](https://raw.githubusercontent.com/NYCPlanning/db-cbbr/master/cbbr_build/output/FY2024/cbbr_submissions.csv)
+- [cbbr_submissions.csv](https://raw.githubusercontent.com/NYCPlanning/db-cbbr/master/cbbr_build/output/FY2024/cbbr_export.csv)
 - [cbbr_submissions_needgeoms.csv](https://raw.githubusercontent.com/NYCPlanning/db-cbbr/master/cbbr_build/output/FY2024/cbbr_submissions_needgeoms.csv)
 - [cbbr_submissions_poly.csv](https://raw.githubusercontent.com/NYCPlanning/db-cbbr/master/cbbr_build/output/FY2024/cbbr_submissions_poly.csv)
 - [cbbr_submissions_pts.csv](https://raw.githubusercontent.com/NYCPlanning/db-cbbr/master/cbbr_build/output/FY2024/cbbr_submissions_pts.csv)

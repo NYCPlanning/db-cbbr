@@ -3,11 +3,6 @@ name: Build - Run CBBR Build
 on:
   workflow_dispatch:
     inputs:
-      run_build:
-        description: "Run the CBBR Build"
-        type: boolean
-        required: true
-        default: false
       run_export:
         description: "Run Export Step and Upload to DO"
         type: boolean
@@ -58,9 +53,6 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v3
-
-      #      - name: Check for dockerenv file
-      #        run: (ls /.dockerenv && echo Found dockerenv) || (echo No dockerenv)
 
       - name: Dataloading ...
         working-directory: cbbr_build

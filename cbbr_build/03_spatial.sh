@@ -4,10 +4,10 @@ source config.sh
 echo "CBBR Version $VERSION : 03 Spatial"
 # TODO delete tables that are created by this stage
 echo "Geocode with geosupport image  ..."
-docker run -it --rm \
+docker run --rm \
     -v $(pwd):/home/db-cbbr \
     -w /home/db-cbbr \
-    --env-file .env \
+    --env BUILD_ENGINE \
     --network="host" \
     nycplanning/docker-geosupport:latest bash -c "python3 -m library.geocode"
 

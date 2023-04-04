@@ -1,13 +1,8 @@
-name: Build - Run CBBR Build 
+name: Build - Run CBBR Build
 
 on:
   workflow_dispatch:
     inputs:
-      run_build:
-        description: "Run the CBBR Build"
-        type: boolean
-        required: true
-        default: false
       run_export:
         description: "Run Export Step and Upload to DO"
         type: boolean
@@ -29,20 +24,20 @@ jobs:
         ports:
           - 5432:5432
     env:
-      BUILD_ENGINE: postgresql://postgres:postgres@localhost:5432/postgres
-      EDM_DATA: ${{ secrets.EDM_DATA }}
       AWS_S3_ENDPOINT: ${{ secrets.AWS_S3_ENDPOINT }}
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      BUILD_ENGINE: postgresql://postgres:postgres@localhost:5432/postgres
+      EDM_DATA: ${{ secrets.EDM_DATA }}
+
     steps:
-      - name: Checkout 
-        uses: actions/checkout@v2
-        
+      - name: Checkout
+        uses: actions/checkout@v3
+
       - name: Setup python
         uses: actions/setup-python@v4.5.0
         with:
           python-version: "3.11.1"
-
 
       - name: install dependencies ...
         working-directory: cbbr_build
@@ -54,26 +49,29 @@ jobs:
           sudo mv ./mc /usr/bin
           mc alias set spaces $AWS_S3_ENDPOINT $AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY --api S3v4
           sudo apt install python3-pip
-          pip3 install requirements.txt
+          pip3 install -r requirements.txt
+
+      - name: Checkout
+        uses: actions/checkout@v3
 
       - name: Dataloading ...
-        working_directory: cbbr_build
+        working-directory: cbbr_build
         run: ./01_dataloading.sh
 
       - name: Create Build Tables and Normalize CBBR Values
-        working_directory: cbbr_build
+        working-directory: cbbr_build
         run: ./02_cbbr.sh
 
       - name: Assign Geometries from DOITT, Parks, Facilties DB and Run Spatial
-        working_directory: cbbr_build
+        working-directory: cbbr_build
         run: ./03_spatial.sh
 
       - name: Export CBBR Output to DO (edm-publishing)
-        working_directory: cbbr_build
+        working-directory: cbbr_build
         run: ./04_export.sh
+        if: inputs.run_export == true
 
-      - name: Archive CBBR to EDM-DATA 
-        working_diretory: cbbr_build
+      - name: Archive CBBR to EDM-DATA
+        working-directory: cbbr_build
         run: ./05_archive.sh
-
-
+        if: inputs.run_export == true

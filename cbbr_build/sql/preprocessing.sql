@@ -15,6 +15,18 @@ DROP TABLE IF EXISTS _dcp_facilities;
 
 CREATE TABLE _dcp_facilities AS TABLE dcp_facilities;
 
+DROP TABLE IF EXISTS _cbbr_point_corrections;
+
+CREATE TABLE  _cbbr_point_corrections AS TABLE cbbr_point_corrections;
+
+DROP TABLE IF EXISTS _cbbr_line_corrections;
+
+CREATE TABLE  _cbbr_line_corrections AS TABLE cbbr_line_corrections;
+
+DROP TABLE IF EXISTS _cbbr_poly_corrections;
+
+CREATE TABLE  _cbbr_poly_corrections AS TABLE cbbr_poly_corrections;
+
 -- -- extract geometries from manually researched json files
 -- UPDATE
 --     cbbr_geoms
@@ -64,6 +76,18 @@ ALTER TABLE _doitt_buildingfootprints RENAME COLUMN wkb_geometry TO geom;
 ALTER TABLE _dpr_parksproperties RENAME COLUMN wkb_geometry TO geom;
 
 ALTER TABLE _dcp_facilities RENAME COLUMN wkb_geometry TO geom;
+
+ALTER TABLE _cbbr_point_corrections RENAME COLUMN wkt to geom;
+
+UPDATE _cbbr_point_corrections SET geom = ST_GeometryFromText(geom, 4326);
+
+ALTER TABLE _cbbr_line_corrections RENAME COLUMN wkt to geom;
+
+UPDATE _cbbr_line_corrections SET geom = ST_GeometryFromText(geom, 4326);
+
+ALTER TABLE _cbbr_poly_corrections RENAME COLUMN wkt to geom;
+
+UPDATE _cbbr_poly_corrections SET geom = ST_GeometryFromText(geom, 4326);
 
 -- remove linebreaks from certain text columns
 UPDATE

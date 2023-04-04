@@ -96,7 +96,7 @@ function import_public {
 }
 
 
-##Upload to DigitalOcean
+# Upload to DigitalOcean
 function Upload {
     local BRANCHNAME=$(git rev-parse --symbolic-full-name --abbrev-ref HEAD)
     local DATE=$(date "+%Y-%m-%d")
